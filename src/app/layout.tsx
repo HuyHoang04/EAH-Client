@@ -15,6 +15,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Education Automation Hub | Automate Your Teaching Workflow",
   description: "A simple platform for instructors to automate administrative tasks and complex pedagogical processes without IT knowledge",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico" }
+    ]
+  }
 };
 
 export default function RootLayout({

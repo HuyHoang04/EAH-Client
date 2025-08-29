@@ -1,0 +1,182 @@
+'use client';
+
+import React, { useState } from 'react';
+import { FlowCardProps } from '@/components/FlowCard';
+import FlowCardGrid from '@/components/FlowCardGrid';
+
+export default function Dashboard() {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Stats cards data
+
+  // Sample flow cards data
+  const flowCards = [
+    // Page 1
+    {
+      title: "flow a lorem ipsum...",
+      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
+      state: "good",
+      activeHook: "lorem ipsum",
+      dateCreated: "dd/mm/yyyy",
+      timeModified: "mm/hh/dd/mm/yyy"
+    },
+    {
+      title: "flow a lorem ipsum...",
+      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
+      state: "good",
+      activeHook: "lorem ipsum",
+      dateCreated: "dd/mm/yyyy",
+      timeModified: "mm/hh/dd/mm/yyy"
+    },
+    {
+      title: "flow a lorem ipsum...",
+      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
+      state: "good",
+      activeHook: "lorem ipsum",
+      dateCreated: "dd/mm/yyyy",
+      timeModified: "mm/hh/dd/mm/yyy"
+    },
+    {
+      title: "flow a lorem ipsum...",
+      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
+      state: "good",
+      activeHook: "lorem ipsum",
+      dateCreated: "dd/mm/yyyy",
+      timeModified: "mm/hh/dd/mm/yyy"
+    },
+    {
+      title: "flow a lorem ipsum...",
+      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
+      state: "good",
+      activeHook: "lorem ipsum",
+      dateCreated: "dd/mm/yyyy",
+      timeModified: "mm/hh/dd/mm/yyy"
+    },
+    {
+      title: "flow a lorem ipsum...",
+      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
+      state: "good",
+      activeHook: "lorem ipsum",
+      dateCreated: "dd/mm/yyyy",
+      timeModified: "mm/hh/dd/mm/yyy"
+    },
+    {
+      title: "flow a lorem ipsum...",
+      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
+      state: "good",
+      activeHook: "lorem ipsum",
+      dateCreated: "dd/mm/yyyy",
+      timeModified: "mm/hh/dd/mm/yyy"
+    },
+    {
+      title: "flow a lorem ipsum...",
+      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
+      state: "good",
+      activeHook: "lorem ipsum",
+      dateCreated: "dd/mm/yyyy",
+      timeModified: "mm/hh/dd/mm/yyy"
+    },
+    // Page 2
+    {
+      title: "Test workflow",
+      purpose: "Testing automated attendance tracking for multiple classes",
+      state: "warning",
+      activeHook: "schedule hook",
+      dateCreated: "08/12/2025",
+      timeModified: "10/25/08/12/2025"
+    },
+    {
+      title: "Email notifications",
+      purpose: "Send automatic emails to students with late assignments",
+      state: "error",
+      activeHook: "due date hook",
+      dateCreated: "07/29/2025",
+      timeModified: "14/30/07/30/2025"
+    },
+    {
+      title: "Grade calculator",
+      purpose: "Calculate final grades from multiple assessments",
+      state: "good",
+      activeHook: "grade update hook",
+      dateCreated: "08/15/2025",
+      timeModified: "09/10/08/15/2025"
+    },
+    {
+      title: "Resource distributor",
+      purpose: "Distribute learning materials based on student progress",
+      state: "good",
+      activeHook: "progress hook",
+      dateCreated: "08/10/2025",
+      timeModified: "11/45/08/11/2025"
+    }
+  ] as FlowCardProps[];
+
+  // Filter flow cards based on search query
+  const filteredFlowCards = flowCards.filter(card => 
+    card.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    card.purpose.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <div className="container mx-auto px-4 custom-scrollbar">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-center my-10 text-gray-800">Work Flow</h1>
+        
+        {/* Search bar */}
+        <div className="w-full max-w-md mx-auto mb-10">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg className="w-5 h-5 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+              </svg>
+            </div>
+            <input 
+              type="search" 
+              className="block w-full p-3 pl-10 text-sm bg-white border border-gray-200 rounded-lg focus:ring-2 focus:outline-none focus:ring-gray-200 shadow-sm" 
+              placeholder="Search flows..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+        
+        <style jsx global>{`
+          .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f1f1f1;
+          }
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+          }
+        `}</style>
+        
+        {/* Import FlowCardGrid component */}
+        <div className="bg-white rounded-xl p-6 shadow-sm">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold text-gray-800">All Workflows</h2>
+            <button className="bg-[#111] text-white px-4 py-2 rounded-lg hover:bg-black transition-colors text-sm">
+              Create New
+            </button>
+          </div>
+          
+          {/* Flow card grid component */}
+          <div className="flow-card-container">
+            <FlowCardGrid cards={filteredFlowCards} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
