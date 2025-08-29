@@ -17,16 +17,8 @@ interface NotificationProps {
 }
 
 export default function NotificationSidebar({ isOpen = false, toggleSidebar }: NotificationSidebarProps) {
-  // State for checking if we're on mobile
-  const [isMobile, setIsMobile] = useState(false);
-  
-  // Check if we're on mobile
-  React.useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  // No longer need to check if we're on mobile as the notification bell
+  // will always be visible in the sidebar regardless of screen size
   
   // Sample notifications
   const notifications: NotificationProps[] = [
@@ -62,10 +54,11 @@ export default function NotificationSidebar({ isOpen = false, toggleSidebar }: N
   return (
     <div className={`top-16 fixed right-0 h-[calc(100vh-64px)] bg-[#111] flex flex-col py-4 text-white border-l border-[#222] rounded-tl-2xl transition-all duration-300 z-30 ${
       isOpen ? 'w-80' : 'w-14'
-    } ${isMobile && !isOpen ? 'translate-x-full' : ''}`}>
+    }`}>
       <button 
         className="self-center p-2 rounded-lg hover:bg-[#222] transition-colors mb-4"
         onClick={toggleSidebar}
+        aria-label="Toggle notifications"
       >
         <div className="relative">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
