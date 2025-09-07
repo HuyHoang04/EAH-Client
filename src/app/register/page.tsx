@@ -2,23 +2,24 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
+import { AUTH_ENDPOINTS } from "@/constants/api";
+import { postRequest } from "@/utils/api";
+import { RegisterFormData, RegisterRequest, AuthResponse } from "@/types/auth";
+import AuthGuard from "@/components/AuthGuard";
 
-interface FormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+interface FormData extends RegisterFormData {}
 
 export default function Register() {
+  const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
+    phone: "",
   });
   
   const [errors, setErrors] = useState<Partial<FormData>>({});
@@ -52,6 +53,12 @@ export default function Register() {
       newErrors.confirmPassword = "Passwords don't match";
     }
     
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!/^[0-9]{10,11}$/.test(formData.phone.replace(/[^0-9]/g, ''))) {
+      newErrors.phone = "Please enter a valid phone number";
+    }
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -64,26 +71,55 @@ export default function Register() {
     }));
   };
 
+  const [apiError, setApiError] = useState("");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setApiError("");
     
     if (validateForm()) {
       setIsSubmitting(true);
       
-      // Simulate API call
-      setTimeout(() => {
-        setIsSubmitting(false);
+      try {
+        // Chuẩn bị dữ liệu gửi lên API
+        const requestData: RegisterRequest = {
+          name: `${formData.firstName} ${formData.lastName}`,
+          gmail: formData.email,
+          password: formData.password,
+          phone: formData.phone
+        };
+        
+        // Gọi API đăng ký
+        const response = await postRequest<AuthResponse>(
+          AUTH_ENDPOINTS.REGISTER, 
+          requestData
+        );
+        
+        console.log("Registration successful:", response);
+        
+        // Lưu token vào localStorage nếu server trả về
+        if (response.accessToken) {
+          localStorage.setItem('auth_token', response.accessToken);
+          console.log("Access token saved:", response.accessToken);
+        } else if (response.token) {
+          localStorage.setItem('auth_token', response.token);
+        }
+        
         setSubmitSuccess(true);
         
-        // Redirect or show success message
-        console.log("Form submitted successfully", formData);
-      }, 1500);
+      } catch (error: any) {
+        console.error("Registration failed:", error);
+        setApiError(error.message || "Đăng ký thất bại. Vui lòng thử lại.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-stone-50">
-      <Header />
+    <AuthGuard redirectTo="/dashboard">
+      <div className="min-h-screen flex flex-col bg-stone-50">
+        <Header />
       
       <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-md shadow-md">
@@ -212,8 +248,35 @@ export default function Register() {
                     <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
                   )}
                 </div>
+                
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone Number
+                  </label>
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className={`appearance-none relative block w-full px-3 py-2 border ${
+                      errors.phone ? 'border-red-300' : 'border-stone-300'
+                    } placeholder-stone-400 text-black rounded-md focus:outline-none focus:ring-stone-500 focus:border-stone-500 focus:z-10 sm:text-sm`}
+                    placeholder="0901234567"
+                  />
+                  {errors.phone && (
+                    <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                  )}
+                </div>
               </div>
 
+              {apiError && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-md mb-4">
+                  <p className="text-red-600 text-sm">{apiError}</p>
+                </div>
+              )}
+              
               <div>
                 <button
                   type="submit"
@@ -253,5 +316,6 @@ export default function Register() {
         </div>
       </main>
     </div>
+    </AuthGuard>
   );
 }

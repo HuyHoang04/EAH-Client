@@ -2,16 +2,20 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
+import { AUTH_ENDPOINTS } from "@/constants/api";
+import { postRequest } from "@/utils/api";
+import { LoginFormData, AuthResponse } from "@/types/auth";
+import AuthGuard from "@/components/AuthGuard";
 
-interface FormData {
-  email: string;
-  password: string;
-}
+interface FormData extends LoginFormData {}
 
+// Trang đăng nhập - quản lý xác thực người dùng và lưu token
 export default function Login() {
+  const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
-    email: "",
+    gmail: "",
     password: "",
   });
   
@@ -19,11 +23,12 @@ export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginError, setLoginError] = useState("");
 
+  // Kiểm tra hợp lệ các trường đầu vào
   const validateForm = () => {
     const newErrors: Partial<FormData> = {};
     
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
+    if (!formData.gmail.trim()) {
+      newErrors.gmail = "gmail is required";
     }
     
     if (!formData.password) {
@@ -34,6 +39,7 @@ export default function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Cập nhật giá trị form khi người dùng nhập
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -49,24 +55,42 @@ export default function Login() {
     if (validateForm()) {
       setIsSubmitting(true);
       
-      // Simulate API call
-      setTimeout(() => {
+      try {
+        // Đăng nhập và lưu token
+        const response = await postRequest<AuthResponse>(
+          AUTH_ENDPOINTS.LOGIN,
+          formData,
+          false
+        );
+        
+        console.log("Login successful:", response);
+        
+        // Lưu token vào localStorage
+        if (response.accessToken) {
+          localStorage.setItem('auth_token', response.accessToken);
+        } else if (response.token) {
+          localStorage.setItem('auth_token', response.token);
+        }
+        
+        // Chuyển hướng đến dashboard sau khi đăng nhập thành công
+        setTimeout(() => {
+          router.push("/dashboard");
+          router.refresh();
+        }, 300);
+        
+      } catch (error: any) {
+        console.error("Login failed:", error);
+        setLoginError(error.message || "gmail hoặc mật khẩu không đúng. Vui lòng thử lại.");
+      } finally {
         setIsSubmitting(false);
-        
-        // For demonstration, let's assume login is successful
-        // In a real app, you'd handle API responses and errors here
-        console.log("Login attempted with:", formData);
-        
-        // Redirect to dashboard or show error
-        // For demo, we'll just simulate a success
-        window.location.href = "/";
-      }, 1500);
+      }
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-stone-50">
-      <Header />
+    <AuthGuard redirectTo="/dashboard">
+      <div className="min-h-screen flex flex-col bg-stone-50">
+        <Header />
       
       <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-md shadow-md">
@@ -91,22 +115,22 @@ export default function Login() {
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="rounded-md shadow-sm space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email address
+                <label htmlFor="gmail" className="block text-sm font-medium text-gray-700 mb-1">
+                  gmail address
                 </label>
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  value={formData.email}
+                  id="gmail"
+                  name="gmail"
+                  type="gmail"
+                  autoComplete="gmail"
+                  value={formData.gmail}
                   onChange={handleChange}
                   className={`appearance-none relative block w-full px-3 py-2 border ${
-                    errors.email ? 'border-red-300' : 'border-stone-300'
+                    errors.gmail ? 'border-red-300' : 'border-stone-300'
                   } placeholder-stone-400 text-black rounded-md focus:outline-none focus:ring-stone-500 focus:border-stone-500 focus:z-10 sm:text-sm`}
                 />
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                {errors.gmail && (
+                  <p className="mt-1 text-sm text-red-600">{errors.gmail}</p>
                 )}
               </div>
 
@@ -212,5 +236,6 @@ export default function Login() {
         </div>
       </main>
     </div>
+    </AuthGuard>
   );
 }
