@@ -3,6 +3,7 @@ import React, { useState, createContext } from 'react';
 import Sidebar from '@/components/Sidebar';
 import NotificationSidebar from '@/components/NotificationSidebar';
 import DashboardHeader from '@/components/DashboardHeader';
+import AuthGuard from '@/components/AuthGuard';
 
 // Create context for the notification sidebar
 export const NotificationContext = createContext({
@@ -30,7 +31,8 @@ export default function DashboardLayout({
   };
   
   return (
-    <NotificationContext.Provider value={{ isNotificationOpen: notificationOpen, toggleNotification }}>
+    <AuthGuard requireAuth redirectTo="/login">
+      <NotificationContext.Provider value={{ isNotificationOpen: notificationOpen, toggleNotification }}>
         <div className="flex h-screen">
           {/* Left Sidebar */}
           <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
@@ -75,6 +77,7 @@ export default function DashboardLayout({
         {/* Right Notification Sidebar */}
         <NotificationSidebar isOpen={notificationOpen} toggleSidebar={toggleNotification} />
       </div>
-    </NotificationContext.Provider>
+      </NotificationContext.Provider>
+    </AuthGuard>
   );
 }
