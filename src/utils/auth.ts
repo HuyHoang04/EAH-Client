@@ -28,34 +28,43 @@ export function getToken(): string | null {
 }
 
 /**
- * Kiểm tra xem người dùng đã đăng nhập chưa bằng cách kiểm tra token
- * và gọi API endpoint /auth/check
+ * Decode JWT token để lấy payload
+ */
+export function decodeToken(token: string): any | null {
+  try {
+    const payload = token.split('.')[1];
+    const decodedPayload = atob(payload);
+    return JSON.parse(decodedPayload);
+  } catch (error) {
+    console.error('Failed to decode token:', error);
+    return null;
+  }
+}
+
+/**
+ * Lấy gmail từ token
+ */
+export function getGmailFromToken(): string | null {
+  const token = getToken();
+  if (!token) return null;
+  
+  const decoded = decodeToken(token);
+  return decoded?.gmail || decoded?.email || null;
+}
+
+/**
+ * Kiểm tra xem người dùng đã đăng nhập chưa bằng cách kiểm tra token trong localStorage
  */
 export async function checkAuthentication(): Promise<boolean> {
   try {
     if (!hasToken()) {
       return false;
     }
-    
-    // Gọi API để xác thực token
-    const response = await getRequest<{ authenticated: boolean, user?: UserData }>(
-      AUTH_ENDPOINTS.CHECK_AUTH,
-      true
-    );
-    
-    if (response.authenticated && response.user) {
-      currentUser = response.user;
-      return true;
-    }
-    
-    // Xóa token nếu không còn hợp lệ
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('refresh_token');
-    currentUser = null;
-    return false;
+
+    // Chỉ kiểm tra token có tồn tại không, không gọi API
+    return true;
   } catch (error) {
     console.error('Authentication check error:', error);
-    currentUser = null;
     return false;
   }
 }
