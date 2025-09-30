@@ -51,8 +51,6 @@ export async function logout(): Promise<void> {
   }
 }
 
-
-
 export async function getUserProfile(gmail: string): Promise<UserData> {
   try {
     const profileUrl = `${GATEWAY_ENDPOINTS.PROFILE}?gmail=${encodeURIComponent(gmail)}`;

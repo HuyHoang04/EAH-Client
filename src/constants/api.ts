@@ -5,5 +5,6 @@ export const GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || 'http://localh
 export const GATEWAY_ENDPOINTS = {
   REGISTER: `${GATEWAY_URL}/auth/register`,
   LOGIN: `${GATEWAY_URL}/auth/login`,
+  GOOGLE_LOGIN: `${GATEWAY_URL}/auth/google`,
   PROFILE: `${GATEWAY_URL}/users/profile`,
 };

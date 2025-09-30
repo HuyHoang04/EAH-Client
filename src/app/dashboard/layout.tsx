@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 import Sidebar from '@/components/Sidebar';
 import NotificationSidebar from '@/components/NotificationSidebar';
 import DashboardHeader from '@/components/DashboardHeader';
@@ -21,6 +21,17 @@ export default function DashboardLayout({
   
   // State for notification sidebar
   const [notificationOpen, setNotificationOpen] = useState(false);
+
+  // Handle token from URL hash (Google OAuth redirect)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash.startsWith('#token=')) {
+      const token = hash.replace('#token=', '');
+      localStorage.setItem('auth_token', token);
+      // Clean up URL
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }, []);
   
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
