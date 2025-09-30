@@ -4,8 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
-import { AUTH_ENDPOINTS } from "@/constants/api";
-import { postRequest } from "@/utils/api";
+import { register } from '@/services/authService';
 import { RegisterFormData, RegisterRequest, AuthResponse } from "@/types/auth";
 import AuthGuard from "@/components/AuthGuard";
 
@@ -90,20 +89,9 @@ export default function Register() {
         };
         
         // Gọi API đăng ký
-        const response = await postRequest<AuthResponse>(
-          AUTH_ENDPOINTS.REGISTER, 
-          requestData
-        );
+        const response = await register(requestData);
         
         console.log("Registration successful:", response);
-        
-        // Lưu token vào localStorage nếu server trả về
-        if (response.accessToken) {
-          localStorage.setItem('auth_token', response.accessToken);
-          console.log("Access token saved:", response.accessToken);
-        } else if (response.token) {
-          localStorage.setItem('auth_token', response.token);
-        }
         
         setSubmitSuccess(true);
         

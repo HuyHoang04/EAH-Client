@@ -7,7 +7,7 @@ import { NotificationContext } from '@/app/dashboard/layout';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { getGmailFromToken } from '@/utils/auth';
-import { getRequest } from '@/utils/api';
+import { logout, getUserProfile } from '@/services/authService';
 import { UserData } from '@/types/auth';
 
 interface DashboardHeaderProps {}
@@ -22,26 +22,23 @@ export default function DashboardHeader({}: DashboardHeaderProps) {
       const userGmail = getGmailFromToken();
       if (userGmail) {
         try {
-          const profileUrl = `${process.env.NEXT_PUBLIC_GATEWAY_URL}/users/profile?gmail=${encodeURIComponent(userGmail)}`;
-          const userData = await getRequest<UserData>(profileUrl, true);
+          const userData = await getUserProfile(userGmail);
           setUser(userData);
         } catch (error) {
           console.error('Failed to fetch user profile:', error);
         }
       }
     };
-    
+
     fetchUserProfile();
   }, []);
 
-  const handleLogout = () => {
-    // Clear local storage
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('refresh_token');
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout error:', error);
     }
-    
-    // Redirect to home page
     router.push('/');
   };
 

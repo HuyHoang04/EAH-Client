@@ -1,11 +1,4 @@
-/**
- * Các hàm gọi API
- */
 
-/**
- * Lấy authentication token từ localStorage
- * @returns token nếu có
- */
 function getAuthToken(): string | null {
   if (typeof window !== 'undefined') {
     return localStorage.getItem('auth_token');
@@ -13,31 +6,6 @@ function getAuthToken(): string | null {
   return null;
 }
 
-/**
- * Tạo header với Bearer token cho API requests
- * @returns Headers object với authorization
- */
-function createAuthHeaders(): HeadersInit {
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-  };
-
-  const token = getAuthToken();
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
-  return headers;
-}
-
-/**
- * Gửi request POST đến API
- * 
- * @param url - Địa chỉ API endpoint
- * @param data - Dữ liệu gửi lên server
- * @param useAuth - Có sử dụng Bearer token không (mặc định true)
- * @returns Dữ liệu server trả về
- */
 export async function postRequest<T>(url: string, data: any, useAuth = true): Promise<T> {
   try {
     // Tạo headers với Content-Type
@@ -85,13 +53,6 @@ export async function postRequest<T>(url: string, data: any, useAuth = true): Pr
   }
 }
 
-/**
- * Gửi request GET đến API
- * 
- * @param url - Địa chỉ API endpoint
- * @param useAuth - Có sử dụng Bearer token không (mặc định true)
- * @returns Dữ liệu server trả về
- */
 export async function getRequest<T>(url: string, useAuth = true): Promise<T> {
   try {
     const headers: HeadersInit = {

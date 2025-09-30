@@ -4,8 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
-import { AUTH_ENDPOINTS } from "@/constants/api";
-import { postRequest } from "@/utils/api";
+import { login } from '@/services/authService';
 import { LoginFormData, AuthResponse } from "@/types/auth";
 import AuthGuard from "@/components/AuthGuard";
 
@@ -57,20 +56,9 @@ export default function Login() {
       
       try {
         // Đăng nhập và lưu token
-        const response = await postRequest<AuthResponse>(
-          AUTH_ENDPOINTS.LOGIN,
-          formData,
-          false
-        );
+        const response = await login(formData);
         
         console.log("Login successful:", response);
-        
-        // Lưu token vào localStorage
-        if (response.accessToken) {
-          localStorage.setItem('auth_token', response.accessToken);
-        } else if (response.token) {
-          localStorage.setItem('auth_token', response.token);
-        }
         
         // Chuyển hướng đến dashboard sau khi đăng nhập thành công
         setTimeout(() => {
