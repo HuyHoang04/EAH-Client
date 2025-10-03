@@ -1,115 +1,56 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlowCardProps } from '@/components/FlowCard';
 import FlowCardGrid from '@/components/FlowCardGrid';
+import { CreateFlowDialog } from '@/components/CreateFlowDialog';
+import { FlowService, FlowResponse } from '@/services/flowService';
+import { Search, Workflow, Plus, Filter } from 'lucide-react';
 
 export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [flowCards, setFlowCards] = useState<FlowCardProps[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Stats cards data
+  // Load flows from API
+  useEffect(() => {
+    loadFlows();
+  }, []);
 
-  // Sample flow cards data
-  const flowCards = [
-    // Page 1
-    {
-      title: "flow a lorem ipsum...",
-      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
-      state: "good",
-      activeHook: "lorem ipsum",
-      dateCreated: "dd/mm/yyyy",
-      timeModified: "mm/hh/dd/mm/yyy"
-    },
-    {
-      title: "flow a lorem ipsum...",
-      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
-      state: "good",
-      activeHook: "lorem ipsum",
-      dateCreated: "dd/mm/yyyy",
-      timeModified: "mm/hh/dd/mm/yyy"
-    },
-    {
-      title: "flow a lorem ipsum...",
-      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
-      state: "good",
-      activeHook: "lorem ipsum",
-      dateCreated: "dd/mm/yyyy",
-      timeModified: "mm/hh/dd/mm/yyy"
-    },
-    {
-      title: "flow a lorem ipsum...",
-      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
-      state: "good",
-      activeHook: "lorem ipsum",
-      dateCreated: "dd/mm/yyyy",
-      timeModified: "mm/hh/dd/mm/yyy"
-    },
-    {
-      title: "flow a lorem ipsum...",
-      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
-      state: "good",
-      activeHook: "lorem ipsum",
-      dateCreated: "dd/mm/yyyy",
-      timeModified: "mm/hh/dd/mm/yyy"
-    },
-    {
-      title: "flow a lorem ipsum...",
-      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
-      state: "good",
-      activeHook: "lorem ipsum",
-      dateCreated: "dd/mm/yyyy",
-      timeModified: "mm/hh/dd/mm/yyy"
-    },
-    {
-      title: "flow a lorem ipsum...",
-      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
-      state: "good",
-      activeHook: "lorem ipsum",
-      dateCreated: "dd/mm/yyyy",
-      timeModified: "mm/hh/dd/mm/yyy"
-    },
-    {
-      title: "flow a lorem ipsum...",
-      purpose: "Purpors: lorem ipsum to loremip sum terme ekerm goodod funiuum dkaioo...",
-      state: "good",
-      activeHook: "lorem ipsum",
-      dateCreated: "dd/mm/yyyy",
-      timeModified: "mm/hh/dd/mm/yyy"
-    },
-    // Page 2
-    {
-      title: "Test workflow",
-      purpose: "Testing automated attendance tracking for multiple classes",
-      state: "warning",
-      activeHook: "schedule hook",
-      dateCreated: "08/12/2025",
-      timeModified: "10/25/08/12/2025"
-    },
-    {
-      title: "Email notifications",
-      purpose: "Send automatic emails to students with late assignments",
-      state: "error",
-      activeHook: "due date hook",
-      dateCreated: "07/29/2025",
-      timeModified: "14/30/07/30/2025"
-    },
-    {
-      title: "Grade calculator",
-      purpose: "Calculate final grades from multiple assessments",
-      state: "good",
-      activeHook: "grade update hook",
-      dateCreated: "08/15/2025",
-      timeModified: "09/10/08/15/2025"
-    },
-    {
-      title: "Resource distributor",
-      purpose: "Distribute learning materials based on student progress",
-      state: "good",
-      activeHook: "progress hook",
-      dateCreated: "08/10/2025",
-      timeModified: "11/45/08/11/2025"
+  const loadFlows = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const flows = await FlowService.getFlows();
+      
+      // Convert FlowResponse to FlowCardProps
+      const cards: FlowCardProps[] = flows.map((flow: FlowResponse) => ({
+        id: flow.id,
+        title: flow.name,
+        purpose: flow.description,
+        state: flow.isActive ? "good" : "warning",
+        activeHook: flow.isActive ? "Active" : "Inactive",
+        dateCreated: new Date(flow.createdAt).toLocaleDateString('en-GB'),
+        timeModified: new Date(flow.updatedAt).toLocaleString('en-GB')
+      }));
+      
+      setFlowCards(cards);
+    } catch (err: any) {
+      console.error('Failed to load flows:', err);
+      setError(err.message || 'Failed to load flows');
+    } finally {
+      setIsLoading(false);
     }
-  ] as FlowCardProps[];
+  };
+
+  // Sample data for demo (removed - now loading from API)
+
+  // Handler for when a new flow is created
+  const handleFlowCreated = (newFlow: FlowResponse) => {
+    // Reload flows after creating new one
+    loadFlows();
+  };
 
   // Filter flow cards based on search query
   const filteredFlowCards = flowCards.filter(card => 
@@ -118,64 +59,123 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="container mx-auto px-4 custom-scrollbar">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-center my-10 text-gray-800">Work Flow</h1>
-        
-        {/* Search bar */}
-        <div className="w-full max-w-md mx-auto mb-10">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg className="w-5 h-5 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-              </svg>
+    <div className="relative z-10 container mx-auto px-4 custom-scrollbar py-8">
+      {/* Header Section */}
+      <div className="mb-12">
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">Work Flow</h1>
+          <p className="text-xl text-white/80 font-medium">Manage and automate your teaching workflows</p>
+        </div>
+
+        {/* Search and Actions Bar */}
+        <div className="max-w-4xl mx-auto mb-8">
+          <div className="bg-white/10 backdrop-blur-lg border-2 border-white/20 rounded-2xl p-6 shadow-2xl">
+            <div className="flex flex-col md:flex-row gap-4 items-center">
+              {/* Search bar */}
+              <div className="flex-1 relative">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-6 pointer-events-none">
+                  <Search className="w-6 h-6 text-blue-400" />
+                </div>
+                <input
+                  type="search"
+                  className="block w-full pl-16 pr-6 py-4 text-lg font-medium bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/30 focus:border-blue-400 transition-all duration-300 placeholder-white/60 text-white"
+                  placeholder="Search workflows, templates, and automation tools..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <div className="absolute inset-y-0 right-0 pr-6 flex items-center">
+                  <Workflow className="w-6 h-6 text-purple-400 hover:text-purple-300 transition-colors duration-300 cursor-pointer hover:scale-110" />
+                </div>
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex gap-3">
+                <CreateFlowDialog onFlowCreated={handleFlowCreated} />
+                <button className="flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white border-2 border-white/20 px-6 py-3 rounded-xl hover:bg-white/20 hover:border-white/40 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-105">
+                  <Filter className="w-5 h-5" />
+                  Filter
+                </button>
+              </div>
             </div>
-            <input 
-              type="search" 
-              className="block w-full p-3 pl-10 text-sm bg-white border border-gray-200 rounded-lg focus:ring-2 focus:outline-none focus:ring-gray-200 shadow-sm" 
-              placeholder="Search flows..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+
+            {/* Quick filters */}
+            <div className="flex justify-center mt-6 space-x-6 text-sm font-medium text-white/70">
+              <span className="flex items-center hover:text-blue-600 transition-colors cursor-pointer">
+                <div className="w-2 h-2 bg-blue-600 rounded-full mr-2"></div>
+                Active
+              </span>
+              <span className="flex items-center hover:text-green-600 transition-colors cursor-pointer">
+                <div className="w-2 h-2 bg-green-600 rounded-full mr-2"></div>
+                Completed
+              </span>
+              <span className="flex items-center hover:text-yellow-600 transition-colors cursor-pointer">
+                <div className="w-2 h-2 bg-yellow-600 rounded-full mr-2"></div>
+                Draft
+              </span>
+              <span className="flex items-center hover:text-red-600 transition-colors cursor-pointer">
+                <div className="w-2 h-2 bg-red-600 rounded-full mr-2"></div>
+                Error
+              </span>
+            </div>
           </div>
         </div>
-        
-        <style jsx global>{`
-          .custom-scrollbar {
-            scrollbar-width: thin;
-            scrollbar-color: #888 #f1f1f1;
-          }
-          .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 10px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #555;
-          }
-        `}</style>
-        
-        {/* Import FlowCardGrid component */}
-        <div className="bg-white rounded-xl p-6 shadow-sm">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-800">All Workflows</h2>
-            <button className="bg-[#111] text-white px-4 py-2 rounded-lg hover:bg-black transition-colors text-sm">
-              Create New
+      </div>
+
+      <style jsx global>{`
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255,255,255,0.3) rgba(255,255,255,0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255,255,255,0.1);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255,255,255,0.3);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255,255,255,0.5);
+        }
+      `}</style>
+
+      {/* Import FlowCardGrid component */}
+      <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-2xl border-2 border-white/20">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-white">All Workflows</h2>
+        </div>
+
+        {/* Loading state */}
+        {isLoading && (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+            <p className="mt-4 text-white/70">Loading workflows...</p>
+          </div>
+        )}
+
+        {/* Error state */}
+        {error && !isLoading && (
+          <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 mb-4">
+            <p className="text-red-200">Error: {error}</p>
+            <button 
+              onClick={loadFlows}
+              className="mt-2 text-sm text-red-200 underline hover:text-white"
+            >
+              Try again
             </button>
           </div>
-          
-          {/* Flow card grid component */}
+        )}
+
+        {/* Flow card grid component */}
+        {!isLoading && !error && (
           <div className="flow-card-container">
             <FlowCardGrid cards={filteredFlowCards} />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

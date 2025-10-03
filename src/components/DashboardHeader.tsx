@@ -4,10 +4,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { NotificationContext } from '@/app/dashboard/layout';
-import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { getGmailFromToken } from '@/utils/auth';
-import { logout, getUserProfile } from '@/services/authService';
+import { getUserProfile } from '@/services/authService';
 import { UserData } from '@/types/auth';
 
 interface DashboardHeaderProps {}
@@ -33,27 +32,18 @@ export default function DashboardHeader({}: DashboardHeaderProps) {
     fetchUserProfile();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-    router.push('/');
-  };
-
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
   return (
-    <div className="bg-white flex justify-between items-center px-6 py-4 shadow-sm h-16 fixed top-0 left-0 right-0 z-40">
+    <div className="bg-white border-b-2 border-black flex justify-between items-center px-6 py-4 h-16 fixed top-0 left-0 right-0 z-40">
       <div className="flex items-center">
-        <Image 
-            src="/eah-logo.svg" 
-            alt="Education Automation Hub Logo" 
-            width={40} 
-            height={40} 
+        <Image
+            src="/eah-logo.svg"
+            alt="Education Automation Hub Logo"
+            width={40}
+            height={40}
             className="mr-3"
         />
         <h1 className="text-2xl font-bold text-black">Education Automation Hub</h1>
@@ -67,9 +57,6 @@ export default function DashboardHeader({}: DashboardHeaderProps) {
             </Avatar>
           </>
         )}
-        <Button onClick={handleLogout} variant="outline">
-          Logout
-        </Button>
       </div>
     </div>
   );

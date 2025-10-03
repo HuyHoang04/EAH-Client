@@ -23,7 +23,8 @@ const FlowCardGrid: React.FC<FlowCardGridProps> = ({ cards }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 custom-scrollbar min-h-[450px] grid-rows-[auto] auto-rows-fr">
         {currentCards.map((card, index) => (
           <FlowCard 
-            key={index}
+            key={card.id || index}
+            id={card.id}
             title={card.title}
             purpose={card.purpose}
             state={card.state as 'good' | 'warning' | 'error'}

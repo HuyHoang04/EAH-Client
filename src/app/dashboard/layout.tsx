@@ -54,7 +54,7 @@ export default function DashboardLayout({
           <DashboardHeader />
           <div className="flex flex-1 overflow-hidden pt-10">
             {/* Main content area - always leaves space for sidebars with responsive margins */}
-            <div className={`flex-1 bg-[#f5f5f7] p-8 sm:p-6 pt-24 overflow-auto transition-all duration-300 custom-scrollbar ${
+            <div className={`flex-1 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8 sm:p-6 pt-24 overflow-auto transition-all duration-300 custom-scrollbar ${
                 sidebarOpen ? 'ml-20 sm:ml-64' : 'ml-20'
                 } ${notificationOpen ? 'mr-14 md:mr-80' : 'mr-14'}`}>
                 {children}
@@ -65,22 +65,22 @@ export default function DashboardLayout({
           <style jsx global>{`
             .custom-scrollbar {
               scrollbar-width: thin;
-              scrollbar-color: #aaa #f5f5f7;
+              scrollbar-color: rgba(255,255,255,0.3) rgba(255,255,255,0.1);
             }
             .custom-scrollbar::-webkit-scrollbar {
               width: 8px;
               height: 8px;
             }
             .custom-scrollbar::-webkit-scrollbar-track {
-              background: #f5f5f7;
+              background: rgba(255,255,255,0.1);
               border-radius: 10px;
             }
             .custom-scrollbar::-webkit-scrollbar-thumb {
-              background: #ccc;
+              background: rgba(255,255,255,0.3);
               border-radius: 10px;
             }
             .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-              background: #aaa;
+              background: rgba(255,255,255,0.5);
             }
           `}</style>
         </div>

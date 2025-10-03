@@ -52,61 +52,61 @@ export default function NotificationSidebar({ isOpen = false, toggleSidebar }: N
   const unreadCount = notifications.filter(n => !n.isRead).length;
   
   return (
-    <div className={`top-16 fixed right-0 h-[calc(100vh-64px)] bg-[#111] flex flex-col py-4 text-white border-l border-[#222] rounded-tl-2xl transition-all duration-300 z-30 ${
+    <div className={`top-16 fixed right-0 h-[calc(100vh-64px)] bg-white flex flex-col py-4 text-black border-l-2 border-black rounded-tl-2xl transition-all duration-300 z-30 ${
       isOpen ? 'w-80' : 'w-14'
     }`}>
-      <button 
-        className="self-center p-2 rounded-lg hover:bg-[#222] transition-colors mb-4"
+      <button
+        className="self-center p-2 rounded-lg hover:bg-blue-50 transition-colors mb-4"
         onClick={toggleSidebar}
         aria-label="Toggle notifications"
       >
         <div className="relative">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
           </svg>
           {unreadCount > 0 && (
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-[10px]">
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-white rounded-full flex items-center justify-center text-[10px] font-medium">
               {unreadCount}
             </div>
           )}
         </div>
       </button>
-      
+
       <div className={`px-4 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <h3 className="text-lg font-semibold mb-4">Notifications</h3>
+        <h3 className="text-lg font-semibold mb-4 text-black">Notifications</h3>
         <div className="space-y-3 max-h-[60vh] overflow-y-auto custom-scrollbar pr-1">
           {notifications.map(notification => (
-            <div key={notification.id} className={`p-3 rounded-lg ${notification.isRead ? 'bg-[#222]' : 'bg-[#333] border-l-4 border-blue-500'} hover:bg-[#444] transition-colors`}>
-              <p className="text-sm font-medium">{notification.title}</p>
-              <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
+            <div key={notification.id} className={`p-3 rounded-lg border-2 ${notification.isRead ? 'bg-white border-black' : 'bg-blue-50 border-blue-600'} hover:bg-blue-100 transition-colors`}>
+              <p className="text-sm font-medium text-black">{notification.title}</p>
+              <p className="text-xs text-black mt-1 opacity-75">{notification.time}</p>
             </div>
           ))}
         </div>
-        
+
         <style jsx global>{`
           .custom-scrollbar {
             scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.2) rgba(0,0,0,0);
+            scrollbar-color: rgba(0,0,0,0.3) rgba(255,255,255,0);
           }
           .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
             height: 6px;
           }
           .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.5);
             border-radius: 10px;
           }
           .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.3);
             border-radius: 10px;
           }
           .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,0.4);
+            background: rgba(0,0,0,0.5);
           }
         `}</style>
-        <div className="mt-4 pt-3 border-t border-[#222]">
-          <Link href="/notifications" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
+        <div className="mt-4 pt-3 border-t-2 border-black">
+          <Link href="/notifications" className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors">
             View all notifications
           </Link>
         </div>

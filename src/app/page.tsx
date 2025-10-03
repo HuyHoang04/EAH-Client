@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
+import { Search, Workflow, Zap, Users, Calendar, FileText, Bell, Database } from "lucide-react";
 
 export default function Home() {
   return (
@@ -27,75 +28,63 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="py-16 bg-white">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-black">What You Can Automate</h2>
+          <h2 className="text-4xl font-bold text-center mb-16 text-black tracking-tight">What You Can Automate</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature 1 */}
-            <div className="bg-stone-100 p-6 rounded-md border border-stone-200">
-              <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
+            <div className="bg-white p-8 rounded-2xl border-2 border-black hover:border-blue-600 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group">
+              <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition-colors duration-300">
+                <Users className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-black">Class Attendance</h3>
-              <p className="text-stone-700">Distribute attendance sheets via QR codes or links, summarize results, and get warnings about absences.</p>
+              <h3 className="text-2xl font-bold mb-4 text-black group-hover:text-blue-600 transition-colors">Class Attendance</h3>
+              <p className="text-black/80 leading-relaxed font-medium">Distribute attendance sheets via QR codes or links, summarize results, and get warnings about absences.</p>
             </div>
             
             {/* Feature 2 */}
-            <div className="bg-stone-100 p-6 rounded-md border border-stone-200">
-              <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            <div className="bg-white p-8 rounded-2xl border-2 border-black hover:border-green-600 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group">
+              <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-6 group-hover:bg-green-600 transition-colors duration-300">
+                <Zap className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-black">Scoring & Feedback</h3>
-              <p className="text-stone-700">Create self-scoring tests, use suggested rubrics for essays, and provide quick feedback to students.</p>
+              <h3 className="text-2xl font-bold mb-4 text-black group-hover:text-green-600 transition-colors">Scoring & Feedback</h3>
+              <p className="text-black/80 leading-relaxed font-medium">Create self-scoring tests, use suggested rubrics for essays, and provide quick feedback to students.</p>
             </div>
             
             {/* Feature 3 */}
-            <div className="bg-stone-100 p-6 rounded-md border border-stone-200">
-              <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+            <div className="bg-white p-8 rounded-2xl border-2 border-black hover:border-purple-600 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group">
+              <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-600 transition-colors duration-300">
+                <Calendar className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-black">Teaching Schedule</h3>
-              <p className="text-stone-700">Create personal timetables, get deadline reminders, and sync with Google Calendar or Outlook.</p>
+              <h3 className="text-2xl font-bold mb-4 text-black group-hover:text-purple-600 transition-colors">Teaching Schedule</h3>
+              <p className="text-black/80 leading-relaxed font-medium">Create personal timetables, get deadline reminders, and sync with Google Calendar or Outlook.</p>
             </div>
             
             {/* Feature 4 */}
-            <div className="bg-stone-100 p-6 rounded-md border border-stone-200">
-              <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
+            <div className="bg-white p-8 rounded-2xl border-2 border-black hover:border-red-600 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group">
+              <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-6 group-hover:bg-red-600 transition-colors duration-300">
+                <FileText className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-black">Document Creation</h3>
-              <p className="text-stone-700">Create and export lesson plans, slides, tests, and other teaching materials to various formats.</p>
+              <h3 className="text-2xl font-bold mb-4 text-black group-hover:text-red-600 transition-colors">Document Creation</h3>
+              <p className="text-black/80 leading-relaxed font-medium">Create and export lesson plans, slides, tests, and other teaching materials to various formats.</p>
             </div>
             
             {/* Feature 5 */}
-            <div className="bg-stone-100 p-6 rounded-md border border-stone-200">
-              <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
+            <div className="bg-white p-8 rounded-2xl border-2 border-black hover:border-yellow-600 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group">
+              <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-6 group-hover:bg-yellow-600 transition-colors duration-300">
+                <Bell className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-black">Notifications</h3>
-              <p className="text-stone-700">Send conditional mass text/email notifications using customizable templates.</p>
+              <h3 className="text-2xl font-bold mb-4 text-black group-hover:text-yellow-600 transition-colors">Notifications</h3>
+              <p className="text-black/80 leading-relaxed font-medium">Send conditional mass text/email notifications using customizable templates.</p>
             </div>
             
             {/* Feature 6 */}
-            <div className="bg-stone-100 p-6 rounded-md border border-stone-200">
-              <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
-                </svg>
+            <div className="bg-white p-8 rounded-2xl border-2 border-black hover:border-indigo-600 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group">
+              <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-600 transition-colors duration-300">
+                <Database className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-black">Submission Management</h3>
-              <p className="text-stone-700">Collect submissions from various platforms, organize files, and create grading lists.</p>
+              <h3 className="text-2xl font-bold mb-4 text-black group-hover:text-indigo-600 transition-colors">Submission Management</h3>
+              <p className="text-black/80 leading-relaxed font-medium">Collect submissions from various platforms, organize files, and create grading lists.</p>
             </div>
           </div>
         </div>

@@ -61,14 +61,15 @@ export default function Login() {
         // Đăng nhập và lưu token
         const response = await login(formData);
         
-        console.log("Login successful:", response);
-        
-        // Chuyển hướng đến dashboard sau khi đăng nhập thành công
-        setTimeout(() => {
-          router.push("/dashboard");
-          router.refresh();
-        }, 300);
-        
+        if (response.token) {
+          console.log("Login successful:", response);
+          setTimeout(() => {
+            router.push("/dashboard");
+            router.refresh();
+          }, 300);
+        } else {
+          setLoginError("gmail hoặc mật khẩu không đúng. Vui lòng thử lại.");
+        }     
       } catch (error: any) {
         console.error("Login failed:", error);
         setLoginError(error.message || "gmail hoặc mật khẩu không đúng. Vui lòng thử lại.");

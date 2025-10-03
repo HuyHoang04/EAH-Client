@@ -1,5 +1,8 @@
 // Địa chỉ API gateway
-export const GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || 'http://localhost:8080';
+export const GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || 'http://localhost:5001';
+
+// Địa chỉ Flow Service
+export const FLOW_URL = process.env.NEXT_PUBLIC_FLOW_URL || 'http://localhost:8080';
 
 // Các endpoint xác thực
 export const GATEWAY_ENDPOINTS = {

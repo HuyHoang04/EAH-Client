@@ -2,8 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { LayoutDashboard, Network, FileText, LogOut, Menu } from 'lucide-react';
+import { logout } from '@/services/authService';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -12,74 +13,101 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const pathname = usePathname();
-  
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+    router.push('/');
+  };
+
+  const menuItems = [
+    {
+      href: '/dashboard',
+      icon: LayoutDashboard,
+      label: 'Dashboard',
+      color: 'text-blue-600'
+    },
+    {
+      href: '/dashboard/network',
+      icon: Network,
+      label: 'Network',
+      color: 'text-green-600'
+    },
+    {
+      href: '/dashboard/files',
+      icon: FileText,
+      label: 'Files',
+      color: 'text-purple-600'
+    }
+  ];
+
   return (
-    <div className={`fixed top-16 left-0 h-[calc(100vh-64px)] bg-[#111] z-30 flex flex-col py-8 text-white rounded-tr-2xl transition-all duration-300 ${isOpen ? 'w-64' : 'w-20'}`}>
+    <div className={`fixed top-16 left-0 h-[calc(100vh-64px)] bg-white border-r-2 border-black z-30 flex flex-col py-8 text-black rounded-tr-2xl transition-all duration-300 shadow-lg ${isOpen ? 'w-64' : 'w-20'}`}>
       {/* Hamburger at top of sidebar */}
-      <button 
-        className="self-start ml-7 mb-8" 
+      <button
+        className="self-start ml-7 mb-8 text-black hover:text-blue-600 transition-all duration-300 hover:scale-110"
         onClick={toggleSidebar}
         aria-label="Toggle sidebar width"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
+        <Menu size={24} className="hover:rotate-90 transition-transform duration-300" />
       </button>
-      
+
       {/* Navigation Links */}
-      <div className="flex flex-col items-center w-full">
-        <Link 
-          href="/dashboard" 
-          className={`mb-8 p-2 flex items-center rounded-lg transition-colors ${
-            pathname === '/dashboard' 
-              ? 'bg-white text-black' 
-              : 'text-white hover:bg-[#222]'
-          } ${isOpen ? 'w-[80%] justify-start' : 'justify-center'}`}
+      <div className="flex flex-col items-center w-full flex-1">
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = pathname === item.href;
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`mb-6 p-3 flex items-center rounded-xl transition-all duration-300 group ${
+                isActive
+                  ? 'bg-black text-white shadow-lg scale-105'
+                  : 'text-black hover:bg-blue-600 hover:text-white hover:shadow-md hover:scale-105'
+              } ${isOpen ? 'w-[85%] justify-start' : 'justify-center'}`}
+            >
+              <Icon
+                size={28}
+                className={`transition-all duration-300 group-hover:scale-110 ${
+                  isActive ? 'text-white' : item.color
+                }`}
+              />
+              {isOpen && (
+                <span className={`ml-4 font-semibold transition-all duration-300 ${
+                  isActive ? 'text-white' : 'text-black group-hover:text-white'
+                }`}>
+                  {item.label}
+                </span>
+              )}
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Logout Button */}
+      <div className="flex flex-col items-center w-full mt-auto mb-8">
+        <button
+          onClick={handleLogout}
+          className={`p-3 flex items-center rounded-xl transition-all duration-300 group bg-red-600 text-white hover:bg-red-700 hover:shadow-lg hover:scale-105 ${
+            isOpen ? 'w-[85%] justify-start' : 'justify-center'
+          }`}
         >
-          <Image 
-            src="/window.svg" 
-            alt="Dashboard" 
-            width={32} 
-            height={32} 
+          <LogOut
+            size={28}
+            className="transition-all duration-300 group-hover:scale-110 group-hover:rotate-12"
           />
-          {isOpen && <span className="ml-3">Dashboard</span>}
-        </Link>
-        
-        <Link 
-          href="/dashboard/network" 
-          className={`mb-8 p-2 flex items-center rounded-lg transition-colors ${
-            pathname === '/dashboard/network' 
-              ? 'bg-white text-black' 
-              : 'text-white hover:bg-[#222]'
-          } ${isOpen ? 'w-[80%] justify-start' : 'justify-center'}`}
-        >
-          <Image 
-            src="/globe.svg" 
-            alt="Network" 
-            width={32} 
-            height={32} 
-          />
-          {isOpen && <span className="ml-3">Network</span>}
-        </Link>
-        
-        <Link 
-          href="/dashboard/files" 
-          className={`p-2 flex items-center rounded-lg transition-colors ${
-            pathname === '/dashboard/files' 
-              ? 'bg-white text-black' 
-              : 'text-white hover:bg-[#222]'
-          } ${isOpen ? 'w-[80%] justify-start' : 'justify-center'}`}
-        >
-          <Image 
-            src="/file.svg" 
-            alt="Files" 
-            width={32} 
-            height={32} 
-          />
-          {isOpen && <span className="ml-3">Files</span>}
-        </Link>
+          {isOpen && (
+            <span className="ml-4 font-semibold transition-all duration-300">
+              Logout
+            </span>
+          )}
+        </button>
       </div>
     </div>
   );
