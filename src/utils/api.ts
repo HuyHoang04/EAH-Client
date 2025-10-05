@@ -1,4 +1,3 @@
-
 function getAuthToken(): string | null {
   if (typeof window !== 'undefined') {
     return localStorage.getItem('auth_token');
@@ -44,6 +43,7 @@ export async function postRequest<T>(url: string, data: any, useAuth = true): Pr
     }
     
     if (!response.ok) {
+    
       throw new Error(responseData.message || 'Có lỗi xảy ra');
     }
     
@@ -53,8 +53,12 @@ export async function postRequest<T>(url: string, data: any, useAuth = true): Pr
   }
 }
 
-export async function getRequest<T>(url: string, useAuth = true): Promise<T> {
+export async function putRequest<T>(url: string, data: any, useAuth = true): Promise<T> {
   try {
+    console.log('🔄 PUT Request:', url);
+    console.log('📦 Request data:', data);
+    
+    // Tạo headers với Content-Type
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
     };
@@ -68,22 +72,81 @@ export async function getRequest<T>(url: string, useAuth = true): Promise<T> {
     }
     
     const response = await fetch(url, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(data),
+    });
+    
+    console.log('📡 Response status:', response.status, response.statusText);
+    
+    // Try to parse response
+    let responseData;
+    try {
+      responseData = await response.json();
+      console.log('📥 Response data:', responseData);
+    } catch (parseError) {
+      console.error('❌ Failed to parse response:', parseError);
+      throw new Error(`Invalid JSON response from server (${response.status})`);
+    }
+    
+    if (!response.ok) {
+      console.error('❌ PUT Request failed:', {
+        status: response.status,
+        statusText: response.statusText,
+        data: responseData
+      });
+      throw new Error(responseData.message || responseData.error || `Request failed with status ${response.status}`);
+    }
+    
+    console.log('✅ PUT Request successful');
+    return responseData;
+  } catch (error: any) {
+    console.error('💥 PUT Request error:', error);
+    throw error;
+  }
+}
+
+export const getRequest = async <T = any>(url: string, useAuth = false): Promise<T> => {
+  try {
+    // Thêm debug logs
+    console.log('🔗 Environment check:', {
+      NODE_RUNNER_URL: process.env.NEXT_PUBLIC_NODE_RUNNER_URL,
+      GATEWAY_URL: process.env.NEXT_PUBLIC_GATEWAY_URL,
+      FLOW_URL: process.env.NEXT_PUBLIC_FLOW_URL
+    });
+    console.log('📡 GET Request URL:', url);
+    
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+    };
+
+    if (useAuth) {
+      const token = getAuthToken();
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+    }
+    
+    const response = await fetch(url, {
       method: 'GET',
       headers,
     });
     
-    const responseData = await response.json();
+    console.log('📨 Response status:', response.status);
     
     if (!response.ok) {
-      throw new Error(responseData.message || `Request failed with status: ${response.status}`);
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
-    
+
+    const responseData = await response.json();
+    console.log('✅ Response data:', responseData);
     return responseData;
   } catch (error: any) {
     console.error('GET Request Error:', {
       url,
       error: error.message,
-      useAuth
+      useAuth,
+      stack: error.stack
     });
     throw error;
   }

@@ -24,6 +24,12 @@ export default function CronJobManager({ flowId }: CronJobManagerProps) {
     cronExpression: '0 8 * * *', // Default: Daily at 8 AM
   });
   const [formError, setFormError] = useState('');
+  
+  // Simple time picker state
+  const [useSimpleMode, setUseSimpleMode] = useState(true);
+  const [hour, setHour] = useState('8');
+  const [minute, setMinute] = useState('0');
+  const [frequency, setFrequency] = useState<'daily' | 'hourly' | 'weekdays'>('daily');
 
   useEffect(() => {
     loadCronJobs();
@@ -51,6 +57,31 @@ export default function CronJobManager({ flowId }: CronJobManagerProps) {
       console.error('Failed to load stats:', error);
     }
   };
+
+  // Generate cron from simple inputs
+  const generateCronExpression = () => {
+    const m = minute;
+    const h = hour;
+    
+    switch (frequency) {
+      case 'hourly':
+        return `${m} * * * *`; // Every hour at specified minute
+      case 'daily':
+        return `${m} ${h} * * *`; // Every day at specified time
+      case 'weekdays':
+        return `${m} ${h} * * 1-5`; // Monday-Friday at specified time
+      default:
+        return `${m} ${h} * * *`;
+    }
+  };
+
+  // Update cron expression when simple mode values change
+  useEffect(() => {
+    if (useSimpleMode) {
+      const cron = generateCronExpression();
+      setFormData(prev => ({ ...prev, cronExpression: cron }));
+    }
+  }, [hour, minute, frequency, useSimpleMode]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -225,7 +256,7 @@ export default function CronJobManager({ flowId }: CronJobManagerProps) {
       {showCreateDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-lg w-full p-6">
-            <h3 className="text-xl font-semibold mb-4">Schedule Workflow</h3>
+            <h3 className="text-xl font-semibold mb-4">Lên Lịch Chạy</h3>
 
             <form onSubmit={handleCreate} className="space-y-4">
               {formError && (
@@ -234,69 +265,198 @@ export default function CronJobManager({ flowId }: CronJobManagerProps) {
                 </div>
               )}
 
+              {/* Job Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Job Name
+                  Tên lịch
                 </label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="daily-attendance-8am"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
+                  placeholder="VD: Gửi email hàng ngày"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Cron Expression
-                </label>
+              {/* Simple Mode Toggle */}
+              <div className="flex items-center gap-2">
                 <input
-                  type="text"
-                  value={formData.cronExpression}
-                  onChange={(e) => setFormData({ ...formData, cronExpression: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 font-mono"
-                  placeholder="0 8 * * *"
+                  type="checkbox"
+                  id="useSimple"
+                  checked={useSimpleMode}
+                  onChange={(e) => setUseSimpleMode(e.target.checked)}
+                  className="w-4 h-4"
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  {parseCronExpression(formData.cronExpression)}
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Quick Select
+                <label htmlFor="useSimple" className="text-sm text-gray-700">
+                  Chế độ đơn giản (chọn giờ)
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {commonExpressions.map((expr) => (
-                    <button
-                      key={expr.value}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, cronExpression: expr.value })}
-                      className="px-3 py-2 text-sm border rounded hover:bg-gray-50 text-left"
-                    >
-                      {expr.label}
-                    </button>
-                  ))}
-                </div>
               </div>
 
-              <div className="flex gap-3 pt-4">
+              {useSimpleMode ? (
+                /* Simple Time Picker Mode */
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Tần suất
+                    </label>
+                    <div className="grid grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setFrequency('hourly')}
+                        className={`px-4 py-2 border rounded-lg transition-colors ${
+                          frequency === 'hourly' 
+                            ? 'bg-blue-500 text-white border-blue-500' 
+                            : 'bg-white text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        Mỗi giờ
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFrequency('daily')}
+                        className={`px-4 py-2 border rounded-lg transition-colors ${
+                          frequency === 'daily' 
+                            ? 'bg-blue-500 text-white border-blue-500' 
+                            : 'bg-white text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        Hàng ngày
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFrequency('weekdays')}
+                        className={`px-4 py-2 border rounded-lg transition-colors ${
+                          frequency === 'weekdays' 
+                            ? 'bg-blue-500 text-white border-blue-500' 
+                            : 'bg-white text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        Thứ 2-6
+                      </button>
+                    </div>
+                  </div>
+
+                  {frequency !== 'hourly' && (
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Giờ
+                        </label>
+                        <select
+                          value={hour}
+                          onChange={(e) => setHour(e.target.value)}
+                          className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
+                        >
+                          {Array.from({ length: 24 }, (_, i) => (
+                            <option key={i} value={i}>
+                              {i.toString().padStart(2, '0')}:00
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Phút
+                        </label>
+                        <select
+                          value={minute}
+                          onChange={(e) => setMinute(e.target.value)}
+                          className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
+                        >
+                          {['00', '15', '30', '45'].map((m) => (
+                            <option key={m} value={m}>
+                              {m}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  )}
+
+                  {frequency === 'hourly' && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Phút (trong giờ)
+                      </label>
+                      <select
+                        value={minute}
+                        onChange={(e) => setMinute(e.target.value)}
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
+                      >
+                        {Array.from({ length: 60 }, (_, i) => (
+                          <option key={i} value={i}>
+                            Phút thứ {i}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+                    <p className="text-sm text-blue-800">
+                      <strong>Tóm tắt:</strong>{' '}
+                      {frequency === 'hourly' && `Chạy mỗi giờ vào phút thứ ${minute}`}
+                      {frequency === 'daily' && `Chạy hàng ngày lúc ${hour}:${minute}`}
+                      {frequency === 'weekdays' && `Chạy thứ 2-6 lúc ${hour}:${minute}`}
+                    </p>
+                    <p className="text-xs text-blue-600 mt-1 font-mono">
+                      {formData.cronExpression}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                /* Advanced Cron Mode */
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Cron Expression (Nâng cao)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.cronExpression}
+                      onChange={(e) => setFormData({ ...formData, cronExpression: e.target.value })}
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-gray-900"
+                      placeholder="0 8 * * *"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      {parseCronExpression(formData.cronExpression)}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Mẫu có sẵn
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {commonExpressions.map((expr) => (
+                        <button
+                          key={expr.value}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, cronExpression: expr.value })}
+                          className="px-3 py-2 text-sm border rounded hover:bg-gray-50 text-left text-gray-700"
+                        >
+                          {expr.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <div className="flex gap-2 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateDialog(false)}
+                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50 text-gray-700"
+                >
+                  Hủy
+                </button>
                 <button
                   type="submit"
                   className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
-                  Create Schedule
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowCreateDialog(false);
-                    setFormError('');
-                  }}
-                  className="px-4 py-2 border rounded-lg hover:bg-gray-50"
-                >
-                  Cancel
+                  Tạo lịch
                 </button>
               </div>
             </form>

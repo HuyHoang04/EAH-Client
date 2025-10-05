@@ -1,4 +1,4 @@
-import { postRequest, getRequest } from '@/utils/api';
+import { postRequest, getRequest, putRequest } from '@/utils/api';
 import { decodeToken, getToken } from '@/utils/auth';
 import { FLOW_URL } from '@/constants/api';
 
@@ -8,6 +8,7 @@ export interface FlowDto {
   name: string;
   description: string;
   isActive: boolean;
+  reactFlowData?: string; // JSON string containing nodes and edges
   createdAt?: string;
   updatedAt?: string;
 }
@@ -94,9 +95,12 @@ export class FlowService {
     }
   }
 
-  static async updateFlow(flowId: string, flowData: Partial<CreateFlowRequest & { isActive: boolean }>): Promise<FlowResponse> {
+  static async updateFlow(
+    flowId: string, 
+    flowData: Partial<FlowDto>
+  ): Promise<FlowResponse> {
     try {
-      const response = await postRequest<FlowResponse>(
+      const response = await putRequest<FlowResponse>(
         `${FLOW_URL}/api/flows/${flowId}`,
         flowData,
         true // Cần auth header

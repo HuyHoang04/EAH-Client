@@ -111,6 +111,24 @@ export const nodeRunnerService = {
   },
 
   /**
+   * Retry a failed execution
+   */
+  async retryExecution(
+    executionId: string,
+    fromNodeId?: string
+  ): Promise<{
+    success: boolean;
+    executionId: string;
+    data?: any;
+    error?: string;
+  }> {
+    const response = await api.post(`/workflow/retry/${executionId}`, {
+      fromNodeId,
+    });
+    return response.data;
+  },
+
+  /**
    * Test mock workflow
    */
   async testWorkflow(): Promise<any> {

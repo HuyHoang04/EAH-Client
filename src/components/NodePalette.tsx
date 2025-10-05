@@ -34,8 +34,20 @@ export default function NodePalette() {
     ? nodes
     : nodes.filter(node => node.category === selectedCategory);
 
-  const onDragStart = (event: React.DragEvent, nodeType: string) => {
-    event.dataTransfer.setData('application/reactflow', nodeType);
+  const onDragStart = (event: React.DragEvent, node: NodeMetadata) => {
+    // Create complete node data object for drag & drop
+    const dragData = {
+      type: node.type,
+      name: node.name,
+      category: node.category,
+      description: node.description,
+      icon: node.icon,
+      inputs: node.inputs,
+      outputs: node.outputs
+    };
+    
+    // Set JSON string instead of just node type
+    event.dataTransfer.setData('application/reactflow', JSON.stringify(dragData));
     event.dataTransfer.effectAllowed = 'move';
   };
 
@@ -92,7 +104,7 @@ export default function NodePalette() {
             <div
               key={node.type}
               draggable
-              onDragStart={(e) => onDragStart(e, node.type)}
+              onDragStart={(e) => onDragStart(e, node)}
               className="
                 bg-white border border-gray-200 rounded-lg p-3
                 cursor-move hover:shadow-md transition-shadow
@@ -138,11 +150,135 @@ export default function NodePalette() {
         )}
       </div>
 
-      {/* Footer Hint */}
-      <div className="p-4 border-t bg-white">
-        <p className="text-xs text-gray-500 text-center">
-          💡 Drag & drop nodes to canvas
-        </p>
+      {/* Connection Type Guide */}
+      <div className="p-4 border-t bg-white space-y-3">
+        <div>
+          <h4 className="text-xs font-semibold text-gray-700 mb-2 uppercase">
+            🔗 Connection Guide
+          </h4>
+          <p className="text-[10px] text-gray-500 mb-3">
+            Màu sắc của connection points cho biết loại dữ liệu:
+          </p>
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full" style={{ background: '#3B82F6' }}></div>
+              <span className="text-xs text-gray-600">string - Văn bản</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full" style={{ background: '#10B981' }}></div>
+              <span className="text-xs text-gray-600">number - Số</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full" style={{ background: '#F59E0B' }}></div>
+              <span className="text-xs text-gray-600">boolean - True/False</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full" style={{ background: '#8B5CF6' }}></div>
+              <span className="text-xs text-gray-600">object - Đối tượng</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full" style={{ background: '#EC4899' }}></div>
+              <span className="text-xs text-gray-600">array - Mảng</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full" style={{ background: '#6366F1' }}></div>
+              <span className="text-xs text-gray-600">any - Bất kỳ</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="pt-2 border-t border-gray-100">
+          <p className="text-[10px] text-gray-500">
+            💡 <strong>Cách kết nối:</strong>
+          </p>
+          <ul className="text-[10px] text-gray-500 mt-1 space-y-0.5 ml-4">
+            <li>• Kéo từ chấm tròn bên phải (output) 📤</li>
+            <li>• Thả vào chấm tròn bên trái (input) 📥</li>
+            <li>• Chỉ kết nối cùng màu hoặc màu tương thích</li>
+            <li>• Hover vào chấm tròn để xem thông tin</li>
+          </ul>
+        </div>
+
+        {/* Workflow Flow Example */}
+        <div className="pt-3 border-t border-gray-100">
+          <h4 className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
+            🔄 <span>Workflow chạy như thế nào?</span>
+          </h4>
+          
+          {/* Visual Flow Diagram */}
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-3 space-y-2">
+            {/* Step 1 */}
+            <div className="flex items-center gap-2">
+              <div className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-500 text-white text-[10px] font-bold flex items-center justify-center">
+                1
+              </div>
+              <div className="flex-1">
+                <p className="text-[10px] text-gray-700 font-semibold">⏰ Trigger khởi động</p>
+                <p className="text-[9px] text-gray-500">Cron/Webhook bắt đầu workflow</p>
+              </div>
+            </div>
+            
+            {/* Arrow */}
+            <div className="flex items-center justify-center">
+              <div className="text-orange-500 text-xl">⬇️</div>
+            </div>
+            
+            {/* Step 2 */}
+            <div className="flex items-center gap-2">
+              <div className="flex-shrink-0 w-5 h-5 rounded-full bg-orange-500 text-white text-[10px] font-bold flex items-center justify-center">
+                2
+              </div>
+              <div className="flex-1">
+                <p className="text-[10px] text-gray-700 font-semibold">🔗 Trigger → Action</p>
+                <p className="text-[9px] text-gray-500">Kết nối CAM trigger.output → action.trigger</p>
+              </div>
+            </div>
+            
+            {/* Arrow */}
+            <div className="flex items-center justify-center">
+              <div className="text-orange-500 text-xl">⬇️</div>
+            </div>
+            
+            {/* Step 3 */}
+            <div className="flex items-center gap-2">
+              <div className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-500 text-white text-[10px] font-bold flex items-center justify-center">
+                3
+              </div>
+              <div className="flex-1">
+                <p className="text-[10px] text-gray-700 font-semibold">📊 Truyền dữ liệu</p>
+                <p className="text-[9px] text-gray-500">Data outputs (màu) → inputs tương ứng</p>
+              </div>
+            </div>
+            
+            {/* Arrow */}
+            <div className="flex items-center justify-center">
+              <div className="text-orange-500 text-xl">⬇️</div>
+            </div>
+            
+            {/* Step 4 */}
+            <div className="flex items-center gap-2">
+              <div className="flex-shrink-0 w-5 h-5 rounded-full bg-green-500 text-white text-[10px] font-bold flex items-center justify-center">
+                4
+              </div>
+              <div className="flex-1">
+                <p className="text-[10px] text-gray-700 font-semibold">✅ Xử lý & tiếp tục</p>
+                <p className="text-[9px] text-gray-500">Action chạy → trigger action tiếp theo</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Example Flow */}
+          <div className="mt-2 bg-white border border-gray-200 rounded p-2">
+            <p className="text-[10px] text-gray-600 font-semibold mb-1">📝 Ví dụ:</p>
+            <div className="text-[9px] text-gray-500 space-y-0.5">
+              <p>⏰ <span className="font-mono bg-purple-100 px-1 rounded">CronTrigger</span> (9h sáng)</p>
+              <p className="ml-3">↓ <span className="text-orange-500">trigger</span> →</p>
+              <p>📧 <span className="font-mono bg-blue-100 px-1 rounded">SendEmail</span> (gửi report)</p>
+              <p className="ml-3">↓ <span className="text-orange-500">trigger</span> →</p>
+              <p>💾 <span className="font-mono bg-green-100 px-1 rounded">SaveToDB</span> (lưu log)</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
