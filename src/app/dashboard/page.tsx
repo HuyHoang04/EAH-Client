@@ -1,17 +1,23 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { FlowCardProps } from '@/components/FlowCard';
 import FlowCardGrid from '@/components/FlowCardGrid';
 import { CreateFlowDialog } from '@/components/CreateFlowDialog';
 import { FlowService, FlowResponse } from '@/services/flowService';
-import { Search, Workflow, Plus, Filter } from 'lucide-react';
+import { TemplateModal } from '@/components/templates';
+import { FlowTemplate } from '@/constants/flowTemplates';
+import { Search, Workflow, Plus, Filter, Palette } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function Dashboard() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [flowCards, setFlowCards] = useState<FlowCardProps[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
 
   // Load flows from API
   useEffect(() => {
@@ -50,6 +56,37 @@ export default function Dashboard() {
   const handleFlowCreated = (newFlow: FlowResponse) => {
     // Reload flows after creating new one
     loadFlows();
+  };
+
+  // Create flow from template
+  const createFlowFromTemplate = async (template: FlowTemplate) => {
+    try {
+      // Show loading toast
+      const loadingToast = toast.loading('Đang tạo flow từ template...');
+
+      // Create new flow with template data
+      const newFlow = await FlowService.createFlow({
+        name: template.name,
+        description: template.description,
+        reactFlowData: JSON.stringify({
+          nodes: template.nodes,
+          edges: template.edges,
+        }),
+      });
+
+      // Dismiss loading toast
+      toast.dismiss(loadingToast);
+
+      // Success notification
+      toast.success(`Đã tạo flow từ template: ${template.name}`);
+
+      // Navigate to flow editor
+      router.push(`/flow/${newFlow.id}`);
+
+    } catch (error) {
+      console.error('Failed to create flow from template:', error);
+      toast.error('Lỗi khi tạo flow từ template');
+    }
   };
 
   // Filter flow cards based on search query
@@ -91,6 +128,16 @@ export default function Dashboard() {
               {/* Action buttons */}
               <div className="flex gap-3">
                 <CreateFlowDialog onFlowCreated={handleFlowCreated} />
+                <button 
+                  onClick={() => setShowTemplateModal(true)}
+                  className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 
+                    hover:from-orange-600 hover:to-orange-700 text-white border-2 border-orange-400/30 
+                    px-6 py-3 rounded-xl transition-all duration-300 font-semibold shadow-lg 
+                    hover:shadow-xl hover:scale-105"
+                >
+                  <Palette className="w-5 h-5" />
+                  <span>Templates</span>
+                </button>
                 <button className="flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white border-2 border-white/20 px-6 py-3 rounded-xl hover:bg-white/20 hover:border-white/40 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-105">
                   <Filter className="w-5 h-5" />
                   Filter
@@ -177,6 +224,13 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+
+      {/* Template Modal */}
+      <TemplateModal
+        isOpen={showTemplateModal}
+        onClose={() => setShowTemplateModal(false)}
+        onSelectTemplate={createFlowFromTemplate}
+      />
     </div>
   );
 }

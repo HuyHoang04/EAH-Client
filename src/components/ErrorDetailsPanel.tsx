@@ -6,7 +6,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Copy, AlertTriangle, XCircle, ChevronDown, ChevronRight, MapPin } from 'lucide-react';
+import { X, Copy, AlertTriangle, XCircle, ChevronDown, ChevronRight, MapPin, Lightbulb } from 'lucide-react';
 
 export interface ExecutionError {
   nodeId: string;
@@ -169,7 +169,10 @@ ${error.input ? `Input Data:\n${JSON.stringify(error.input, null, 2)}` : ''}
 
           {/* Suggested Actions */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="text-sm font-semibold text-blue-800 mb-2">💡 Suggested Actions</h4>
+                          <h4 className="text-sm font-semibold mb-2 flex items-center gap-2">
+                <Lightbulb className="w-4 h-4 text-blue-500" />
+                Gợi ý khắc phục:
+              </h4>
             <ul className="text-sm text-blue-700 space-y-1 list-disc list-inside">
               <li>Check the error message for specific issues</li>
               <li>Review the node configuration and input data</li>

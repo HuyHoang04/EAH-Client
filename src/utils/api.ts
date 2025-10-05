@@ -109,7 +109,7 @@ export async function putRequest<T>(url: string, data: any, useAuth = true): Pro
 export const getRequest = async <T = any>(url: string, useAuth = false): Promise<T> => {
   try {
     // Thêm debug logs
-    console.log('🔗 Environment check:', {
+    console.log('[API] Environment check:', {
       NODE_RUNNER_URL: process.env.NEXT_PUBLIC_NODE_RUNNER_URL,
       GATEWAY_URL: process.env.NEXT_PUBLIC_GATEWAY_URL,
       FLOW_URL: process.env.NEXT_PUBLIC_FLOW_URL
@@ -132,14 +132,14 @@ export const getRequest = async <T = any>(url: string, useAuth = false): Promise
       headers,
     });
     
-    console.log('📨 Response status:', response.status);
+    console.log('[API] Response status:', response.status);
     
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
 
     const responseData = await response.json();
-    console.log('✅ Response data:', responseData);
+    console.log('[API] Response data:', responseData);
     return responseData;
   } catch (error: any) {
     console.error('GET Request Error:', {
@@ -159,7 +159,7 @@ const NODE_RUNNER_BASE_URL = process.env.NEXT_PUBLIC_NODE_RUNNER_URL || 'http://
 
 // Debug: Log base URL on startup
 if (typeof window !== 'undefined') {
-  console.log('🔗 Node Runner Base URL:', NODE_RUNNER_BASE_URL);
+  console.log('[API] Node Runner Base URL:', NODE_RUNNER_BASE_URL);
 }
 
 export const api = {

@@ -7,6 +7,7 @@
 
 import { useState } from 'react';
 import { nodeRunnerService } from '@/services/nodeRunnerService';
+import { Play, AlertTriangle, CheckCircle, XCircle, Lightbulb } from 'lucide-react';
 
 interface WorkflowExecutorProps {
   flowId: string;
@@ -40,7 +41,7 @@ export default function WorkflowExecutor({
     if (flowStatus && !flowStatus.isActive) {
       setExecutionResult({
         success: false,
-        error: '⚠️ Flow chưa active! Vui lòng kết nối Start Node với ít nhất một node để có thể thực thi workflow.',
+        error: 'Flow chưa active! Vui lòng kết nối Start Node với ít nhất một node để có thể thực thi workflow.',
       });
       return;
     }
@@ -114,7 +115,7 @@ export default function WorkflowExecutor({
       {flowStatus && !flowStatus.isActive && (
         <div className="bg-amber-50 border-2 border-amber-300 rounded-lg p-4 animate-fade-in">
           <div className="flex items-start gap-3">
-            <span className="text-2xl">⚠️</span>
+            <AlertTriangle className="w-6 h-6 text-amber-600" />
             <div>
               <h4 className="font-semibold text-amber-800 mb-1">Flow Chưa Active</h4>
               <p className="text-sm text-amber-700">
@@ -161,12 +162,12 @@ export default function WorkflowExecutor({
           </>
         ) : flowStatus && !flowStatus.isActive ? (
           <>
-            <span>🔴</span>
+            <span className="w-2 h-2 bg-red-500 rounded-full"></span>
             <span>Flow Inactive - Cannot Execute</span>
           </>
         ) : (
           <>
-            <span>▶️</span>
+            <Play className="w-5 h-5" />
             <span>Execute Workflow</span>
           </>
         )}
@@ -182,9 +183,11 @@ export default function WorkflowExecutor({
           }
         `}>
           <div className="flex items-start gap-3">
-            <span className="text-2xl">
-              {executionResult.success ? '✅' : '❌'}
-            </span>
+            {executionResult.success ? (
+              <CheckCircle className="w-7 h-7 text-green-600" />
+            ) : (
+              <XCircle className="w-7 h-7 text-red-600" />
+            )}
             
             <div className="flex-1">
               <h4 className={`font-semibold mb-2 ${
@@ -245,7 +248,10 @@ export default function WorkflowExecutor({
       {/* Help Text */}
       {!executing && !executionResult && (
         <div className="text-sm text-gray-500 bg-gray-50 p-3 rounded">
-          <p className="font-medium mb-1">💡 About Execution:</p>
+          <p className="flex items-center gap-2 font-medium mb-1">
+            <Lightbulb className="w-4 h-4 text-blue-600" />
+            <span>About Execution:</span>
+          </p>
           <ul className="list-disc list-inside space-y-1 text-xs">
             <li>This will execute the workflow immediately</li>
             <li>Results will be saved to execution history</li>

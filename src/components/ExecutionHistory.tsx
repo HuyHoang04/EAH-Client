@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from 'react';
 import { nodeRunnerService, WorkflowExecution, formatExecutionStatus } from '@/services/nodeRunnerService';
+import { RefreshCw, FileText, AlertTriangle, XCircle, Info, AlertCircle, Download, Search, Filter, X } from 'lucide-react';
 
 interface ExecutionHistoryProps {
   flowId: string;
@@ -61,10 +62,10 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
         <h3 className="text-lg font-semibold">Execution History</h3>
         <button
           onClick={loadExecutions}
-          className="px-3 py-1 text-sm border rounded hover:bg-gray-50"
+          className="px-3 py-1 text-sm border rounded hover:bg-gray-50 flex items-center gap-1"
           title="Refresh"
         >
-          🔄 Refresh
+          <RefreshCw className="w-4 h-4" /> Refresh
         </button>
       </div>
 
@@ -117,16 +118,16 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
 
                     {execution.error && (
                       <div className="mt-3 p-2 bg-red-50 border border-red-200 rounded">
-                        <p className="text-sm text-red-600">
-                          ❌ {execution.error}
+                        <p className="text-sm text-red-600 flex items-center gap-2">
+                          <XCircle className="w-4 h-4" /> {execution.error}
                         </p>
                       </div>
                     )}
 
                     {execution.logs && execution.logs.length > 0 && (
                       <div className="mt-3">
-                        <p className="text-xs text-gray-500">
-                          📝 {execution.logs.length} log entries
+                        <p className="text-xs text-gray-500 flex items-center gap-1">
+                          <FileText className="w-3 h-3" /> {execution.logs.length} log entries
                         </p>
                       </div>
                     )}
@@ -165,7 +166,7 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
                   onClick={() => setSelectedExecution(null)}
                   className="text-gray-400 hover:text-gray-600"
                 >
-                  ✕
+                  <X className="w-5 h-5" />
                 </button>
               </div>
             </div>

@@ -19,7 +19,7 @@ import ReactFlow, {
   ConnectionLineType,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { ArrowLeft, Save, Play, Settings, Clock, History, Layers } from 'lucide-react';
+import { ArrowLeft, Save, Play, Settings, Clock, History, Layers, Palette, Link, Zap, Mail, Wrench, Lightbulb, Calendar, Sunrise, Watch, AlertTriangle, CheckCircle, XCircle, Info } from 'lucide-react';
 import { FlowService, FlowResponse } from '@/services/flowService';
 import NodePalette from '@/components/NodePalette';
 import CronJobManager from '@/components/CronJobManager';
@@ -31,6 +31,8 @@ import ConditionalEdge from '@/components/ConditionalEdge';
 import ExecutionLogs from '@/components/ExecutionLogs';
 import ExecutionProgress from '@/components/ExecutionProgress';
 import { useExecutionSocket } from '@/hooks/useExecutionSocket';
+import { TemplateModal } from '@/components/templates';
+import { FlowTemplate } from '@/constants/flowTemplates';
 import toast from 'react-hot-toast';
 
 // Custom styles for selected nodes
@@ -207,15 +209,15 @@ function NodeConfigPanel({ nodeId, nodes, setNodes, edges }: NodeConfigPanelProp
           </div>
           <div className="text-sm text-stone-700 bg-white rounded p-2 border border-green-200">
             <div className="flex items-center gap-2">
-              <span className="text-lg">🔗</span>
+              <Link className="w-5 h-5 text-green-600" />
               <div>
                 <div className="font-medium">{connectedSource.nodeName}</div>
                 <div className="text-xs text-stone-500">Output: {connectedSource.outputName}</div>
               </div>
             </div>
           </div>
-          <p className="text-xs text-green-600 mt-2">
-            💡 Trường này nhận dữ liệu từ node khác. Ngắt kết nối để nhập thủ công.
+          <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
+            <Lightbulb className="w-3 h-3" /> Trường này nhận dữ liệu từ node khác. Ngắt kết nối để nhập thủ công.
           </p>
         </div>
       );
@@ -224,36 +226,41 @@ function NodeConfigPanel({ nodeId, nodes, setNodes, edges }: NodeConfigPanelProp
     // Special handler for cronExpression - with quick presets
     if (input.name === 'cronExpression' || input.id === 'cronExpression') {
       const presets = [
-        { label: '9h sáng T2-6', value: '0 9 * * 1-5', emoji: '📅' },
-        { label: '8h sáng hàng ngày', value: '0 8 * * *', emoji: '🌅' },
-        { label: 'Mỗi giờ', value: '0 * * * *', emoji: '⏰' },
-        { label: '12h trưa T2-6', value: '0 12 * * 1-5', emoji: '🕛' },
+        { label: '9h sáng T2-6', value: '0 9 * * 1-5', icon: <Calendar className="w-3 h-3" /> },
+        { label: '8h sáng hàng ngày', value: '0 8 * * *', icon: <Sunrise className="w-3 h-3" /> },
+        { label: 'Mỗi giờ', value: '0 * * * *', icon: <Clock className="w-3 h-3" /> },
+        { label: '12h trưa T2-6', value: '0 12 * * 1-5', icon: <Watch className="w-3 h-3" /> },
       ];
 
       return (
         <div className="space-y-3 bg-purple-50 p-3 rounded-lg border border-purple-200">
           <div>
-            <label className="block text-xs font-medium text-stone-700 mb-2">⚡ Mẫu nhanh</label>
+            <label className="flex items-center gap-1 text-xs font-medium text-stone-700 mb-2">
+              <Zap className="w-3 h-3" /> Mẫu nhanh
+            </label>
             <div className="grid grid-cols-2 gap-2">
               {presets.map((preset) => (
                 <button
                   key={preset.value}
                   type="button"
                   onClick={() => handleParameterChange(input.name, preset.value)}
-                  className={`px-3 py-2 text-xs rounded-md transition-colors text-left ${
+                  className={`flex items-center gap-2 px-3 py-2 text-xs rounded-md transition-colors text-left ${
                     value === preset.value
                       ? 'bg-purple-500 text-white'
                       : 'bg-white text-stone-700 border border-stone-300 hover:bg-purple-100'
                   }`}
                 >
-                  <div className="font-medium">{preset.emoji} {preset.label}</div>
+                  {preset.icon}
+                  <div className="font-medium">{preset.label}</div>
                 </button>
               ))}
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-stone-700 mb-1">✏️ Hoặc nhập thủ công</label>
+            <label className="flex items-center gap-1 text-xs font-medium text-stone-700 mb-1">
+              <Zap className="w-3 h-3" /> Hoặc nhập thủ công
+            </label>
             <input
               type="text"
               value={value}
@@ -341,7 +348,13 @@ function NodeConfigPanel({ nodeId, nodes, setNodes, edges }: NodeConfigPanelProp
       {/* Node Info - Simplified */}
       <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-4 mb-4 border border-indigo-200">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-2xl">{nodeData?.category === 'trigger' ? '⏰' : nodeData?.category === 'action' ? '📧' : '🔧'}</span>
+          {nodeData?.category === 'trigger' ? (
+            <Clock className="w-6 h-6 text-indigo-600" />
+          ) : nodeData?.category === 'action' ? (
+            <Mail className="w-6 h-6 text-indigo-600" />
+          ) : (
+            <Wrench className="w-6 h-6 text-indigo-600" />
+          )}
           <span className="font-bold text-stone-900">{nodeData?.nodeType || 'Node'}</span>
         </div>
         <p className="text-sm text-stone-600">
@@ -425,7 +438,7 @@ function NodeConfigPanel({ nodeId, nodes, setNodes, edges }: NodeConfigPanelProp
               label: selectedNode.data.label,
               parameters,
             });
-            alert('✅ Đã lưu cấu hình! Xem console để biết chi tiết.');
+            alert('Đã lưu cấu hình! Xem console để biết chi tiết.');
           }}
           className="w-full px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors flex items-center justify-center gap-2 font-medium"
         >
@@ -487,6 +500,9 @@ function FlowEditorContent() {
   const [activeTab, setActiveTab] = useState<'nodes' | 'config' | 'execute' | 'schedule' | 'history' | 'logs'>('nodes');
   const [sidebarWidth, setSidebarWidth] = useState(384); // 384px = w-96
   const [isResizing, setIsResizing] = useState(false);
+  
+  // Template state
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
   
   // Node selection state
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -620,7 +636,7 @@ function FlowEditorContent() {
               draggable: true,
             };
             loadedNodes = [startNode, ...loadedNodes];
-            toast.success('✅ Start Node đã được tạo tự động');
+            toast.success('Start Node đã được tạo tự động');
           }
           
           setNodes(loadedNodes);
@@ -721,7 +737,7 @@ function FlowEditorContent() {
           reactFlowData: JSON.stringify(reactFlowState),
         });
         
-        console.log('✅ Auto-saved flow');
+        console.log('Auto-saved flow');
       } catch (error) {
         console.error('Failed to auto-save flow:', error);
       } finally {
@@ -736,7 +752,7 @@ function FlowEditorContent() {
     (params: Connection | Edge) => {
       // Task 1.3: Prevent connections TO Start Node
       if (params.target === 'start-node') {
-        toast.error('❌ Start node không thể nhận kết nối đầu vào!');
+        toast.error('Start node không thể nhận kết nối đầu vào!');
         return;
       }
       
@@ -746,7 +762,7 @@ function FlowEditorContent() {
                 edge.targetHandle === params.targetHandle
       );
       if (existingEdge) {
-        toast.error('⚠️ Input này đã có kết nối! Mỗi input chỉ nhận 1 connection.');
+        toast.error('Input này đã có kết nối! Mỗi input chỉ nhận 1 connection.');
         return;
       }
       
@@ -765,13 +781,13 @@ function FlowEditorContent() {
 
       // Validation 1: Source must have outputs
       if (sourceOutputs.length === 0) {
-        toast.error('❌ Lỗi kết nối: Node nguồn không có đầu ra');
+        toast.error('Lỗi kết nối: Node nguồn không có đầu ra');
         return;
       }
 
       // Validation 2: Target must have inputs
       if (targetInputs.length === 0) {
-        alert('❌ Lỗi kết nối: Node đích không có đầu vào');
+        alert('Lỗi kết nối: Node đích không có đầu vào');
         return;
       }
 
@@ -787,10 +803,10 @@ function FlowEditorContent() {
 
       if (!isCompatible) {
         // Show visual feedback with toast-style message
-        const errorMsg = `❌ Không thể kết nối: Kiểu dữ liệu không tương thích\n` +
-                        `📤 Đầu ra "${sourceOutput.name}": ${sourceOutput.type}\n` +
-                        `📥 Đầu vào "${targetInput.name}": ${targetInput.type}\n\n` +
-                        `💡 Tip: Chỉ có thể kết nối cùng loại hoặc với type "any"`;
+        const errorMsg = `Không thể kết nối: Kiểu dữ liệu không tương thích\n` +
+                        `Đầu ra "${sourceOutput.name}": ${sourceOutput.type}\n` +
+                        `Đầu vào "${targetInput.name}": ${targetInput.type}\n\n` +
+                        `Tip: Chỉ có thể kết nối cùng loại hoặc với type "any"`;
         toast.error(errorMsg);
         return;
       }
@@ -804,11 +820,11 @@ function FlowEditorContent() {
       );
 
       if (isDuplicate) {
-        alert('❌ Lỗi kết nối: Kết nối này đã tồn tại');
+        alert('Lỗi kết nối: Kết nối này đã tồn tại');
         return;
       }
 
-      // ✅ Connection is valid - add with styling
+      // Connection is valid - add with styling
       
       // Check if source is IfElse node for conditional edge
       const sourceNodeType = (sourceNode.data as any)?.nodeType;
@@ -844,12 +860,12 @@ function FlowEditorContent() {
       setEdges((eds) => addEdge(newEdge, eds));
       
       // Visual feedback
-      console.log('✅ Kết nối thành công:', {
+      console.log('Kết nối thành công:', {
         from: sourceNode.data.label,
         to: targetNode.data.label,
         dataType: sourceOutput.type,
       });
-      toast.success(`✅ Kết nối thành công: ${sourceNode.data.label} → ${targetNode.data.label}`);
+      toast.success(`Kết nối thành công: ${sourceNode.data.label} → ${targetNode.data.label}`);
     },
     [setEdges, nodes, edges]
   );
@@ -943,7 +959,67 @@ function FlowEditorContent() {
   const onSelectionChange = useCallback(({ nodes }: { nodes: any[] }) => {
     if (nodes.length > 0) {
       setSelectedNodeId(nodes[0].id);
-    } else if (selectedNodeId) {
+      setActiveTab('config');
+    }
+  }, []);
+
+  // Apply template to current flow
+  const applyTemplate = useCallback(async (template: FlowTemplate) => {
+    // Confirm with user if flow already has nodes (excluding Start Node)
+    if (nodes.length > 1) {
+      const confirmed = window.confirm(
+        'Áp dụng template sẽ thay thế toàn bộ workflow hiện tại (trừ Start Node). Tiếp tục?'
+      );
+      if (!confirmed) {
+        return;
+      }
+    }
+
+    try {
+      // Generate unique IDs for template nodes
+      const timestamp = Date.now();
+      const idMap: Record<string, string> = {};
+      
+      // Create new nodes with unique IDs
+      const newNodes = template.nodes.map((node, index) => {
+        const newId = node.id === 'start-node' 
+          ? 'start-node'  // Keep Start Node ID
+          : `${node.id}-${timestamp}-${index}`;
+        idMap[node.id] = newId;
+        
+        return {
+          ...node,
+          id: newId,
+        };
+      });
+      
+      // Update edges with new node IDs
+      const newEdges = template.edges.map((edge, index) => ({
+        ...edge,
+        id: `${edge.id}-${timestamp}-${index}`,
+        source: idMap[edge.source],
+        target: idMap[edge.target],
+      }));
+      
+      // Apply to canvas
+      setNodes(newNodes);
+      setEdges(newEdges);
+      
+      // Success notification
+      toast.success(`Đã áp dụng template: ${template.name}`);
+      
+      // Auto-save will trigger via useEffect
+      console.log('Template applied, auto-save will run in 2 seconds...');
+      
+    } catch (error) {
+      console.error('Failed to apply template:', error);
+      toast.error('Lỗi khi áp dụng template');
+    }
+  }, [nodes, setNodes, setEdges]);
+
+  // Handle selection changes when nodes are deselected
+  const handleSelectionChange = useCallback(() => {
+    if (selectedNodeId) {
       setSelectedNodeId(null);
     }
   }, [selectedNodeId]);
@@ -1072,7 +1148,9 @@ function FlowEditorContent() {
             <div className="flex items-center gap-2 px-4 py-2 bg-green-50 border-2 border-green-400 rounded-lg shadow-sm">
               <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
               <div>
-                <div className="text-sm font-bold text-green-800">🟢 Flow Active</div>
+                <div className="text-sm font-bold text-green-800 flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4" /> Flow Active
+                </div>
                 <div className="text-xs text-green-600">
                   Kết nối: Start → {nodes.find(n => n.id === flowStatus.firstNode)?.data?.label || 'Node'}
                 </div>
@@ -1112,6 +1190,15 @@ function FlowEditorContent() {
           >
             <Layers className="w-4 h-4" />
             {showSidebar ? 'Hide' : 'Show'} Panel
+          </button>
+          <button
+            onClick={() => setShowTemplateModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 
+              hover:from-orange-600 hover:to-orange-700 text-white rounded-md transition-all 
+              shadow-md hover:shadow-lg"
+          >
+            <Palette className="w-5 h-5" />
+            <span className="font-semibold">Templates</span>
           </button>
           <button
             className="flex items-center gap-2 px-4 py-2 bg-white border border-stone-300 text-stone-700 rounded-md hover:bg-stone-50 transition-colors"
@@ -1421,6 +1508,13 @@ function FlowEditorContent() {
           </div>
         )}
       </div>
+
+      {/* Template Modal */}
+      <TemplateModal
+        isOpen={showTemplateModal}
+        onClose={() => setShowTemplateModal(false)}
+        onSelectTemplate={applyTemplate}
+      />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import React, { memo } from 'react';
 import { Handle, Position, NodeProps, useReactFlow } from 'reactflow';
-import { Copy, Trash2 } from 'lucide-react';
+import { Copy, Trash2, Clock, Mail, Wrench, Zap, Circle as CircleIcon, ArrowRight, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 
 interface WorkflowNodeData {
   label: string;
@@ -66,17 +66,17 @@ function WorkflowNode({ data, selected, id }: NodeProps<WorkflowNodeData>) {
 
   const hasConnectionInputs = effectiveInputs.length > 0;
 
-  // Get emoji icon based on category
+  // Get icon based on category
   const getIcon = () => {
     if (data.icon) return data.icon;
-    const icons = {
-      trigger: '⏰',
-      action: '📧',
-      logic: '🔧',
-      data: '📊',
-      transform: '🔄',
+    const icons: Record<string, React.ReactNode> = {
+      trigger: <Clock className="w-6 h-6" />,
+      action: <Mail className="w-6 h-6" />,
+      logic: <Wrench className="w-6 h-6" />,
+      data: <CircleIcon className="w-6 h-6 fill-blue-500 text-blue-500" />,
+      transform: <ArrowRight className="w-6 h-6" />,
     };
-    return icons[data.category as keyof typeof icons] || '🔵';
+    return icons[data.category] || <CircleIcon className="w-6 h-6 fill-blue-500 text-blue-500" />;
   };
 
   // Get status badge
@@ -85,11 +85,11 @@ function WorkflowNode({ data, selected, id }: NodeProps<WorkflowNodeData>) {
     
     const badges = {
       idle: { text: '', color: '', show: false },
-      configured: { text: '✓', color: 'bg-green-500', show: true },
-      running: { text: '⏳', color: 'bg-blue-500 animate-pulse', show: true },
-      success: { text: '✓', color: 'bg-green-500', show: true },
-      error: { text: '❌', color: 'bg-red-500 animate-pulse', show: true },
-      failed: { text: '❌', color: 'bg-red-500 animate-pulse', show: true }, // Added for failed state
+      configured: { icon: <CheckCircle className="w-3 h-3" />, color: 'bg-green-500', show: true },
+      running: { icon: <Clock className="w-3 h-3 animate-spin" />, color: 'bg-blue-500 animate-pulse', show: true },
+      success: { icon: <CheckCircle className="w-3 h-3" />, color: 'bg-green-500', show: true },
+      error: { icon: <XCircle className="w-3 h-3" />, color: 'bg-red-500 animate-pulse', show: true },
+      failed: { icon: <XCircle className="w-3 h-3" />, color: 'bg-red-500 animate-pulse', show: true },
     };
     
     return badges[status as keyof typeof badges] || badges.idle;
@@ -205,7 +205,7 @@ function WorkflowNode({ data, selected, id }: NodeProps<WorkflowNodeData>) {
                 }}
               >
                 <div className="flex items-center gap-1.5">
-                  <span className="text-lg">➡️</span>
+                  <ArrowRight className="w-4 h-4 text-green-400" />
                   <span className="text-green-400 font-bold text-[9px]">NHẬN</span>
                   <span className="font-semibold">{input.name}</span>
                   {input.required && <span className="text-red-400 text-sm">*</span>}
@@ -228,7 +228,7 @@ function WorkflowNode({ data, selected, id }: NodeProps<WorkflowNodeData>) {
         ${data.status === 'running' ? 'ring-2 ring-blue-400 animate-pulse' : ''}
       `}>
         <div className="flex items-center gap-3 mb-2">
-          <span className="text-3xl">{getIcon()}</span>
+          <div className="text-white">{getIcon()}</div>
           <div className="flex-1 min-w-0">
             <div className="font-semibold text-base text-white truncate">
               {data.label}
@@ -237,13 +237,13 @@ function WorkflowNode({ data, selected, id }: NodeProps<WorkflowNodeData>) {
               <span>{data.category}</span>
               {data.configured && data.status !== 'running' && data.status !== 'error' && (
                 <span className="inline-flex items-center gap-0.5 bg-green-500/20 text-green-300 px-1.5 py-0.5 rounded text-[8px] font-semibold">
-                  <span>✓</span>
+                  <CheckCircle className="w-2.5 h-2.5" />
                   <span>Config</span>
                 </span>
               )}
               {!data.configured && data.status !== 'running' && data.status !== 'error' && (
                 <span className="inline-flex items-center gap-0.5 bg-orange-500/20 text-orange-300 px-1.5 py-0.5 rounded text-[8px] font-semibold">
-                  <span>⚠</span>
+                  <AlertTriangle className="w-2.5 h-2.5" />
                   <span>Config</span>
                 </span>
               )}
@@ -253,24 +253,24 @@ function WorkflowNode({ data, selected, id }: NodeProps<WorkflowNodeData>) {
         
         {/* Execution Time - Show when running or completed */}
         {data.executionTime && data.status === 'success' && (
-          <div className="mt-1 text-[9px] text-green-300 bg-green-500/10 px-2 py-0.5 rounded">
-            ⚡ Hoàn thành trong {data.executionTime}ms
+          <div className="mt-1 text-[9px] text-green-300 bg-green-500/10 px-2 py-0.5 rounded flex items-center gap-1">
+            <Zap className="w-3 h-3" /> Hoàn thành trong {data.executionTime}ms
           </div>
         )}
         {data.status === 'error' && (
-          <div className="mt-1 text-[9px] text-red-300 bg-red-500/10 px-2 py-0.5 rounded">
-            ❌ Lỗi thực thi
+          <div className="mt-1 text-[9px] text-red-300 bg-red-500/10 px-2 py-0.5 rounded flex items-center gap-1">
+            <XCircle className="w-3 h-3" /> Lỗi thực thi
           </div>
         )}
         
         {/* Input/Output Indicators */}
         <div className="flex items-center justify-between text-[10px] text-white/60 mt-2">
           <span className="flex items-center gap-1">
-            <span className="text-green-400">➡️</span>
+            <ArrowRight className="w-3 h-3 text-green-400" />
             <span>{data.inputs?.length || 0} nhận</span>
           </span>
           <span className="flex items-center gap-1">
-            <span className="text-orange-400">➡️</span>
+            <ArrowRight className="w-3 h-3 text-orange-400" />
             <span>{data.outputs?.length || 0} gửi</span>
           </span>
         </div>
@@ -338,7 +338,7 @@ function WorkflowNode({ data, selected, id }: NodeProps<WorkflowNodeData>) {
                 }}
               >
                 <div className="flex items-center gap-1.5">
-                  <span className="text-lg">➡️</span>
+                  <ArrowRight className="w-4 h-4 text-orange-400" />
                   <span className="text-orange-400 font-bold text-[9px]">GỬI</span>
                   <span className="font-semibold">{output.name}</span>
                 </div>

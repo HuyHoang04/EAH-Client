@@ -108,7 +108,7 @@ export function useExecutionSocket(
     socketRef.current = newSocket;
 
     newSocket.on('connect', () => {
-      console.log('✅ WebSocket connected');
+      console.log('[WebSocket] Connected');
       setIsConnected(true);
       
       // Subscribe to execution updates
@@ -121,13 +121,13 @@ export function useExecutionSocket(
     });
 
     newSocket.on('connect_error', (error) => {
-      console.error('🔴 WebSocket connection error:', error);
+      console.error('[WebSocket] Connection error:', error);
       setIsConnected(false);
     });
 
     // Handle execution started
     newSocket.on('execution:started', (data: ExecutionStartedEvent) => {
-      console.log('🚀 Execution started:', data);
+      console.log('[Execution] Started:', data);
       setCurrentExecution(data);
       setProgress({ completed: 0, total: data.totalNodes });
       setLogs([]); // Clear logs for new execution
@@ -143,7 +143,7 @@ export function useExecutionSocket(
 
     // Handle node completed
     newSocket.on('node:completed', (data: NodeCompletedEvent) => {
-      console.log('✅ Node completed:', data);
+      console.log('[Node] Completed:', data);
       if (onNodeStatusChange) {
         onNodeStatusChange(data.nodeId, 'success', data.output);
       }
@@ -161,7 +161,7 @@ export function useExecutionSocket(
 
     // Handle log messages
     newSocket.on('log', (data: LogMessageEvent) => {
-      console.log(`📝 [${data.level.toUpperCase()}] ${data.message}`);
+      console.log(`[${data.level.toUpperCase()}] ${data.message}`);
       setLogs(prev => [...prev, data]);
     });
 

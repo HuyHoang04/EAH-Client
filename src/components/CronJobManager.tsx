@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from 'react';
 import { nodeRunnerService, CronJob, parseCronExpression, validateCronExpression } from '@/services/nodeRunnerService';
+import { Play, Pause, Trash2, Calendar, Clock } from 'lucide-react';
 
 interface CronJobManagerProps {
   flowId?: string;
@@ -209,23 +210,27 @@ export default function CronJobManager({ flowId }: CronJobManagerProps) {
                   <div className="flex items-center gap-3">
                     <h4 className="font-medium text-gray-800">{job.name}</h4>
                     <span className={`
-                      px-2 py-1 text-xs rounded-full
+                      px-2 py-1 text-xs rounded-full flex items-center gap-1
                       ${job.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}
                     `}>
-                      {job.isActive ? '▶️ Active' : '⏸️ Paused'}
+                      {job.isActive ? (
+                        <><Play className="w-3 h-3" /> Active</>
+                      ) : (
+                        <><Pause className="w-3 h-3" /> Paused</>
+                      )}
                     </span>
                   </div>
 
                   <div className="mt-2 space-y-1 text-sm text-gray-600">
-                    <p>
-                      📅 Schedule: <span className="font-mono">{job.cronExpression}</span>
+                    <p className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4" /> Schedule: <span className="font-mono">{job.cronExpression}</span>
                       <span className="text-gray-400 ml-2">({parseCronExpression(job.cronExpression)})</span>
                     </p>
                     {job.nextRunAt && (
-                      <p>⏰ Next run: {new Date(job.nextRunAt).toLocaleString()}</p>
+                      <p className="flex items-center gap-1"><Clock className="w-4 h-4" /> Next run: {new Date(job.nextRunAt).toLocaleString()}</p>
                     )}
                     {job.lastRunAt && (
-                      <p>✅ Last run: {new Date(job.lastRunAt).toLocaleString()}</p>
+                      <p className="flex items-center gap-1"><Clock className="w-4 h-4" /> Last run: {new Date(job.lastRunAt).toLocaleString()}</p>
                     )}
                   </div>
                 </div>
@@ -233,17 +238,17 @@ export default function CronJobManager({ flowId }: CronJobManagerProps) {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleToggle(job)}
-                    className="px-3 py-1 text-sm border rounded hover:bg-gray-50"
+                    className="px-3 py-1 text-sm border rounded hover:bg-gray-50 flex items-center gap-1"
                     title={job.isActive ? 'Pause' : 'Resume'}
                   >
-                    {job.isActive ? '⏸️' : '▶️'}
+                    {job.isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   </button>
                   <button
                     onClick={() => handleDelete(job)}
-                    className="px-3 py-1 text-sm text-red-600 border border-red-200 rounded hover:bg-red-50"
+                    className="px-3 py-1 text-sm text-red-600 border border-red-200 rounded hover:bg-red-50 flex items-center gap-1"
                     title="Delete"
                   >
-                    🗑️
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               </div>

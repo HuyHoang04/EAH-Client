@@ -11,7 +11,7 @@
 
 import { memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
-import { Play, Link2, Unlink } from 'lucide-react';
+import { Play, Link2, Unlink, Circle, Lightbulb } from 'lucide-react';
 
 interface StartNodeData {
   label: string;
@@ -54,13 +54,16 @@ function StartNode({ data, selected }: NodeProps<StartNodeData>) {
           
           {/* Status Badge */}
           <div className={`
-            px-2 py-1 rounded-full text-xs font-semibold
+            flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-semibold
             ${isActive 
               ? 'bg-white text-green-600' 
               : 'bg-green-100 text-green-700'
             }
           `}>
-            {isActive ? '🟢 Active' : '🔴 Inactive'}
+            <Circle className={`w-2.5 h-2.5 ${
+              isActive ? 'fill-green-600' : 'fill-red-500'
+            }`} />
+            {isActive ? 'Active' : 'Inactive'}
           </div>
         </div>
       </div>
@@ -98,7 +101,7 @@ function StartNode({ data, selected }: NodeProps<StartNodeData>) {
         {/* Info Box */}
         <div className="mt-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
           <div className="flex gap-2">
-            <span className="text-lg">💡</span>
+            <Lightbulb className="w-5 h-5 text-blue-600" />
             <div className="text-xs text-blue-700">
               <p className="font-semibold mb-1">Start Node là điểm bắt đầu</p>
               <ul className="space-y-1 list-disc list-inside">

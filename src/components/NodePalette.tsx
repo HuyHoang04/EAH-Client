@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { nodeRunnerService, NodeMetadata, getNodeCategoryColor } from '@/services/nodeRunnerService';
+import { Download, Upload, Link, BarChart3, FileText, Mail, Database, RefreshCw, Clock, ArrowDownUp, Lightbulb } from 'lucide-react';
 
 export default function NodePalette() {
   const [nodes, setNodes] = useState<NodeMetadata[]>([]);
@@ -136,11 +137,11 @@ export default function NodePalette() {
 
                   {/* Inputs/Outputs Count */}
                   <div className="flex gap-3 mt-2">
-                    <span className="text-xs text-gray-500">
-                      📥 {node.inputs.length} inputs
+                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <Download className="w-3 h-3" /> {node.inputs.length} inputs
                     </span>
-                    <span className="text-xs text-gray-500">
-                      📤 {node.outputs.length} outputs
+                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <Upload className="w-3 h-3" /> {node.outputs.length} outputs
                     </span>
                   </div>
                 </div>
@@ -153,8 +154,8 @@ export default function NodePalette() {
       {/* Connection Type Guide */}
       <div className="p-4 border-t bg-white space-y-3">
         <div>
-          <h4 className="text-xs font-semibold text-gray-700 mb-2 uppercase">
-            🔗 Connection Guide
+          <h4 className="text-xs font-semibold text-gray-700 mb-2 uppercase flex items-center gap-1">
+            <Link className="w-3 h-3" /> Connection Guide
           </h4>
           <p className="text-[10px] text-gray-500 mb-3">
             Màu sắc của connection points cho biết loại dữ liệu:
@@ -188,8 +189,8 @@ export default function NodePalette() {
         </div>
         
         <div className="pt-2 border-t border-gray-100">
-          <p className="text-[10px] text-gray-500">
-            💡 <strong>Cách kết nối:</strong>
+          <p className="text-[10px] text-gray-500 flex items-center gap-1">
+            <Lightbulb className="w-3 h-3" /> <strong>Cách kết nối:</strong>
           </p>
           <ul className="text-[10px] text-gray-500 mt-1 space-y-0.5 ml-4">
             <li>• Kéo từ chấm tròn bên phải (output) 📤</li>
@@ -202,7 +203,7 @@ export default function NodePalette() {
         {/* Workflow Flow Example */}
         <div className="pt-3 border-t border-gray-100">
           <h4 className="text-xs font-semibold text-gray-700 mb-2 flex items-center gap-1">
-            🔄 <span>Workflow chạy như thế nào?</span>
+            <RefreshCw className="w-3 h-3" /> <span>Workflow chạy như thế nào?</span>
           </h4>
           
           {/* Visual Flow Diagram */}
@@ -213,14 +214,16 @@ export default function NodePalette() {
                 1
               </div>
               <div className="flex-1">
-                <p className="text-[10px] text-gray-700 font-semibold">⏰ Trigger khởi động</p>
+                <p className="text-[10px] text-gray-700 font-semibold flex items-center gap-1">
+                  <Clock className="w-3 h-3" /> Trigger khởi động
+                </p>
                 <p className="text-[9px] text-gray-500">Cron/Webhook bắt đầu workflow</p>
               </div>
             </div>
             
             {/* Arrow */}
             <div className="flex items-center justify-center">
-              <div className="text-orange-500 text-xl">⬇️</div>
+              <ArrowDownUp className="w-4 h-4 text-orange-500 rotate-90" />
             </div>
             
             {/* Step 2 */}
@@ -229,14 +232,16 @@ export default function NodePalette() {
                 2
               </div>
               <div className="flex-1">
-                <p className="text-[10px] text-gray-700 font-semibold">🔗 Trigger → Action</p>
+                <p className="text-[10px] text-gray-700 font-semibold flex items-center gap-1">
+                  <Link className="w-3 h-3" /> Trigger → Action
+                </p>
                 <p className="text-[9px] text-gray-500">Kết nối CAM trigger.output → action.trigger</p>
               </div>
             </div>
             
             {/* Arrow */}
             <div className="flex items-center justify-center">
-              <div className="text-orange-500 text-xl">⬇️</div>
+              <ArrowDownUp className="w-4 h-4 text-orange-500 rotate-90" />
             </div>
             
             {/* Step 3 */}
@@ -245,7 +250,9 @@ export default function NodePalette() {
                 3
               </div>
               <div className="flex-1">
-                <p className="text-[10px] text-gray-700 font-semibold">📊 Truyền dữ liệu</p>
+                <p className="text-[10px] text-gray-700 font-semibold flex items-center gap-1">
+                  <BarChart3 className="w-3 h-3" /> Truyền dữ liệu
+                </p>
                 <p className="text-[9px] text-gray-500">Data outputs (màu) → inputs tương ứng</p>
               </div>
             </div>
@@ -261,7 +268,7 @@ export default function NodePalette() {
                 4
               </div>
               <div className="flex-1">
-                <p className="text-[10px] text-gray-700 font-semibold">✅ Xử lý & tiếp tục</p>
+                <p className="text-[10px] text-gray-700 font-semibold">Xử lý & tiếp tục</p>
                 <p className="text-[9px] text-gray-500">Action chạy → trigger action tiếp theo</p>
               </div>
             </div>
@@ -269,13 +276,21 @@ export default function NodePalette() {
           
           {/* Example Flow */}
           <div className="mt-2 bg-white border border-gray-200 rounded p-2">
-            <p className="text-[10px] text-gray-600 font-semibold mb-1">📝 Ví dụ:</p>
+            <p className="text-[10px] text-gray-600 font-semibold mb-1 flex items-center gap-1">
+              <FileText className="w-3 h-3" /> Ví dụ:
+            </p>
             <div className="text-[9px] text-gray-500 space-y-0.5">
-              <p>⏰ <span className="font-mono bg-purple-100 px-1 rounded">CronTrigger</span> (9h sáng)</p>
+              <p className="flex items-center gap-1">
+                <Clock className="w-3 h-3" /> <span className="font-mono bg-purple-100 px-1 rounded">CronTrigger</span> (9h sáng)
+              </p>
               <p className="ml-3">↓ <span className="text-orange-500">trigger</span> →</p>
-              <p>📧 <span className="font-mono bg-blue-100 px-1 rounded">SendEmail</span> (gửi report)</p>
+              <p className="flex items-center gap-1">
+                <Mail className="w-3 h-3" /> <span className="font-mono bg-blue-100 px-1 rounded">SendEmail</span> (gửi report)
+              </p>
               <p className="ml-3">↓ <span className="text-orange-500">trigger</span> →</p>
-              <p>💾 <span className="font-mono bg-green-100 px-1 rounded">SaveToDB</span> (lưu log)</p>
+              <p className="flex items-center gap-1">
+                <Database className="w-3 h-3" /> <span className="font-mono bg-green-100 px-1 rounded">SaveToDB</span> (lưu log)
+              </p>
             </div>
           </div>
         </div>

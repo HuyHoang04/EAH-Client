@@ -16,6 +16,7 @@ export interface FlowDto {
 export interface CreateFlowRequest {
   name: string;
   description: string;
+  reactFlowData?: string; // Optional: Template data
 }
 
 export interface FlowResponse extends FlowDto {
@@ -46,6 +47,7 @@ export class FlowService {
         name: flowData.name.trim(),
         description: flowData.description.trim(),
         isActive: false,
+        reactFlowData: flowData.reactFlowData, // Include template data if provided
       };
 
       const response = await postRequest<FlowResponse>(

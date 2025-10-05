@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Search, Download, Filter, XCircle, Info, AlertTriangle, AlertCircle } from 'lucide-react';
+import { FileText, RefreshCw, AlertTriangle, XCircle, Info, AlertCircle, Download, Search, Filter } from 'lucide-react';
 import type { LogMessageEvent } from '@/hooks/useExecutionSocket';
 
 interface ExecutionLogsProps {
@@ -201,15 +201,15 @@ export default function ExecutionLogs({ logs, onClear }: ExecutionLogsProps) {
 
       {/* Footer Stats */}
       <div className="flex items-center justify-between p-3 border-t border-stone-200 bg-stone-50 text-xs text-stone-600">
-        <div className="flex gap-4">
-          <span>
-            ℹ️ Info: <strong>{logs.filter(l => l.level === 'info').length}</strong>
+        <div className="flex gap-4 text-sm text-stone-400">
+          <span className="flex items-center gap-1.5">
+            <Info className="w-4 h-4" /> Info: <strong>{logs.filter(l => l.level === 'info').length}</strong>
           </span>
-          <span>
-            ⚠️ Warnings: <strong>{logs.filter(l => l.level === 'warn').length}</strong>
+          <span className="flex items-center gap-1.5">
+            <AlertTriangle className="w-4 h-4" /> Warnings: <strong>{logs.filter(l => l.level === 'warn').length}</strong>
           </span>
-          <span>
-            ❌ Errors: <strong>{logs.filter(l => l.level === 'error').length}</strong>
+          <span className="flex items-center gap-1.5">
+            <XCircle className="w-4 h-4" /> Errors: <strong>{logs.filter(l => l.level === 'error').length}</strong>
           </span>
         </div>
         <span>
