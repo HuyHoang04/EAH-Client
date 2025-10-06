@@ -120,49 +120,26 @@ export default function Dashboard() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <div className="absolute inset-y-0 right-0 pr-6 flex items-center">
-                  <Workflow className="w-6 h-6 text-purple-400 hover:text-purple-300 transition-colors duration-300 cursor-pointer hover:scale-110" />
-                </div>
               </div>
 
               {/* Action buttons */}
               <div className="flex gap-3">
-                <CreateFlowDialog onFlowCreated={handleFlowCreated} />
+                <CreateFlowDialog 
+                  onFlowCreated={handleFlowCreated}
+                  trigger={
+                    <button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-2 border-blue-400/30 px-6 py-3 rounded-xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-105">
+                      <Plus className="w-5 h-5" />
+                      Create New
+                    </button>
+                  }
+                />
                 <button 
                   onClick={() => setShowTemplateModal(true)}
-                  className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 
-                    hover:from-orange-600 hover:to-orange-700 text-white border-2 border-orange-400/30 
-                    px-6 py-3 rounded-xl transition-all duration-300 font-semibold shadow-lg 
-                    hover:shadow-xl hover:scale-105"
+                  className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white border-2 border-blue-400/30 px-6 py-3 rounded-xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-105"
                 >
                   <Palette className="w-5 h-5" />
-                  <span>Templates</span>
-                </button>
-                <button className="flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white border-2 border-white/20 px-6 py-3 rounded-xl hover:bg-white/20 hover:border-white/40 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-105">
-                  <Filter className="w-5 h-5" />
-                  Filter
                 </button>
               </div>
-            </div>
-
-            {/* Quick filters */}
-            <div className="flex justify-center mt-6 space-x-6 text-sm font-medium text-white/70">
-              <span className="flex items-center hover:text-blue-600 transition-colors cursor-pointer">
-                <div className="w-2 h-2 bg-blue-600 rounded-full mr-2"></div>
-                Active
-              </span>
-              <span className="flex items-center hover:text-green-600 transition-colors cursor-pointer">
-                <div className="w-2 h-2 bg-green-600 rounded-full mr-2"></div>
-                Completed
-              </span>
-              <span className="flex items-center hover:text-yellow-600 transition-colors cursor-pointer">
-                <div className="w-2 h-2 bg-yellow-600 rounded-full mr-2"></div>
-                Draft
-              </span>
-              <span className="flex items-center hover:text-red-600 transition-colors cursor-pointer">
-                <div className="w-2 h-2 bg-red-600 rounded-full mr-2"></div>
-                Error
-              </span>
             </div>
           </div>
         </div>

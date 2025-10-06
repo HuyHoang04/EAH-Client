@@ -33,6 +33,7 @@ import ExecutionProgress from '@/components/ExecutionProgress';
 import { useExecutionSocket } from '@/hooks/useExecutionSocket';
 import { TemplateModal } from '@/components/templates';
 import { FlowTemplate } from '@/constants/flowTemplates';
+import { SmartInput, FieldValue } from '@/components/workflow/reference';
 import toast from 'react-hot-toast';
 
 // Custom styles for selected nodes
@@ -328,7 +329,48 @@ function NodeConfigPanel({ nodeId, nodes, setNodes, edges }: NodeConfigPanelProp
           />
         );
       
-      default: // string or any
+      default: // string or any - USE SMART INPUT for text fields
+        // Check if this is a field that should use SmartInput
+        const useSmartInput = ['to', 'subject', 'body', 'message', 'content', 'text', 'url', 'path', 'email'].some(
+          keyword => input.name.toLowerCase().includes(keyword)
+        );
+
+        if (useSmartInput) {
+          // Convert old string value to FieldValue format
+          const fieldValue: FieldValue[] = typeof value === 'string' && value
+            ? [{ type: 'text', value }]
+            : Array.isArray(value) 
+              ? value 
+              : [];
+
+          // Determine field type based on input name
+          let fieldType: 'email' | 'text' | 'number' | 'url' = 'text';
+          if (input.name.toLowerCase().includes('email') || input.name.toLowerCase() === 'to') {
+            fieldType = 'email';
+          } else if (input.name.toLowerCase().includes('url') || input.name.toLowerCase().includes('link')) {
+            fieldType = 'url';
+          }
+
+          return (
+            <SmartInput
+              label=""
+              value={fieldValue}
+              onChange={(newValue) => {
+                // Convert FieldValue[] back to format for backend
+                handleParameterChange(input.name, newValue);
+              }}
+              type="text-with-fields"
+              fieldType={fieldType}
+              currentNodeId={nodeId}
+              nodes={nodes}
+              edges={edges}
+              placeholder={`Enter ${input.name}...`}
+              multiline={input.name.toLowerCase().includes('body') || input.name.toLowerCase().includes('content') || input.name.toLowerCase().includes('message')}
+            />
+          );
+        }
+
+        // Fallback to regular input for other fields
         return (
           <input
             type="text"
@@ -472,6 +514,60 @@ const initialNodes: any[] = [];
 
 const initialEdges: Edge[] = [];
 
+// Helper: Convert FieldValue[] to backend-compatible format
+function convertFieldValueToBackend(fieldValue: FieldValue[] | string | any): any {
+  // If already a string or other type, return as-is
+  if (typeof fieldValue === 'string' || typeof fieldValue === 'number' || typeof fieldValue === 'boolean') {
+    return fieldValue;
+  }
+  
+  // If not an array, return as-is
+  if (!Array.isArray(fieldValue)) {
+    return fieldValue;
+  }
+  
+  // Convert FieldValue[] to backend format
+  // For now, keep the full structure so backend can process it later
+  // In Sprint 4, backend will handle reference resolution
+  return fieldValue;
+}
+
+// Helper: Convert backend format to FieldValue[]
+function convertBackendToFieldValue(backendValue: any): FieldValue[] | any {
+  // If already FieldValue[] format (has 'type' property), return as-is
+  if (Array.isArray(backendValue) && backendValue.length > 0 && backendValue[0].type) {
+    return backendValue;
+  }
+  
+  // If string, convert to FieldValue format
+  if (typeof backendValue === 'string') {
+    return backendValue ? [{ type: 'text', value: backendValue }] : [];
+  }
+  
+  // Other types, return as-is
+  return backendValue;
+}
+
+// Helper: Convert all node parameters before saving
+function prepareNodesForBackend(nodes: any[]): any[] {
+  return nodes.map(node => {
+    if (!node.data.parameters) return node;
+    
+    const convertedParams: Record<string, any> = {};
+    for (const [key, value] of Object.entries(node.data.parameters)) {
+      convertedParams[key] = convertFieldValueToBackend(value);
+    }
+    
+    return {
+      ...node,
+      data: {
+        ...node.data,
+        parameters: convertedParams,
+      },
+    };
+  });
+}
+
 function FlowEditorContent() {
   const params = useParams();
   const router = useRouter();
@@ -610,6 +706,33 @@ function FlowEditorContent() {
             loadedNodes = reactFlowState.nodes.filter((node: any) => 
               node.type !== 'input' && node.type !== 'output'
             );
+            
+            // Convert backend parameters to FieldValue format for SmartInput
+            loadedNodes = loadedNodes.map((node: any) => {
+              if (!node.data.parameters) return node;
+              
+              const convertedParams: Record<string, any> = {};
+              for (const [key, value] of Object.entries(node.data.parameters)) {
+                // Check if this param should use SmartInput
+                const useSmartInput = ['to', 'subject', 'body', 'message', 'content', 'text', 'url', 'path', 'email'].some(
+                  keyword => key.toLowerCase().includes(keyword)
+                );
+                
+                if (useSmartInput) {
+                  convertedParams[key] = convertBackendToFieldValue(value);
+                } else {
+                  convertedParams[key] = value;
+                }
+              }
+              
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  parameters: convertedParams,
+                },
+              };
+            });
           }
           if (reactFlowState.edges && Array.isArray(reactFlowState.edges)) {
             loadedEdges = reactFlowState.edges;
@@ -720,8 +843,12 @@ function FlowEditorContent() {
     const saveTimer = setTimeout(async () => {
       try {
         setIsSaving(true);
+        
+        // Prepare nodes for backend (convert FieldValue[] format)
+        const nodesToSave = prepareNodesForBackend(nodes);
+        
         const reactFlowState = {
-          nodes,
+          nodes: nodesToSave,
           edges,
         };
         
@@ -750,23 +877,23 @@ function FlowEditorContent() {
 
   const onConnect = useCallback(
     (params: Connection | Edge) => {
-      // Task 1.3: Prevent connections TO Start Node
+      // Sprint 2 Day 15: Simplified validation for ExecutionData system
+      
+      // Rule 1: Prevent connections TO Start Node
       if (params.target === 'start-node') {
-        toast.error('Start node không thể nhận kết nối đầu vào!');
+        toast.error('❌ Start node không thể nhận kết nối đầu vào!');
         return;
       }
       
-      // Task 1.3: Prevent duplicate connections to same input
-      const existingEdge = edges.find(
-        edge => edge.target === params.target && 
-                edge.targetHandle === params.targetHandle
-      );
+      // Rule 2: Each node can only have ONE input connection
+      // (Simplified: no need to check targetHandle - only 1 input per node)
+      const existingEdge = edges.find(edge => edge.target === params.target);
       if (existingEdge) {
-        toast.error('Input này đã có kết nối! Mỗi input chỉ nhận 1 connection.');
+        toast.error('⚠️ Node này đã có input connection! Mỗi node chỉ nhận 1 connection.');
         return;
       }
       
-      // Smart Connection Validation
+      // Rule 3: Validate nodes exist
       const sourceNode = nodes.find(n => n.id === params.source);
       const targetNode = nodes.find(n => n.id === params.target);
 
@@ -775,173 +902,79 @@ function FlowEditorContent() {
         return;
       }
 
-      // Get node metadata
-      const sourceOutputs = (sourceNode.data as any)?.outputs || [];
-      const targetInputs = (targetNode.data as any)?.inputs || [];
-
-      // Validation 1: Source must have outputs
-      if (sourceOutputs.length === 0) {
-        toast.error('Lỗi kết nối: Node nguồn không có đầu ra');
-        return;
-      }
-
-      // Validation 2: Target must have inputs
-      if (targetInputs.length === 0) {
-        alert('Lỗi kết nối: Node đích không có đầu vào');
-        return;
-      }
-
-      // Validation 3: Check data type compatibility
-      const sourceOutput = sourceOutputs[0]; // For now, use first output
-      const targetInput = targetInputs[0]; // For now, use first input
-
-      const compatibleTypes = ['any', sourceOutput.type, targetInput.type];
-      const isCompatible = 
-        sourceOutput.type === 'any' || 
-        targetInput.type === 'any' || 
-        sourceOutput.type === targetInput.type;
-
-      if (!isCompatible) {
-        // Show visual feedback with toast-style message
-        const errorMsg = `Không thể kết nối: Kiểu dữ liệu không tương thích\n` +
-                        `Đầu ra "${sourceOutput.name}": ${sourceOutput.type}\n` +
-                        `Đầu vào "${targetInput.name}": ${targetInput.type}\n\n` +
-                        `Tip: Chỉ có thể kết nối cùng loại hoặc với type "any"`;
-        toast.error(errorMsg);
-        return;
-      }
-
-      // Validation 4: Prevent duplicate connections
+      // Rule 4: Prevent duplicate connections
       const isDuplicate = edges.some(
-        edge => edge.source === params.source && 
-                edge.target === params.target &&
-                edge.sourceHandle === params.sourceHandle &&
-                edge.targetHandle === params.targetHandle
+        edge => edge.source === params.source && edge.target === params.target
       );
-
       if (isDuplicate) {
-        alert('Lỗi kết nối: Kết nối này đã tồn tại');
+        toast.error('⚠️ Kết nối này đã tồn tại!');
         return;
       }
 
-      // Connection is valid - add with styling
+      // All ExecutionData connections are compatible (no type checking needed)
       
-      // Check if source is IfElse node for conditional edge
-      const sourceNodeType = (sourceNode.data as any)?.nodeType;
-      const isConditionalBranch = sourceNodeType === 'ifElse' && 
-        (params.sourceHandle === 'true' || params.sourceHandle === 'false');
-      
+      // Create connection with styling
       const newEdge = {
         ...params,
         id: `e-${params.source}-${params.target}-${Date.now()}`,
-        type: isConditionalBranch ? 'conditional' : 'smoothstep', // Use conditional edge for IfElse branches
-        animated: true, // Animated flow
+        type: 'smoothstep',
+        animated: true,
         style: {
-          stroke: isConditionalBranch 
-            ? (params.sourceHandle === 'true' ? '#10B981' : '#EF4444')
-            : getDataTypeColor(sourceOutput.type),
+          stroke: '#6366F1', // Indigo for ExecutionData
           strokeWidth: 2,
         },
-        label: isConditionalBranch ? '' : (sourceOutput.name || ''), // Label handled by conditional edge
         labelStyle: {
           fill: '#64748b',
           fontSize: 11,
           fontWeight: 500,
         },
-        labelBgStyle: {
-          fill: '#ffffff',
-          fillOpacity: 0.9,
-        },
-        data: isConditionalBranch ? {
-          branchType: params.sourceHandle as 'true' | 'false',
-        } : undefined,
       };
 
       setEdges((eds) => addEdge(newEdge, eds));
       
       // Visual feedback
-      console.log('Kết nối thành công:', {
+      console.log('✅ Kết nối thành công (ExecutionData):', {
         from: sourceNode.data.label,
         to: targetNode.data.label,
-        dataType: sourceOutput.type,
       });
-      toast.success(`Kết nối thành công: ${sourceNode.data.label} → ${targetNode.data.label}`);
+      toast.success(`✅ Kết nối thành công: ${sourceNode.data.label} → ${targetNode.data.label}`);
     },
     [setEdges, nodes, edges]
   );
 
   // Validate connection during drag (visual feedback)
+  // Sprint 2 Day 15: Simplified for ExecutionData system
   const isValidConnection = useCallback(
     (connection: Connection) => {
-      // Task 1.3: Start Node cannot receive connections
+      // Rule 1: Start Node cannot receive connections
       if (connection.target === 'start-node') {
         return false;
       }
       
-      // Task 1.3: Each input can only have ONE connection
-      const existingEdge = edges.find(
-        edge => edge.target === connection.target && 
-                edge.targetHandle === connection.targetHandle
-      );
+      // Rule 2: Each node can only have ONE input connection
+      // (Simplified: no need to check targetHandle - only 1 input per node)
+      const existingEdge = edges.find(edge => edge.target === connection.target);
       if (existingEdge) {
         return false;
       }
       
+      // Rule 3: Validate nodes exist
       const sourceNode = nodes.find(n => n.id === connection.source);
       const targetNode = nodes.find(n => n.id === connection.target);
-
       if (!sourceNode || !targetNode) {
         return false;
       }
       
-      // Start Node can connect to anything (it has special 'any' output)
-      if (connection.source === 'start-node') {
-        return true;
-      }
-
-      const sourceOutputs = (sourceNode.data as any)?.outputs || [];
-      const targetInputs = (targetNode.data as any)?.inputs || [];
-
-      // Check if nodes have outputs/inputs
-      if (sourceOutputs.length === 0) {
+      // Rule 4: Cannot connect to self
+      if (connection.source === connection.target) {
         return false;
       }
       
-      if (targetInputs.length === 0) {
-        return false;
-      }
-
-      // Get specific handles if provided, otherwise use first
-      let sourceOutput, targetInput;
-      
-      if (connection.sourceHandle) {
-        sourceOutput = sourceOutputs.find((o: any) => o.id === connection.sourceHandle);
-      } else {
-        sourceOutput = sourceOutputs[0];
-      }
-      
-      if (connection.targetHandle) {
-        targetInput = targetInputs.find((i: any) => i.id === connection.targetHandle);
-      } else {
-        targetInput = targetInputs[0];
-      }
-
-      if (!sourceOutput || !targetInput) {
-        return false;
-      }
-
-      // Type compatibility check (more flexible)
-      const isCompatible = 
-        sourceOutput.type === 'any' || 
-        targetInput.type === 'any' || 
-        sourceOutput.type === targetInput.type ||
-        // Allow string to number conversion
-        (sourceOutput.type === 'string' && targetInput.type === 'number') ||
-        (sourceOutput.type === 'number' && targetInput.type === 'string');
-
-      return isCompatible;
+      // All ExecutionData connections are compatible (no type checking needed)
+      // Start Node has special 'any' type that connects to everything
+      return true;
     },
-    [nodes]
+    [nodes, edges]
   );
 
   // Node selection handlers

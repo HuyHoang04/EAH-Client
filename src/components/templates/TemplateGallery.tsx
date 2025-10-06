@@ -49,16 +49,6 @@ export default function TemplateGallery({ onSelectTemplate }: TemplateGalleryPro
 
   return (
     <div className="w-full">
-      {/* Header */}
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
-          <Palette className="w-8 h-8" /> Flow Templates
-        </h2>
-        <p className="text-stone-400">
-          Chọn template có sẵn để bắt đầu nhanh chóng với workflow của bạn
-        </p>
-      </div>
-
       {/* Filters */}
       <div className="mb-6 space-y-4">
         {/* Search Bar */}
