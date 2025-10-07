@@ -1,30 +1,61 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 
 export default function EducationBackground() {
-  // Memoize random positions to prevent recalculation on re-render
-  const stars = useMemo(() => 
-    [...Array(50)].map((_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      opacity: Math.random() * 0.7 + 0.3,
-      duration: Math.random() * 3 + 2,
-      delay: Math.random() * 2,
-    })), 
-  []);
+  const [mounted, setMounted] = useState(false);
+  const [stars, setStars] = useState<Array<{
+    id: number;
+    left: number;
+    top: number;
+    opacity: number;
+    duration: number;
+    delay: number;
+  }>>([]);
+  const [particles, setParticles] = useState<Array<{
+    id: number;
+    left: number;
+    top: number;
+    duration: number;
+    delay: number;
+  }>>([]);
 
-  const particles = useMemo(() => 
-    [...Array(30)].map((_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100 + 20,
-      duration: Math.random() * 15 + 10,
-      delay: Math.random() * 5,
-    })), 
-  []);
+  useEffect(() => {
+    // Generate random positions only on client side to prevent hydration mismatch
+    setStars(
+      [...Array(50)].map((_, i) => ({
+        id: i,
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        opacity: Math.random() * 0.7 + 0.3,
+        duration: Math.random() * 3 + 2,
+        delay: Math.random() * 2,
+      }))
+    );
+    
+    setParticles(
+      [...Array(30)].map((_, i) => ({
+        id: i,
+        left: Math.random() * 100,
+        top: Math.random() * 100 + 20,
+        duration: Math.random() * 15 + 10,
+        delay: Math.random() * 5,
+      }))
+    );
+    
+    setMounted(true);
+  }, []);
+
+  // Render static background during SSR and before hydration
+  if (!mounted) {
+    return (
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">

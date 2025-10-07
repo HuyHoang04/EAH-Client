@@ -116,7 +116,7 @@ function StartNode({ data, selected }: NodeProps<StartNodeData>) {
 
       {/* Protected Badge */}
       <div className="absolute -top-3 -left-3 bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
-        🔒 Protected
+        Protected
       </div>
 
       {/* Output Handle - Only on the right */}

@@ -1,8 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
-import Header from "@/components/Header";
-import EducationBackground from "@/components/EducationBackground";
-import { Search, Workflow, Zap, Users, Calendar, FileText, Bell, Database } from "lucide-react";
+import Header from "@/components/layout/Header";
+import EducationBackground from "@/components/shared/effects/EducationBackground";
+import { Zap, Users, Calendar, FileText, Bell, Database } from "lucide-react";
 
 export default function Home() {
   return (

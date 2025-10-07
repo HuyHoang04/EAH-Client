@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import FlowCard, { FlowCardProps } from '@/components/FlowCard';
+import FlowCard, { FlowCardProps } from './FlowCard';
 
 interface FlowCardGridProps {
   cards: FlowCardProps[];

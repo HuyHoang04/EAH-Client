@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FlowCardProps } from '@/components/FlowCard';
-import FlowCardGrid from '@/components/FlowCardGrid';
-import { CreateFlowDialog } from '@/components/CreateFlowDialog';
+import { FlowCardProps } from '@/components/features/dashboard/FlowCard';
+import FlowCardGrid from '@/components/features/dashboard/FlowCardGrid';
+import { CreateFlowDialog } from '@/components/features/dashboard/CreateFlowDialog';
 import { FlowService, FlowResponse } from '@/services/flowService';
-import { TemplateModal } from '@/components/templates';
+import { TemplateModal } from '@/components/features/templates';
 import { FlowTemplate } from '@/constants/flowTemplates';
-import { Search, Workflow, Plus, Filter, Palette } from 'lucide-react';
+import { Search, Plus, Palette } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function Dashboard() {

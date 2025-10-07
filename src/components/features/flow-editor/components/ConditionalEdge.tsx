@@ -37,12 +37,12 @@ export default function ConditionalEdge({
   let labelTextColor = '#64748B';
   
   if (branchType === 'true') {
-    strokeColor = '#10B981'; // Green
+    strokeColor = '#10B981';
     labelText = 'TRUE';
     labelBg = '#D1FAE5';
     labelTextColor = '#059669';
   } else if (branchType === 'false') {
-    strokeColor = '#EF4444'; // Red
+    strokeColor = '#EF4444'; 
     labelText = 'FALSE';
     labelBg = '#FEE2E2';
     labelTextColor = '#DC2626';

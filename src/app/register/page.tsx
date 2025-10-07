@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import Header from "@/components/Header";
-import EducationBackground from "@/components/EducationBackground";
+import Header from "@/components/layout/Header";
+import EducationBackground from "@/components/shared/effects/EducationBackground";
 import { register } from '@/services/authService';
 import { RegisterFormData, RegisterRequest, AuthResponse } from "@/types/auth";
-import AuthGuard from "@/components/AuthGuard";
+import AuthGuard from "@/components/shared/guards/AuthGuard";
 
 interface FormData extends RegisterFormData {}
 
@@ -101,9 +101,7 @@ export default function Register() {
         };
         
         // Gọi API đăng ký
-        const response = await register(requestData);
-        
-        console.log("Registration successful:", response);
+        const response = await register(requestData)
         
         toast.success("Registration successful! You can now sign in.", { id: loadingToast });
         setSubmitSuccess(true);

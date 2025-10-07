@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import Header from "@/components/Header";
-import EducationBackground from "@/components/EducationBackground";
+import Header from "@/components/layout/Header";
+import EducationBackground from "@/components/shared/effects/EducationBackground";
 import { login } from '@/services/authService';
 import { LoginFormData, AuthResponse } from "@/types/auth";
-import AuthGuard from "@/components/AuthGuard";
+import AuthGuard from "@/components/shared/guards/AuthGuard";
 
 interface FormData extends LoginFormData {}
 

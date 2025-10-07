@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ChevronDown, ChevronRight } from 'lucide-react';
+import { X, ChevronDown, ChevronRight, ReplyAll } from 'lucide-react';
 
 interface LoopChipProps {
   nodeId: string;
@@ -30,7 +30,7 @@ export function LoopChip({
     <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-400 rounded-full hover:scale-105 transition-all duration-200 cursor-pointer group shadow-sm hover:shadow-md relative">
       {/* Loop Icon */}
       <div className="w-5 h-5 text-purple-600 flex-shrink-0 animate-spin-slow">
-        🔄
+        <ReplyAll size={16} />
       </div>
       
       {/* Content */}
@@ -111,7 +111,7 @@ export function LoopChip({
             ))}
           </div>
           <div className="p-2 border-t bg-gray-50 text-[10px] text-gray-600">
-            💡 Will extract this field from each array item
+             Will extract this field from each array item
           </div>
         </div>
       )}

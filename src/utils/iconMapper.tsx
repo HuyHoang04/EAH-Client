@@ -52,12 +52,6 @@ const iconMap: Record<string, LucideIcon> = {
   'circle': Circle,
 };
 
-/**
- * Get icon component by name
- * @param iconName - The name of the icon (e.g., 'mail', 'clock')
- * @param defaultIcon - Default icon to use if name not found
- * @returns Lucide icon component
- */
 export function getIconComponent(
   iconName: string | undefined,
   defaultIcon: LucideIcon = Circle
@@ -66,12 +60,6 @@ export function getIconComponent(
   return iconMap[iconName.toLowerCase()] || defaultIcon;
 }
 
-/**
- * Render icon component with props
- * @param iconName - The name of the icon
- * @param className - Optional CSS classes
- * @returns React element
- */
 export function renderIcon(
   iconName: string | undefined,
   className: string = 'w-5 h-5'

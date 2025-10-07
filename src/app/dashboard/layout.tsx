@@ -1,9 +1,9 @@
 'use client';
 import React, { useState, createContext, useEffect } from 'react';
-import Sidebar from '@/components/Sidebar';
-import NotificationSidebar from '@/components/NotificationSidebar';
-import DashboardHeader from '@/components/DashboardHeader';
-import AuthGuard from '@/components/AuthGuard';
+import Sidebar from '@/components/layout/Sidebar';
+import NotificationSidebar from '@/components/layout/NotificationSidebar';
+import DashboardHeader from '@/components/layout/DashboardHeader';
+import AuthGuard from '@/components/shared/guards/AuthGuard';
 
 // Create context for the notification sidebar
 export const NotificationContext = createContext({

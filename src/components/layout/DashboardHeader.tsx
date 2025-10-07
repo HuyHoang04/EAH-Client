@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { NotificationContext } from '@/app/dashboard/layout';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/shared/ui/avatar';
 import { getGmailFromToken } from '@/utils/auth';
 import { getUserProfile } from '@/services/authService';
 import { UserData } from '@/types/auth';

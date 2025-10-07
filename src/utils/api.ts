@@ -55,9 +55,6 @@ export async function postRequest<T>(url: string, data: any, useAuth = true): Pr
 
 export async function putRequest<T>(url: string, data: any, useAuth = true): Promise<T> {
   try {
-    console.log('🔄 PUT Request:', url);
-    console.log('📦 Request data:', data);
-    
     // Tạo headers với Content-Type
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
@@ -83,25 +80,15 @@ export async function putRequest<T>(url: string, data: any, useAuth = true): Pro
     let responseData;
     try {
       responseData = await response.json();
-      console.log('📥 Response data:', responseData);
     } catch (parseError) {
-      console.error('❌ Failed to parse response:', parseError);
       throw new Error(`Invalid JSON response from server (${response.status})`);
     }
     
     if (!response.ok) {
-      console.error('❌ PUT Request failed:', {
-        status: response.status,
-        statusText: response.statusText,
-        data: responseData
-      });
       throw new Error(responseData.message || responseData.error || `Request failed with status ${response.status}`);
     }
-    
-    console.log('✅ PUT Request successful');
     return responseData;
   } catch (error: any) {
-    console.error('💥 PUT Request error:', error);
     throw error;
   }
 }
