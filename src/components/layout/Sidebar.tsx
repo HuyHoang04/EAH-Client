@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Network, FileText, LogOut, Menu } from 'lucide-react';
+import { LayoutDashboard, Network, FileText, LogOut, Menu, Activity } from 'lucide-react';
 import { logout } from '@/services/authService';
 
 interface SidebarProps {
@@ -36,6 +36,12 @@ export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
       icon: Network,
       label: 'Network',
       color: 'text-green-600'
+    },
+    {
+      href: '/dashboard/services',
+      icon: Activity,
+      label: 'Services',
+      color: 'text-orange-600'
     },
     {
       href: '/dashboard/files',
