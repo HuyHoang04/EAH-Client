@@ -2,7 +2,6 @@ import React from 'react';
 import { X } from 'lucide-react';
 
 interface FieldChipProps {
-  nodeId: string;
   nodeName: string;
   fieldPath: string;
   icon?: React.ReactNode;
@@ -13,7 +12,7 @@ interface FieldChipProps {
 // Format preview value for better readability
 const formatChipPreview = (preview: string): { text: string; title: string } => {
   // Remove quotes if already formatted
-  let cleaned = preview.replace(/^"|"$/g, '');
+  const cleaned = preview.replace(/^"|"$/g, '');
   
   // Check for special formatting
   if (preview.startsWith('[') && preview.includes('item')) {
@@ -43,7 +42,6 @@ const formatChipPreview = (preview: string): { text: string; title: string } => 
 };
 
 export function FieldChip({
-  nodeId,
   nodeName,
   fieldPath,
   icon,
