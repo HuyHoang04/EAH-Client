@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 function getAuthToken(): string | null {
   if (typeof window !== 'undefined') {
     return localStorage.getItem('auth_token');
@@ -43,7 +45,7 @@ export async function postRequest<T>(url: string, data: any, useAuth = true): Pr
     }
     
     if (!response.ok) {
-    
+      toast.error(responseData.message || responseData.error || 'Request failed');
       throw new Error(responseData.message || 'Có lỗi xảy ra');
     }
     

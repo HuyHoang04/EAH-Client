@@ -15,6 +15,7 @@ import {
   Save,
 } from "lucide-react";
 import { SmartInput, FieldValue } from "@/components/features/flow-editor/reference";
+import { toast } from "react-hot-toast";
 
 interface NodeConfigPanelProps {
   nodeId: string;
@@ -453,7 +454,7 @@ export default function NodeConfigPanel({
               label: selectedNode.data.label,
               parameters,
             });
-            alert("Đã lưu cấu hình! Xem console để biết chi tiết.");
+            toast.success("Đã lưu cấu hình!");
           }}
           className="w-full px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 transition-colors flex items-center justify-center gap-2 font-medium"
         >
