@@ -49,9 +49,9 @@ function WorkflowNode({ data, selected, id }: NodeProps<WorkflowNodeData>) {
   }, [data.label, data.inputs, data.outputs, hasInputs, hasOutputs]);
 
   // Filter out config-only fields from connection handles
-  // Only Start Node has no connection inputs
-  // All other nodes (including trigger) can receive connections
-  const connectionInputs = data.inputs || [];
+  // Only show handles for inputs where isConfig !== true (dynamic fields)
+  // Config fields (isConfig: true) should only be set via NodeConfigPanel, not connections
+  const connectionInputs = (data.inputs || []).filter((input: any) => input.isConfig !== true);
   
   // Special case: If node explicitly has no inputs defined, create a default 'trigger' input
   // This allows Start Node to connect to nodes that don't have explicit input definitions

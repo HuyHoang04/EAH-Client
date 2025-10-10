@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, ChevronDown, ChevronRight, ReplyAll } from 'lucide-react';
 
 interface LoopChipProps {
+  nodeId: string;
   nodeName: string;
   arrayPath: string;
   itemFields?: string[]; // Available fields in array items
@@ -13,6 +14,7 @@ interface LoopChipProps {
 }
 
 export function LoopChip({
+  nodeId,
   nodeName,
   arrayPath,
   itemFields = [],

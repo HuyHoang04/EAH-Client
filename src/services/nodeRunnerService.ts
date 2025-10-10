@@ -1,9 +1,3 @@
-/**
- * Node Runner Service
- * Connects Next.js client to Node Runner API
- * Endpoints: http://localhost:3001/api
- */
-
 import { api } from '@/utils/api';
 
 export interface NodeMetadata {

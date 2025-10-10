@@ -15,7 +15,7 @@ interface FieldPickerModalProps {
 }
 
 interface NodeFieldData {
-  [key: string]: unknown;
+  [key: string]: any;
 }
 
 export function FieldPickerModal({
@@ -33,7 +33,7 @@ export function FieldPickerModal({
   const [recentFields, setRecentFields] = useState<RecentField[]>([]); // Recently used fields
 
   // Format preview based on value type
-  const formatPreview = (value: unknown, typeName: string): string => {
+  const formatPreview = (value: any, typeName: string): string => {
     if (value === null) return '(null)';
     if (value === undefined) return '(undefined)';
     
@@ -53,21 +53,15 @@ export function FieldPickerModal({
         return value ? '✓ true' : '✗ false';
       
       case 'array':
-        if (Array.isArray(value)) {
-          return `[${value.length} ${value.length === 1 ? 'item' : 'items'}]`;
-        }
-        return '[array]';
+        return `[${value.length} ${value.length === 1 ? 'item' : 'items'}]`;
       
       case 'object': {
-        if (typeof value === 'object' && value !== null) {
-          const keys = Object.keys(value);
-          if (keys.length === 0) return '{}';
-          if (keys.length <= 3) {
-            return `{${keys.join(', ')}}`;
-          }
-          return `{${keys.slice(0, 3).join(', ')}, +${keys.length - 3} more}`;
+        const keys = Object.keys(value);
+        if (keys.length === 0) return '{}';
+        if (keys.length <= 3) {
+          return `{${keys.join(', ')}}`;
         }
-        return '{}';
+        return `{${keys.slice(0, 3).join(', ')}, +${keys.length - 3} more}`;
       }
       
       default: {
@@ -210,7 +204,7 @@ export function FieldPickerModal({
     });
   };
 
-  const getFieldIcon = (value: unknown): string => {
+  const getFieldIcon = (value: any): string => {
     if (Array.isArray(value)) return '📚';
     if (typeof value === 'number') return '🔢';
     if (typeof value === 'boolean') return '✓';
@@ -376,6 +370,11 @@ export function FieldPickerModal({
             {Array.isArray(value) && (
               <button
                 onClick={() => {
+                  // Show loop options for this array
+                  const arrayFields = value.length > 0 && typeof value[0] === 'object' 
+                    ? Object.keys(value[0])
+                    : [];
+                  
                   // For now, just add the whole array path
                   // We'll enhance this with a submenu later
                   handleFieldSelect({
@@ -467,7 +466,7 @@ export function FieldPickerModal({
                   )}
                 </>
               ) : (
-                typeof value === 'object' && value !== null ? renderFieldTree(value as NodeFieldData, fieldPath, node, depth + 1) : null
+                renderFieldTree(value, fieldPath, node, depth + 1)
               )}
             </div>
           )}
@@ -669,7 +668,7 @@ export function FieldPickerModal({
                           </div>
                         ) : (
                           <div className="text-sm text-gray-400 py-4 px-4 text-center">
-                            No data available yet. This node hasn&apos;t been executed.
+                            No data available yet. This node hasn't been executed.
                           </div>
                         )}
                       </div>
@@ -684,7 +683,7 @@ export function FieldPickerModal({
         {/* Footer */}
         <div className="sticky bottom-0 bg-gray-50 border-t p-4 flex justify-between items-center">
           <div className="text-xs text-gray-500">
-            💡 Click &quot;Add&quot; next to any field to use it in your configuration
+            💡 Click "Add" next to any field to use it in your configuration
           </div>
           <button
             onClick={onClose}

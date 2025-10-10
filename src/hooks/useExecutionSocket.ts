@@ -10,13 +10,7 @@ import {
   ExecutionFailedEvent,
 } from "@/types/executionEvent";
 
-/**
- * Hook to manage WebSocket connection for execution updates
- *
- * @param executionId - The execution ID to subscribe to
- * @param onNodeStatusChange - Callback when node status changes
- * @param enabled - Whether to enable the WebSocket connection
- */
+
 export function useExecutionSocket(
   executionId: string | null,
   onNodeStatusChange?: (

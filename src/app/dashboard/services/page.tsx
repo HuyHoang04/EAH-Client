@@ -15,7 +15,7 @@ export default function ServiceHealthPage() {
   const [services, setServices] = useState<ServiceStatus[]>([
     {
       name: 'Flow Service (Spring Boot)',
-      url: process.env.NEXT_PUBLIC_FLOW_SERVICE_URL || '',
+      url: process.env.NEXT_PUBLIC_FLOW_URL || '',
       status: 'offline',
     },
     {
@@ -64,7 +64,9 @@ export default function ServiceHealthPage() {
     );
 
     try {
-      const response = await fetch(`${service.url}/up`, {
+      const healthCheckUrl = service.url.replace(/\/api\/?$/, '');
+      
+      const response = await fetch(`${healthCheckUrl}/up`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
