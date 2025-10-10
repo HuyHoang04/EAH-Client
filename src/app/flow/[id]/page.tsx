@@ -531,12 +531,14 @@ function FlowEditorContent() {
         flowData={flowData}
         flowStatus={flowStatus}
         nodes={nodes}
+        edges={edges}
         showSidebar={showSidebar}
         isSaving={isSaving}
         isLoading={isLoading}
         onBack={handleBack}
         onToggleSidebar={() => setShowSidebar(!showSidebar)}
         onShowTemplates={() => setShowTemplateModal(true)}
+        onSave={setIsSaving}
       />
 
       <div className="flex-1 flex overflow-hidden">
