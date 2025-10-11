@@ -283,6 +283,8 @@ export default function NodeConfigPanel({
           "url",
           "path",
           "email",
+          "qrCode",
+          "dataURL"
         ].some((keyword) => input.name.toLowerCase().includes(keyword));
 
         if (useSmartInput) {
@@ -398,7 +400,7 @@ export default function NodeConfigPanel({
                     )}
                   </label>
                   {input.description && (
-                    <p className="text-xs text-stone-500 mb-1">
+                    <p className="text-xs text-black mb-1">
                       {input.description}
                     </p>
                   )}

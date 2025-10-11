@@ -1,5 +1,17 @@
 import { api } from '@/utils/api';
 
+export interface OutputSchemaProperty {
+  type: 'string' | 'number' | 'boolean' | 'object' | 'array';
+  description?: string;
+  properties?: Record<string, OutputSchemaProperty>; // For nested objects
+  items?: { type: string; properties?: Record<string, OutputSchemaProperty> }; // For arrays
+  example?: any;
+}
+
+export interface OutputSchema {
+  [key: string]: OutputSchemaProperty;
+}
+
 export interface NodeMetadata {
   type: string;
   category: 'trigger' | 'action' | 'logic' | 'data' | 'transform';
@@ -18,6 +30,7 @@ export interface NodeMetadata {
     type: string;
     description?: string;
   }>;
+  outputSchema?: OutputSchema; // NEW: Actual structure returned by execute()
 }
 
 export interface CronJob {
