@@ -337,7 +337,7 @@ export default function NodeConfigPanel({
             onChange={(e) => handleParameterChange(input.name, e.target.value)}
             placeholder={`Nhập ${input.name}...`}
             className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
-          />;
+          />
         );
     }
   };
