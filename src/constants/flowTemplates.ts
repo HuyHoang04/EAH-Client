@@ -48,58 +48,138 @@ export const FLOW_TEMPLATES: FlowTemplate[] = [
         }
       },
       {
-        id: 'schedule-1',
+        id: 'cronTrigger-1',
         type: 'workflow',
-        position: { x: 350, y: 250 },
+        position: { x: 100, y: 250 },
         data: {
           label: 'Daily Schedule',
-          nodeType: 'schedule',
+          nodeType: 'cronTrigger',
           category: 'trigger',
           description: 'Trigger workflow vào 9h sáng hàng ngày',
-          icon: 'clock',
+          icon: '⏰',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'trigger', name: 'Trigger', type: 'any', required: false }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'cronExpression',
+              name: 'cronExpression',
+              type: 'string',
+              required: false,
+              description: 'Cron expression (e.g., "0 9 * * 1-5" for 9am weekdays)',
+              defaultValue: '0 9 * * *',
+              isConfig: true
+            },
+            {
+              id: 'timezone',
+              name: 'timezone',
+              type: 'string',
+              required: false,
+              description: 'Timezone for cron schedule',
+              defaultValue: 'Asia/Ho_Chi_Minh',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Output', type: 'any' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'any',
+              description: 'Cron trigger data'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#8B5CF6' },
+        width: 240,
+        height: 95
       },
       {
-        id: 'email-1',
+        id: 'sendEmail-1',
         type: 'workflow',
-        position: { x: 650, y: 250 },
+        position: { x: 450, y: 250 },
         data: {
           label: 'Send Email',
           nodeType: 'sendEmail',
           category: 'action',
           description: 'Gửi email với nội dung được config',
-          icon: 'mail',
+          icon: '📧',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'input', name: 'Data', type: 'any', required: true }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'to',
+              name: 'to',
+              type: 'string',
+              required: true,
+              description: 'Email recipient address',
+              isConfig: true
+            },
+            {
+              id: 'subject',
+              name: 'subject',
+              type: 'string',
+              required: true,
+              description: 'Email subject',
+              isConfig: true
+            },
+            {
+              id: 'body',
+              name: 'body',
+              type: 'string',
+              required: true,
+              description: 'Email body (HTML supported)',
+              isConfig: true
+            },
+            {
+              id: 'recipientName',
+              name: 'recipientName',
+              type: 'string',
+              required: false,
+              description: 'Recipient name (optional)',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Result', type: 'object' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'any',
+              description: 'Email send result'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#3B82F6' },
+        width: 240,
+        height: 95
       }
     ],
     edges: [
       {
-        id: 'e1',
-        source: 'start-node',
-        target: 'schedule-1',
-        sourceHandle: 'start-output',
-        targetHandle: 'trigger'
-      },
-      {
-        id: 'e2',
-        source: 'schedule-1',
-        target: 'email-1',
-        sourceHandle: 'output',
-        targetHandle: 'input'
+        id: 'e-cronTrigger-1-sendEmail-1',
+        source: 'cronTrigger-1',
+        target: 'sendEmail-1',
+        sourceHandle: 'result',
+        targetHandle: 'trigger',
+        type: 'smoothstep',
+        style: { stroke: '#6366F1', strokeWidth: 2 },
+        animated: true,
+        selected: false,
+        labelStyle: { fill: '#64748b', fontSize: 11, fontWeight: 500 }
       }
     ]
   },
@@ -124,7 +204,7 @@ export const FLOW_TEMPLATES: FlowTemplate[] = [
       {
         id: 'start-node',
         type: 'startNode',
-        position: { x: 100, y: 300 },
+        position: { x: 100, y: 250 },
         data: {
           label: 'Start',
           category: 'start',
@@ -132,84 +212,184 @@ export const FLOW_TEMPLATES: FlowTemplate[] = [
         }
       },
       {
-        id: 'http-1',
+        id: 'httpRequest-1',
         type: 'workflow',
-        position: { x: 350, y: 300 },
+        position: { x: 100, y: 300 },
         data: {
           label: 'Fetch API Data',
           nodeType: 'httpRequest',
           category: 'action',
           description: 'Lấy dữ liệu từ REST API',
-          icon: 'globe',
+          icon: '🌐',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'trigger', name: 'Trigger', type: 'any', required: false }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'url',
+              name: 'url',
+              type: 'string',
+              required: true,
+              description: 'API endpoint URL',
+              isConfig: true
+            },
+            {
+              id: 'method',
+              name: 'method',
+              type: 'string',
+              required: true,
+              description: 'HTTP method (GET, POST, etc.)',
+              defaultValue: 'GET',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Response', type: 'object' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'object',
+              description: 'HTTP response data'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#10B981' },
+        width: 240,
+        height: 95
       },
       {
-        id: 'transform-1',
+        id: 'dataTransform-1',
         type: 'workflow',
-        position: { x: 650, y: 300 },
+        position: { x: 450, y: 300 },
         data: {
           label: 'Transform Data',
           nodeType: 'dataTransform',
           category: 'transform',
           description: 'Transform và format dữ liệu',
-          icon: 'refresh-cw',
+          icon: '🔄',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'input', name: 'Raw Data', type: 'object', required: true }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'data',
+              name: 'data',
+              type: 'object',
+              required: true,
+              description: 'Raw data to be transformed',
+              isConfig: true
+            },
+            {
+              id: 'transformScript',
+              name: 'transformScript',
+              type: 'string',
+              required: true,
+              description: 'JavaScript transformation code',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Transformed', type: 'object' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'object',
+              description: 'Transformed data'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#F59E0B' },
+        width: 240,
+        height: 95
       },
       {
-        id: 'db-1',
+        id: 'databaseInsert-1',
         type: 'workflow',
-        position: { x: 950, y: 300 },
+        position: { x: 800, y: 300 },
         data: {
           label: 'Save to Database',
           nodeType: 'databaseInsert',
           category: 'action',
           description: 'Lưu dữ liệu vào database',
-          icon: 'save',
+          icon: '💾',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'input', name: 'Data', type: 'object', required: true }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'data',
+              name: 'data',
+              type: 'object',
+              required: true,
+              description: 'Data to be saved',
+              isConfig: true
+            },
+            {
+              id: 'table',
+              name: 'table',
+              type: 'string',
+              required: true,
+              description: 'Database table name',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Result', type: 'object' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'object',
+              description: 'Insert operation result'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#8B5CF6' },
+        width: 240,
+        height: 95
       }
     ],
     edges: [
       {
-        id: 'e1',
-        source: 'start-node',
-        target: 'http-1',
-        sourceHandle: 'start-output',
-        targetHandle: 'trigger'
+        id: 'e-httpRequest-1-dataTransform-1',
+        source: 'httpRequest-1',
+        target: 'dataTransform-1',
+        sourceHandle: 'result',
+        targetHandle: 'trigger',
+        type: 'smoothstep',
+        style: { stroke: '#6366F1', strokeWidth: 2 },
+        animated: true,
+        selected: false,
+        labelStyle: { fill: '#64748b', fontSize: 11, fontWeight: 500 }
       },
       {
-        id: 'e2',
-        source: 'http-1',
-        target: 'transform-1',
-        sourceHandle: 'output',
-        targetHandle: 'input'
-      },
-      {
-        id: 'e3',
-        source: 'transform-1',
-        target: 'db-1',
-        sourceHandle: 'output',
-        targetHandle: 'input'
+        id: 'e-dataTransform-1-databaseInsert-1',
+        source: 'dataTransform-1',
+        target: 'databaseInsert-1',
+        sourceHandle: 'result',
+        targetHandle: 'trigger',
+        type: 'smoothstep',
+        style: { stroke: '#6366F1', strokeWidth: 2 },
+        animated: true,
+        selected: false,
+        labelStyle: { fill: '#64748b', fontSize: 11, fontWeight: 500 }
       }
     ]
   },
@@ -234,7 +414,7 @@ export const FLOW_TEMPLATES: FlowTemplate[] = [
       {
         id: 'start-node',
         type: 'startNode',
-        position: { x: 100, y: 300 },
+        position: { x: 100, y: 250 },
         data: {
           label: 'Start',
           category: 'start',
@@ -242,115 +422,254 @@ export const FLOW_TEMPLATES: FlowTemplate[] = [
         }
       },
       {
-        id: 'data-1',
+        id: 'dataFetch-1',
         type: 'workflow',
-        position: { x: 350, y: 300 },
+        position: { x: 100, y: 300 },
         data: {
           label: 'Get Data',
           nodeType: 'dataFetch',
           category: 'data',
           description: 'Lấy dữ liệu cần kiểm tra',
-          icon: 'download',
+          icon: '📥',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'trigger', name: 'Trigger', type: 'any', required: false }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'source',
+              name: 'source',
+              type: 'string',
+              required: true,
+              description: 'Data source',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Data', type: 'object' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'object',
+              description: 'Fetched data'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#10B981' },
+        width: 240,
+        height: 95
       },
       {
-        id: 'condition-1',
+        id: 'ifElse-1',
         type: 'workflow',
-        position: { x: 650, y: 300 },
+        position: { x: 450, y: 300 },
         data: {
           label: 'Check Condition',
           nodeType: 'ifElse',
           category: 'logic',
           description: 'Kiểm tra điều kiện if/else',
-          icon: 'help-circle',
+          icon: '❓',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'input', name: 'Data', type: 'object', required: true }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'condition',
+              name: 'condition',
+              type: 'string',
+              required: true,
+              description: 'Condition expression to evaluate',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'true', name: 'True', type: 'any' },
-            { id: 'false', name: 'False', type: 'any' }
+            {
+              id: 'true',
+              name: 'true',
+              type: 'any',
+              description: 'Output when condition is true'
+            },
+            {
+              id: 'false',
+              name: 'false',
+              type: 'any',
+              description: 'Output when condition is false'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#F59E0B' },
+        width: 240,
+        height: 95
       },
       {
-        id: 'email-success',
+        id: 'sendEmail-success',
         type: 'workflow',
-        position: { x: 950, y: 200 },
+        position: { x: 800, y: 200 },
         data: {
           label: 'Send Success Email',
           nodeType: 'sendEmail',
           category: 'action',
           description: 'Gửi email khi điều kiện TRUE',
-          icon: 'check-circle',
+          icon: '✅',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'input', name: 'Data', type: 'any', required: true }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'to',
+              name: 'to',
+              type: 'string',
+              required: true,
+              description: 'Email recipient address',
+              isConfig: true
+            },
+            {
+              id: 'subject',
+              name: 'subject',
+              type: 'string',
+              required: true,
+              description: 'Email subject',
+              isConfig: true
+            },
+            {
+              id: 'body',
+              name: 'body',
+              type: 'string',
+              required: true,
+              description: 'Email body',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Result', type: 'object' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'any',
+              description: 'Email send result'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#10B981' },
+        width: 240,
+        height: 95
       },
       {
-        id: 'email-fail',
+        id: 'sendEmail-fail',
         type: 'workflow',
-        position: { x: 950, y: 400 },
+        position: { x: 800, y: 400 },
         data: {
           label: 'Send Alert Email',
           nodeType: 'sendEmail',
           category: 'action',
           description: 'Gửi email cảnh báo khi FALSE',
-          icon: 'alert-triangle',
+          icon: '⚠️',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'input', name: 'Data', type: 'any', required: true }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'to',
+              name: 'to',
+              type: 'string',
+              required: true,
+              description: 'Email recipient address',
+              isConfig: true
+            },
+            {
+              id: 'subject',
+              name: 'subject',
+              type: 'string',
+              required: true,
+              description: 'Email subject',
+              isConfig: true
+            },
+            {
+              id: 'body',
+              name: 'body',
+              type: 'string',
+              required: true,
+              description: 'Email body',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Result', type: 'object' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'any',
+              description: 'Email send result'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#EF4444' },
+        width: 240,
+        height: 95
       }
     ],
     edges: [
       {
-        id: 'e1',
-        source: 'start-node',
-        target: 'data-1',
-        sourceHandle: 'start-output',
-        targetHandle: 'trigger'
+        id: 'e-dataFetch-1-ifElse-1',
+        source: 'dataFetch-1',
+        target: 'ifElse-1',
+        sourceHandle: 'result',
+        targetHandle: 'trigger',
+        type: 'smoothstep',
+        style: { stroke: '#6366F1', strokeWidth: 2 },
+        animated: true,
+        selected: false,
+        labelStyle: { fill: '#64748b', fontSize: 11, fontWeight: 500 }
       },
       {
-        id: 'e2',
-        source: 'data-1',
-        target: 'condition-1',
-        sourceHandle: 'output',
-        targetHandle: 'input'
-      },
-      {
-        id: 'e3-true',
-        source: 'condition-1',
-        target: 'email-success',
+        id: 'e-ifElse-1-sendEmail-success',
+        source: 'ifElse-1',
+        target: 'sendEmail-success',
         sourceHandle: 'true',
-        targetHandle: 'input',
-        type: 'conditional',
-        data: { condition: 'true' }
+        targetHandle: 'trigger',
+        type: 'smoothstep',
+        style: { stroke: '#10B981', strokeWidth: 2 },
+        animated: true,
+        selected: false,
+        label: 'True',
+        labelStyle: { fill: '#10B981', fontSize: 11, fontWeight: 500 }
       },
       {
-        id: 'e4-false',
-        source: 'condition-1',
-        target: 'email-fail',
+        id: 'e-ifElse-1-sendEmail-fail',
+        source: 'ifElse-1',
+        target: 'sendEmail-fail',
         sourceHandle: 'false',
-        targetHandle: 'input',
-        type: 'conditional',
-        data: { condition: 'false' }
+        targetHandle: 'trigger',
+        type: 'smoothstep',
+        style: { stroke: '#EF4444', strokeWidth: 2 },
+        animated: true,
+        selected: false,
+        label: 'False',
+        labelStyle: { fill: '#EF4444', fontSize: 11, fontWeight: 500 }
       }
     ]
   },
@@ -383,223 +702,243 @@ export const FLOW_TEMPLATES: FlowTemplate[] = [
         }
       },
       {
-        id: 'schedule-1',
+        id: 'cronTrigger-1',
         type: 'workflow',
-        position: { x: 350, y: 250 },
+        position: { x: 100, y: 250 },
         data: {
           label: 'Weekly Schedule',
-          nodeType: 'schedule',
+          nodeType: 'cronTrigger',
           category: 'trigger',
           description: 'Trigger mỗi thứ 2 lúc 8h sáng',
-          icon: 'calendar',
+          icon: '📅',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'trigger', name: 'Trigger', type: 'any', required: false }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'cronExpression',
+              name: 'cronExpression',
+              type: 'string',
+              required: false,
+              description: 'Cron expression',
+              defaultValue: '0 8 * * 1',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Output', type: 'any' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'any',
+              description: 'Trigger data'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#8B5CF6' },
+        width: 240,
+        height: 95
       },
       {
-        id: 'db-query',
+        id: 'databaseQuery-1',
         type: 'workflow',
-        position: { x: 650, y: 250 },
+        position: { x: 450, y: 250 },
         data: {
           label: 'Query Database',
           nodeType: 'databaseQuery',
           category: 'data',
           description: 'Lấy dữ liệu từ database',
-          icon: 'search',
+          icon: '🔍',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'input', name: 'Trigger', type: 'any', required: true }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'query',
+              name: 'query',
+              type: 'string',
+              required: true,
+              description: 'SQL query',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Data', type: 'array' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'array',
+              description: 'Query results'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#10B981' },
+        width: 240,
+        height: 95
       },
       {
-        id: 'generate-report',
+        id: 'generateQRCode-1',
         type: 'workflow',
-        position: { x: 950, y: 250 },
+        position: { x: 800, y: 250 },
         data: {
-          label: 'Generate Report',
-          nodeType: 'reportGenerator',
-          category: 'transform',
-          description: 'Tạo file report (PDF/Excel)',
-          icon: 'bar-chart',
+          label: 'Generate QR Code',
+          nodeType: 'generateQRCode',
+          category: 'action',
+          description: 'Generate QR code from data',
+          icon: '📱',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'input', name: 'Data', type: 'array', required: true }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'text',
+              name: 'text',
+              type: 'string',
+              required: true,
+              description: 'Text or URL to encode',
+              isConfig: true
+            },
+            {
+              id: 'size',
+              name: 'size',
+              type: 'number',
+              required: false,
+              description: 'QR code size in pixels',
+              defaultValue: 300,
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Report', type: 'file' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'any',
+              description: 'QR code data'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#8B5CF6' },
+        width: 240,
+        height: 95
       },
       {
-        id: 'send-email',
+        id: 'sendEmail-1',
         type: 'workflow',
-        position: { x: 1250, y: 250 },
+        position: { x: 1150, y: 250 },
         data: {
           label: 'Email Report',
           nodeType: 'sendEmail',
           category: 'action',
           description: 'Gửi report qua email',
-          icon: 'mail',
+          icon: '📧',
+          status: 'idle',
+          configured: false,
           inputs: [
-            { id: 'input', name: 'Attachment', type: 'file', required: true }
+            {
+              id: 'trigger',
+              name: 'trigger',
+              type: 'any',
+              required: false,
+              description: 'Input from previous node'
+            },
+            {
+              id: 'to',
+              name: 'to',
+              type: 'string',
+              required: true,
+              description: 'Email recipient',
+              isConfig: true
+            },
+            {
+              id: 'subject',
+              name: 'subject',
+              type: 'string',
+              required: true,
+              description: 'Email subject',
+              isConfig: true
+            },
+            {
+              id: 'body',
+              name: 'body',
+              type: 'string',
+              required: true,
+              description: 'Email body',
+              isConfig: true
+            }
           ],
           outputs: [
-            { id: 'output', name: 'Result', type: 'object' }
+            {
+              id: 'result',
+              name: 'result',
+              type: 'any',
+              description: 'Email result'
+            }
           ],
-          configured: false
-        }
+          parameters: {}
+        },
+        style: { background: '#3B82F6' },
+        width: 240,
+        height: 95
       }
     ],
     edges: [
       {
-        id: 'e1',
-        source: 'start-node',
-        target: 'schedule-1',
-        sourceHandle: 'start-output',
-        targetHandle: 'trigger'
+        id: 'e-cronTrigger-1-databaseQuery-1',
+        source: 'cronTrigger-1',
+        target: 'databaseQuery-1',
+        sourceHandle: 'result',
+        targetHandle: 'trigger',
+        type: 'smoothstep',
+        style: { stroke: '#6366F1', strokeWidth: 2 },
+        animated: true,
+        selected: false,
+        labelStyle: { fill: '#64748b', fontSize: 11, fontWeight: 500 }
       },
       {
-        id: 'e2',
-        source: 'schedule-1',
-        target: 'db-query',
-        sourceHandle: 'output',
-        targetHandle: 'input'
+        id: 'e-databaseQuery-1-generateQRCode-1',
+        source: 'databaseQuery-1',
+        target: 'generateQRCode-1',
+        sourceHandle: 'result',
+        targetHandle: 'trigger',
+        type: 'smoothstep',
+        style: { stroke: '#6366F1', strokeWidth: 2 },
+        animated: true,
+        selected: false,
+        labelStyle: { fill: '#64748b', fontSize: 11, fontWeight: 500 }
       },
       {
-        id: 'e3',
-        source: 'db-query',
-        target: 'generate-report',
-        sourceHandle: 'output',
-        targetHandle: 'input'
-      },
-      {
-        id: 'e4',
-        source: 'generate-report',
-        target: 'send-email',
-        sourceHandle: 'output',
-        targetHandle: 'input'
+        id: 'e-generateQRCode-1-sendEmail-1',
+        source: 'generateQRCode-1',
+        target: 'sendEmail-1',
+        sourceHandle: 'result',
+        targetHandle: 'trigger',
+        type: 'smoothstep',
+        style: { stroke: '#6366F1', strokeWidth: 2 },
+        animated: true,
+        selected: false,
+        labelStyle: { fill: '#64748b', fontSize: 11, fontWeight: 500 }
       }
     ]
   },
-
-  // ============================================
-  // 5. WEBHOOK INTEGRATION (Intermediate)
-  // ============================================
-  {
-    id: 'webhook-integration',
-    name: 'Webhook Integration',
-    description: 'Nhận webhook từ external service và xử lý dữ liệu. Phù hợp cho integration với third-party apps.',
-    category: 'integration',
-    icon: 'link',
-    difficulty: 'intermediate',
-    tags: ['webhook', 'integration', 'api', 'real-time'],
-    useCases: [
-      'GitHub webhook integration',
-      'Payment gateway notifications',
-      'Third-party event handling'
-    ],
-    nodes: [
-      {
-        id: 'start-node',
-        type: 'startNode',
-        position: { x: 100, y: 250 },
-        data: {
-          label: 'Start',
-          category: 'start',
-          description: 'Entry point của workflow'
-        }
-      },
-      {
-        id: 'webhook-1',
-        type: 'workflow',
-        position: { x: 350, y: 250 },
-        data: {
-          label: 'Webhook Trigger',
-          nodeType: 'webhook',
-          category: 'trigger',
-          description: 'Nhận webhook từ external service',
-          icon: 'inbox',
-          inputs: [
-            { id: 'trigger', name: 'Trigger', type: 'any', required: false }
-          ],
-          outputs: [
-            { id: 'output', name: 'Webhook Data', type: 'object' }
-          ],
-          configured: false
-        }
-      },
-      {
-        id: 'validate-1',
-        type: 'workflow',
-        position: { x: 650, y: 250 },
-        data: {
-          label: 'Validate Data',
-          nodeType: 'dataValidation',
-          category: 'logic',
-          description: 'Validate webhook payload',
-          icon: 'check',
-          inputs: [
-            { id: 'input', name: 'Data', type: 'object', required: true }
-          ],
-          outputs: [
-            { id: 'output', name: 'Valid Data', type: 'object' }
-          ],
-          configured: false
-        }
-      },
-      {
-        id: 'process-1',
-        type: 'workflow',
-        position: { x: 950, y: 250 },
-        data: {
-          label: 'Process Event',
-          nodeType: 'eventProcessor',
-          category: 'action',
-          description: 'Xử lý event từ webhook',
-          icon: 'settings',
-          inputs: [
-            { id: 'input', name: 'Event', type: 'object', required: true }
-          ],
-          outputs: [
-            { id: 'output', name: 'Result', type: 'object' }
-          ],
-          configured: false
-        }
-      }
-    ],
-    edges: [
-      {
-        id: 'e1',
-        source: 'start-node',
-        target: 'webhook-1',
-        sourceHandle: 'start-output',
-        targetHandle: 'trigger'
-      },
-      {
-        id: 'e2',
-        source: 'webhook-1',
-        target: 'validate-1',
-        sourceHandle: 'output',
-        targetHandle: 'input'
-      },
-      {
-        id: 'e3',
-        source: 'validate-1',
-        target: 'process-1',
-        sourceHandle: 'output',
-        targetHandle: 'input'
-      }
-    ]
-  }
 ];
 
 /**
