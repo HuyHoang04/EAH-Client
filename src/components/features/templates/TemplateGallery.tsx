@@ -78,7 +78,7 @@ export default function TemplateGallery({ onSelectTemplate }: TemplateGalleryPro
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Category Filter */}
           <div className="flex-1">
-            <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wide mb-2">
+            <label className="block text-xs font-semibold text-black-500 uppercase tracking-wide mb-2">
               Category
             </label>
             <div className="flex flex-wrap gap-2">
@@ -101,7 +101,7 @@ export default function TemplateGallery({ onSelectTemplate }: TemplateGalleryPro
 
           {/* Difficulty Filter */}
           <div className="lg:w-80">
-            <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wide mb-2">
+            <label className="block text-xs font-semibold text-black-500 uppercase tracking-wide mb-2">
               Difficulty
             </label>
             <div className="flex flex-wrap gap-2">
@@ -112,7 +112,7 @@ export default function TemplateGallery({ onSelectTemplate }: TemplateGalleryPro
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     selectedDifficulty === difficulty
                       ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30'
-                      : 'bg-stone-800 text-stone-400 hover:bg-stone-700 hover:text-white border border-stone-700'
+                      : 'bg-stone-800 text-black hover:bg-stone-700 hover:text-white border border-stone-700'
                   }`}
                 >
                   <Circle className={`w-3 h-3 fill-current ${difficultyLabels[difficulty].color}`} />
@@ -125,7 +125,7 @@ export default function TemplateGallery({ onSelectTemplate }: TemplateGalleryPro
       </div>
 
       {/* Results Count */}
-      <div className="mb-4 text-sm text-stone-500">
+      <div className="mb-4 text-sm text-black-500">
         Hiển thị <span className="text-orange-500 font-semibold">{filteredTemplates.length}</span> template
         {searchTerm && (
           <span> cho từ khóa "<span className="text-white">{searchTerm}</span>"</span>
@@ -149,7 +149,7 @@ export default function TemplateGallery({ onSelectTemplate }: TemplateGalleryPro
           <h3 className="text-xl font-semibold text-white mb-2">
             Không tìm thấy template
           </h3>
-          <p className="text-stone-500 mb-6">
+          <p className="text-black-500 mb-6">
             Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm
           </p>
           <button

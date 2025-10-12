@@ -62,7 +62,7 @@ export default function TemplatePreview({ template, onUseTemplate, onClose }: Te
                 className="p-2 hover:bg-stone-800 rounded-lg transition-colors"
               >
                 <svg
-                  className="w-6 h-6 text-stone-500 hover:text-white"
+                  className="w-6 h-6 text-black-500 hover:text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -85,7 +85,7 @@ export default function TemplatePreview({ template, onUseTemplate, onClose }: Te
               <h3 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
                 <FileText className="w-5 h-5" /> Mô tả
               </h3>
-              <p className="text-stone-400">{template.description}</p>
+              <p className="text-black">{template.description}</p>
             </div>
 
             {/* Stats */}
@@ -94,13 +94,13 @@ export default function TemplatePreview({ template, onUseTemplate, onClose }: Te
                 <div className="text-2xl font-bold text-orange-500 mb-1">
                   {template.nodes.length}
                 </div>
-                <div className="text-sm text-stone-400">Nodes in workflow</div>
+                <div className="text-sm text-black">Nodes in workflow</div>
               </div>
               <div className="bg-stone-800/50 rounded-lg p-4 border border-stone-700">
                 <div className="text-2xl font-bold text-orange-500 mb-1">
                   {template.edges.length}
                 </div>
-                <div className="text-sm text-stone-400">Connections</div>
+                <div className="text-sm text-black">Connections</div>
               </div>
             </div>
 
@@ -111,7 +111,7 @@ export default function TemplatePreview({ template, onUseTemplate, onClose }: Te
               </h3>
               <ul className="space-y-2">
                 {template.useCases.map((useCase, index) => (
-                  <li key={index} className="flex items-start gap-3 text-stone-400">
+                  <li key={index} className="flex items-start gap-3 text-black">
                     <CheckCircle className="w-4 h-4 text-orange-500 mt-0.5 flex-shrink-0" />
                     <span>{useCase}</span>
                   </li>
@@ -128,7 +128,7 @@ export default function TemplatePreview({ template, onUseTemplate, onClose }: Te
                 {template.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 bg-stone-800 text-stone-300 rounded-full text-sm border border-stone-700"
+                    className="px-3 py-1 bg-stone-800 text-black-300 rounded-full text-sm border border-stone-700"
                   >
                     #{tag}
                   </span>
@@ -157,13 +157,13 @@ export default function TemplatePreview({ template, onUseTemplate, onClose }: Te
                             return <IconComponent className="w-5 h-5 text-blue-400" />;
                           })()}
                           <span className="font-medium text-white">{node.data.label}</span>
-                          <span className="text-xs text-stone-500">
+                          <span className="text-xs text-black-500">
                             ({node.data.category})
                           </span>
                         </div>
                       </div>
                       {index < template.nodes.length - 1 && (
-                        <div className="text-stone-600 text-xl">↓</div>
+                        <div className="text-black text-xl">↓</div>
                       )}
                     </div>
                   ))}
@@ -175,7 +175,7 @@ export default function TemplatePreview({ template, onUseTemplate, onClose }: Te
           {/* Footer Actions */}
           <div className="border-t border-stone-800 px-8 py-4 bg-stone-900/80 backdrop-blur">
             <div className="flex items-center justify-between">
-              <div className="text-sm text-stone-500">
+              <div className="text-sm text-black-500">
                 Click "Sử dụng Template" để apply template này vào flow của bạn
               </div>
               <div className="flex gap-3">

@@ -53,7 +53,7 @@ export default function ForgotPassword() {
             <h2 className="mt-6 text-center text-3xl font-extrabold text-black">
               Reset your password
             </h2>
-            <p className="mt-2 text-center text-sm text-stone-600">
+            <p className="mt-2 text-center text-sm text-black">
               Enter your email and we'll send you a link to reset your password
             </p>
           </div>
@@ -61,7 +61,7 @@ export default function ForgotPassword() {
           {submitSuccess ? (
             <div className="bg-stone-100 border border-stone-200 rounded-md p-4 text-center">
               <p className="text-black font-medium">Check your email</p>
-              <p className="text-stone-600 mt-1">
+              <p className="text-black mt-1">
                 We've sent a password reset link to {email}
               </p>
               <div className="mt-4">
@@ -118,7 +118,7 @@ export default function ForgotPassword() {
           )}
           
           <div className="text-center mt-4">
-            <Link href="/login" className="font-medium text-black hover:text-stone-700">
+            <Link href="/login" className="font-medium text-black hover:text-black-700">
               Back to login
             </Link>
           </div>

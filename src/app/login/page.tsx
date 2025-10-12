@@ -107,9 +107,9 @@ export default function Login() {
               <h2 className="mt-6 text-center text-3xl font-extrabold text-black">
                 Sign in to your account
               </h2>
-              <p className="mt-2 text-center text-sm text-stone-600">
+              <p className="mt-2 text-center text-sm text-black">
                 Or{" "}
-                <Link href="/register" className="font-medium text-black hover:text-stone-700 underline decoration-2 underline-offset-2">
+                <Link href="/register" className="font-medium text-black hover:text-black-700 underline decoration-2 underline-offset-2">
                   create a new account
                 </Link>
               </p>

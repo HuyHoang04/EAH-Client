@@ -200,7 +200,7 @@ export default function ExecutionLogs({ logs, onClear }: ExecutionLogsProps) {
       </div>
 
       {/* Footer Stats */}
-      <div className="flex items-center justify-between p-3 border-t border-stone-200 bg-stone-50 text-xs text-stone-600">
+      <div className="flex items-center justify-between p-3 border-t border-stone-200 bg-stone-50 text-xs text-black">
         <div className="flex gap-4 text-sm text-black">
           <span className="flex items-center gap-1.5">
             <Info className="w-4 h-4" /> Info: <strong>{logs.filter(l => l.level === 'info').length}</strong>
