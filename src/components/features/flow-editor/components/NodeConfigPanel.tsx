@@ -344,7 +344,7 @@ export default function NodeConfigPanel({
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-3 text-black">
+      <h3 className="text-black font-semibold mb-3 text-black">
         Cài Đặt Node
       </h3>
 

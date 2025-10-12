@@ -104,24 +104,24 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
               <div className="text-xl font-bold">Education Automation Hub</div>
-              <p className="text-gray-400 mt-2">Simplify your teaching workflow</p>
+              <p className="text-black mt-2">Simplify your teaching workflow</p>
             </div>
             <div className="flex gap-8">
               <div>
                 <h3 className="font-semibold mb-2">Product</h3>
-                <ul className="space-y-1 text-gray-400">
+                <ul className="space-y-1 text-black">
 
                 </ul>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">Company</h3>
-                <ul className="space-y-1 text-gray-400">
+                <ul className="space-y-1 text-black">
 
                 </ul>
               </div>
             </div>
           </div>
-          <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+          <div className="border-t border-gray-700 mt-8 pt-6 text-center text-black">
             <p>&copy; {new Date().getFullYear()} EduAutomation Hub. All rights reserved.</p>
           </div>
         </div>

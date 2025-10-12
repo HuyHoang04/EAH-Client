@@ -427,7 +427,7 @@ export function FieldPickerModal({
   ): React.ReactElement[] => {
     if (depth > 3) {
       return [
-        <div key="max-depth" className="text-xs text-gray-400 ml-4 py-1">
+        <div key="max-depth" className="text-xs text-black ml-4 py-1">
           ... (nested too deep)
         </div>
       ];
@@ -502,7 +502,7 @@ export function FieldPickerModal({
             <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
               isCompatible 
                 ? 'text-green-700 bg-green-100' 
-                : 'text-gray-400 bg-gray-100'
+                : 'text-black bg-gray-100'
             }`}>
               {valueTypeName}
               {isCompatible && fieldType && fieldType !== 'any' && ' ✓'}
@@ -514,7 +514,7 @@ export function FieldPickerModal({
                 e.stopPropagation();
                 copyToClipboard(fieldPath, node.data.label || node.data.type);
               }}
-              className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-blue-600 transition-all"
+              className="opacity-0 group-hover:opacity-100 p-1 text-black hover:text-blue-600 transition-all"
               title={copiedPath === `${node.data.label || node.data.type}.${fieldPath}` ? 'Copied!' : 'Copy path'}
             >
               {copiedPath === `${node.data.label || node.data.type}.${fieldPath}` ? (
@@ -683,7 +683,7 @@ export function FieldPickerModal({
         <div className="p-4 border-b bg-gray-50 space-y-3">
           {/* Search bar */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-black" size={18} />
             <input
               type="text"
               placeholder="Search fields..."
@@ -793,9 +793,9 @@ export function FieldPickerModal({
           )}
           
           {previousNodes.length === 0 ? (
-            <div className="text-center py-16 text-gray-400">
+            <div className="text-center py-16 text-black">
               <Zap size={48} className="mx-auto mb-4 opacity-30" />
-              <p className="text-lg font-medium">No previous nodes found</p>
+              <p className="text-black font-medium">No previous nodes found</p>
               <p className="text-sm mt-2">
                 Connect this node to other nodes first to access their data
               </p>
@@ -842,7 +842,7 @@ export function FieldPickerModal({
                             {renderFieldTree(fields, '', node)}
                           </div>
                         ) : (
-                          <div className="text-sm text-gray-400 py-4 px-4 text-center">
+                          <div className="text-sm text-black py-4 px-4 text-center">
                             No data available yet. This node hasn't been executed.
                           </div>
                         )}

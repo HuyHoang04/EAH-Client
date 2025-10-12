@@ -68,7 +68,7 @@ export default function NodePalette() {
     <div className="flex flex-col h-full bg-gray-50">
       {/* Header */}
       <div className="p-4 border-b bg-white">
-        <h3 className="text-lg font-semibold text-gray-800">Nodes</h3>
+        <h3 className="text-black font-semibold text-gray-800">Nodes</h3>
         <p className="text-sm text-gray-500 mt-1">{nodes.length} available</p>
       </div>
 
@@ -97,7 +97,7 @@ export default function NodePalette() {
       {/* Node List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-2">
         {filteredNodes.length === 0 ? (
-          <div className="text-center text-gray-400 py-8">
+          <div className="text-center text-black py-8">
             <p>No nodes found</p>
           </div>
         ) : (
@@ -131,7 +131,7 @@ export default function NodePalette() {
                   </p>
 
                   {/* Node Type */}
-                  <p className="text-xs text-gray-400 mt-1 font-mono">
+                  <p className="text-xs text-black mt-1 font-mono">
                     {node.type}
                   </p>
 

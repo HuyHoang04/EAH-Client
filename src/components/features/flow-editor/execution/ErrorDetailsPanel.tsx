@@ -72,7 +72,7 @@ ${error.input ? `Input Data:\n${JSON.stringify(error.input, null, 2)}` : ''}
               )}
               
               <div>
-                <h3 className={`text-lg font-semibold ${
+                <h3 className={`text-black font-semibold ${
                   error.severity === 'critical' ? 'text-red-800' : 'text-orange-800'
                 }`}>
                   Execution Error
@@ -97,7 +97,7 @@ ${error.input ? `Input Data:\n${JSON.stringify(error.input, null, 2)}` : ''}
 
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+              className="text-black hover:text-gray-600 transition-colors p-1"
               aria-label="Close"
             >
               <X className="w-5 h-5" />

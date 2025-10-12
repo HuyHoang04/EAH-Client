@@ -44,7 +44,7 @@ const FlowCard: React.FC<FlowCardProps> = ({
           </svg>
         </div>
         <div>
-          <h3 className="font-semibold text-black text-lg group-hover:text-blue-600 transition-colors">{title}</h3>
+          <h3 className="font-semibold text-black text-black group-hover:text-blue-600 transition-colors">{title}</h3>
           <div className={`text-sm font-medium capitalize mt-1 ${
             state === 'good' ? 'text-blue-600' : 'text-red-600'
           }`}>

@@ -40,7 +40,7 @@ export default function TemplateCard({ template, onClick }: TemplateCardProps) {
               })()}
             </div>
             <div>
-              <h3 className="font-bold text-lg text-gray-900 group-hover:text-blue-600 transition-colors">
+              <h3 className="font-bold text-black text-gray-900 group-hover:text-blue-600 transition-colors">
                 {template.name}
               </h3>
               <div className="flex items-center gap-2 mt-1">

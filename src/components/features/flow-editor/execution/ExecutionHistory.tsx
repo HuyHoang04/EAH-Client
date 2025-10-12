@@ -59,7 +59,7 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Execution History</h3>
+        <h3 className="text-black font-semibold">Execution History</h3>
         <button
           onClick={loadExecutions}
           className="px-3 py-1 text-sm border rounded hover:bg-gray-50 flex items-center gap-1"
@@ -71,7 +71,7 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
 
       {executions.length === 0 ? (
         <div className="text-center py-12 bg-white border rounded-lg">
-          <p className="text-gray-400">No executions yet</p>
+          <p className="text-black">No executions yet</p>
           <p className="text-sm text-gray-500 mt-2">
             Execute this workflow to see results here
           </p>
@@ -164,7 +164,7 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
                 <h3 className="text-xl font-semibold">Execution Details</h3>
                 <button
                   onClick={() => setSelectedExecution(null)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-black hover:text-gray-600"
                 >
                   <X className="w-5 h-5" />
                 </button>

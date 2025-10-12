@@ -74,7 +74,7 @@ export default function NotificationSidebar({ isOpen = false, toggleSidebar }: N
       </button>
 
       <div className={`px-4 transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <h3 className="text-lg font-semibold mb-4 text-black">Notifications</h3>
+        <h3 className="text-black font-semibold mb-4 text-black">Notifications</h3>
         <div className="space-y-3 max-h-[60vh] overflow-y-auto custom-scrollbar pr-1">
           {notifications.map(notification => (
             <div key={notification.id} className={`p-3 rounded-lg border-2 ${notification.isRead ? 'bg-white border-black' : 'bg-blue-50 border-blue-600'} hover:bg-blue-100 transition-colors`}>

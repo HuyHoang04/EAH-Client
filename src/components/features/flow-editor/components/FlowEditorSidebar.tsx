@@ -180,7 +180,7 @@ export default function FlowEditorSidebar({
       <div className="flex-1 overflow-y-auto p-4">
         {activeTab === "nodes" && (
           <div>
-            <h3 className="text-lg font-semibold mb-3 text-black">
+            <h3 className="text-black font-semibold mb-3 text-black">
               Available Nodes
             </h3>
             <p className="text-sm text-black mb-4">
@@ -202,7 +202,7 @@ export default function FlowEditorSidebar({
             ) : (
               <div className="text-center py-8">
                 <SettingsIcon className="w-12 h-12 text-black mx-auto mb-3" />
-                <h3 className="text-lg font-semibold text-black mb-2">
+                <h3 className="text-black font-semibold text-black mb-2">
                   No Node Selected
                 </h3>
                 <p className="text-sm text-black">
@@ -216,7 +216,7 @@ export default function FlowEditorSidebar({
         {activeTab === "execute" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-3">Execute Workflow</h3>
+              <h3 className="text-black font-semibold mb-3">Execute Workflow</h3>
               <p className="text-sm text-black mb-4">
                 Run this workflow immediately and see results
               </p>
@@ -242,7 +242,7 @@ export default function FlowEditorSidebar({
 
         {activeTab === "schedule" && (
           <div>
-            <h3 className="text-lg font-semibold mb-3">Schedule Workflow</h3>
+            <h3 className="text-black font-semibold mb-3">Schedule Workflow</h3>
             <p className="text-sm text-black mb-4">
               Create automated schedules with cron expressions
             </p>
@@ -252,7 +252,7 @@ export default function FlowEditorSidebar({
 
         {activeTab === "history" && (
           <div>
-            <h3 className="text-lg font-semibold mb-3">Execution History</h3>
+            <h3 className="text-black font-semibold mb-3">Execution History</h3>
             <p className="text-sm text-black mb-4">
               View past executions and their results
             </p>
@@ -263,7 +263,7 @@ export default function FlowEditorSidebar({
         {activeTab === "logs" && (
           <div className="h-full flex flex-col">
             <div className="mb-4">
-              <h3 className="text-lg font-semibold mb-1">Execution Logs</h3>
+              <h3 className="text-black font-semibold mb-1">Execution Logs</h3>
               <div className="flex items-center gap-2 text-sm">
                 <div
                   className={`w-2 h-2 rounded-full ${

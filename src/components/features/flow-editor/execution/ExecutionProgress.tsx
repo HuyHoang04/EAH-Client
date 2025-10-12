@@ -86,7 +86,7 @@ export default function ExecutionProgress({
           />
         </div>
         <div className="text-center mt-1">
-          <span className="text-lg font-bold text-black">
+          <span className="text-black font-bold text-black">
             {progress.percentage}%
           </span>
         </div>

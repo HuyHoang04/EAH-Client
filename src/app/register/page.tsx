@@ -138,7 +138,7 @@ export default function Register() {
             
             {submitSuccess ? (
               <div className="bg-green-50 border border-green-500 rounded-lg p-6 text-center mt-8">
-                <p className="text-green-900 font-bold text-lg">Registration successful!</p>
+                <p className="text-green-900 font-bold text-black">Registration successful!</p>
                 <p className="text-green-700 mt-2">You can now sign in to your account.</p>
                 <Link href="/login" 
                   className="mt-4 inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
@@ -233,7 +233,7 @@ export default function Register() {
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-black hover:text-gray-600 transition-colors"
                       >
                         {showPassword ? (
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -272,7 +272,7 @@ export default function Register() {
                       <button
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-black hover:text-gray-600 transition-colors"
                       >
                         {showConfirmPassword ? (
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">

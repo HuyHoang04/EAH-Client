@@ -115,7 +115,7 @@ export default function Dashboard() {
                 </div>
                 <input
                   type="search"
-                  className="block w-full pl-16 pr-6 py-4 text-lg font-medium bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/30 focus:border-blue-400 transition-all duration-300 placeholder-white/60 text-white"
+                  className="block w-full pl-16 pr-6 py-4 text-black font-medium bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/30 focus:border-blue-400 transition-all duration-300 placeholder-white/60 text-white"
                   placeholder="Search workflows, templates, and automation tools..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}

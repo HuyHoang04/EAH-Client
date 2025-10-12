@@ -24,7 +24,7 @@ export default function FilesPage() {
         <div className="w-full max-w-md mx-auto mb-10">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <svg className="w-5 h-5 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
               </svg>
             </div>
@@ -60,9 +60,9 @@ export default function FilesPage() {
               <tbody>
                 {files.map((file, index) => (
                   <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-3 pr-6 font-medium">{file.name}</td>
+                    <td className="py-3 pr-6 text-gray-700 font-medium">{file.name}</td>
                     <td className="py-3 px-6 text-gray-500">{file.type}</td>
-                    <td className="py-3 px-6 text-gray-500">{file.size}</td>
+                    <td className="py-3 px-6 text-gray-700">{file.size}</td>
                     <td className="py-3 px-6 text-gray-500">{file.modified}</td>
                     <td className="py-3 px-6">
                       <span className={`inline-block w-2 h-2 rounded-full ${file.shared ? 'bg-green-500' : 'bg-gray-300'}`}></span>

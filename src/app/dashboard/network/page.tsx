@@ -24,42 +24,42 @@ export default function NetworkPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">Connection Status</h2>
+              <h2 className="text-black font-semibold text-gray-800">Connection Status</h2>
               <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
                 <div className="h-3 w-3 rounded-full bg-green-500"></div>
               </div>
             </div>
-            <p className="text-3xl font-bold">Active</p>
+            <p className="text-3xl text-black font-bold">Active</p>
             <p className="text-gray-500 text-sm mt-1">Last checked: 2 minutes ago</p>
           </div>
           
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">Network Speed</h2>
+              <h2 className="text-black font-semibold text-gray-800">Network Speed</h2>
               <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
                 <svg className="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
             </div>
-            <p className="text-3xl font-bold">1.2 Gbps</p>
+            <p className="text-3xl text-black font-bold">1.2 Gbps</p>
             <div className="flex items-center mt-1">
               <span className="text-green-500 text-sm">↑ 120 Mbps</span>
-              <span className="mx-2 text-gray-300">|</span>
+              <span className="mx-2 text-black">|</span>
               <span className="text-blue-500 text-sm">↓ 980 Mbps</span>
             </div>
           </div>
           
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">Connected Devices</h2>
+              <h2 className="text-black font-semibold text-gray-800">Connected Devices</h2>
               <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
                 <svg className="h-5 w-5 text-purple-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
             </div>
-            <p className="text-3xl font-bold">32</p>
+            <p className="text-3xl text-black font-bold">32</p>
             <p className="text-gray-500 text-sm mt-1">8 devices currently active</p>
           </div>
         </div>
@@ -86,8 +86,8 @@ export default function NetworkPage() {
               <tbody>
                 {devices.map((device, index) => (
                   <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-3 pr-6 font-medium">{device.name}</td>
-                    <td className="py-3 px-6 text-gray-500">{device.ipAddress}</td>
+                    <td className="py-3 pr-6 text-gray-600 font-medium">{device.name}</td>
+                    <td className="py-3 px-6 text-gray-800">{device.ipAddress}</td>
                     <td className="py-3 px-6">
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         device.status === 'Online' ? 'bg-green-100 text-green-800' : 
@@ -97,7 +97,7 @@ export default function NetworkPage() {
                         {device.status}
                       </span>
                     </td>
-                    <td className="py-3 pl-6 text-gray-500">{device.lastActive}</td>
+                    <td className="py-3 pl-6 text-gray-700">{device.lastActive}</td>
                   </tr>
                 ))}
               </tbody>

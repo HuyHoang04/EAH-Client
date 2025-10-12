@@ -56,7 +56,7 @@ const FlowCardGrid: React.FC<FlowCardGridProps> = ({ cards }) => {
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
             className={`w-7 h-7 text-sm rounded-full flex items-center justify-center transition-colors
-              ${currentPage === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}`}
+              ${currentPage === 1 ? 'text-black cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M15 18l-6-6 6-6"/>
@@ -83,7 +83,7 @@ const FlowCardGrid: React.FC<FlowCardGridProps> = ({ cards }) => {
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages || 1))}
             disabled={currentPage === (totalPages || 1)}
             className={`w-7 h-7 text-sm rounded-full flex items-center justify-center transition-colors
-              ${currentPage === (totalPages || 1) ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}`}
+              ${currentPage === (totalPages || 1) ? 'text-black cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'}`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 18l6-6-6-6"/>

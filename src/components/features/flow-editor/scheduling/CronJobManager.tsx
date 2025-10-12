@@ -168,13 +168,13 @@ export default function CronJobManager({ flowId }: CronJobManagerProps) {
         </div>
         <div className="bg-white border rounded-lg p-4">
           <p className="text-sm text-gray-500">Paused</p>
-          <p className="text-2xl font-bold text-gray-400">{stats.inactive}</p>
+          <p className="text-2xl font-bold text-black">{stats.inactive}</p>
         </div>
       </div>
 
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Scheduled Jobs</h3>
+        <h3 className="text-black font-semibold">Scheduled Jobs</h3>
         {flowId && (
           <button
             onClick={() => setShowCreateDialog(true)}
@@ -189,7 +189,7 @@ export default function CronJobManager({ flowId }: CronJobManagerProps) {
       <div className="space-y-2">
         {cronJobs.length === 0 ? (
           <div className="text-center py-12 bg-white border rounded-lg">
-            <p className="text-gray-400">No scheduled jobs</p>
+            <p className="text-black">No scheduled jobs</p>
             {flowId && (
               <button
                 onClick={() => setShowCreateDialog(true)}
@@ -224,7 +224,7 @@ export default function CronJobManager({ flowId }: CronJobManagerProps) {
                   <div className="mt-2 space-y-1 text-sm text-gray-600">
                     <p className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" /> Schedule: <span className="font-mono">{job.cronExpression}</span>
-                      <span className="text-gray-400 ml-2">({parseCronExpression(job.cronExpression)})</span>
+                      <span className="text-black ml-2">({parseCronExpression(job.cronExpression)})</span>
                     </p>
                     {job.nextRunAt && (
                       <p className="flex items-center gap-1"><Clock className="w-4 h-4" /> Next run: {new Date(job.nextRunAt).toLocaleString()}</p>

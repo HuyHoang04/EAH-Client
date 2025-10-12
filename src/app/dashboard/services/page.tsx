@@ -160,7 +160,7 @@ export default function ServiceHealthPage() {
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-black mb-2">
           Service Health Monitor
         </h1>
         <p className="text-gray-600">
@@ -202,7 +202,7 @@ export default function ServiceHealthPage() {
             className="bg-white rounded-lg shadow-md p-6 border hover:shadow-lg transition-shadow"
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-black font-semibold text-gray-900">
                 {service.name}
               </h3>
               <span
@@ -268,7 +268,7 @@ export default function ServiceHealthPage() {
 
       {/* Instructions */}
       <div className="mt-8 bg-blue-50 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-blue-900 mb-3">
+        <h3 className="text-black font-semibold text-blue-900 mb-3">
           📖 How it works
         </h3>
         <ul className="text-blue-800 space-y-2">
@@ -304,7 +304,7 @@ export default function ServiceHealthPage() {
 
       {/* Status Legend */}
       <div className="mt-6 bg-gray-50 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-3">
+        <h3 className="text-black font-semibold text-gray-900 mb-3">
           📊 Status Legend
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

@@ -82,7 +82,7 @@ export default function TemplatePreview({ template, onUseTemplate, onClose }: Te
           <div className="overflow-y-auto max-h-[calc(90vh-250px)] p-8 space-y-6">
             {/* Description */}
             <div>
-              <h3 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
+              <h3 className="text-black font-semibold text-white mb-2 flex items-center gap-2">
                 <FileText className="w-5 h-5" /> Mô tả
               </h3>
               <p className="text-black">{template.description}</p>
@@ -106,7 +106,7 @@ export default function TemplatePreview({ template, onUseTemplate, onClose }: Te
 
             {/* Use Cases */}
             <div>
-              <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+              <h3 className="text-black font-semibold text-white mb-3 flex items-center gap-2">
                 <Lightbulb className="w-5 h-5" /> Use Cases
               </h3>
               <ul className="space-y-2">
@@ -121,7 +121,7 @@ export default function TemplatePreview({ template, onUseTemplate, onClose }: Te
 
             {/* Tags */}
             <div>
-              <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+              <h3 className="text-black font-semibold text-white mb-3 flex items-center gap-2">
                 <Tag className="w-5 h-5" /> Tags
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -138,7 +138,7 @@ export default function TemplatePreview({ template, onUseTemplate, onClose }: Te
 
             {/* Workflow Structure */}
             <div>
-              <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+              <h3 className="text-black font-semibold text-white mb-3 flex items-center gap-2">
                 <LinkIcon className="w-5 h-5" /> Workflow Structure
               </h3>
               <div className="bg-stone-800/50 rounded-lg p-6 border border-stone-700">
