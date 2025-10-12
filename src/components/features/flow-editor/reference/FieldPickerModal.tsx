@@ -4,6 +4,7 @@ import { Node, Edge } from 'reactflow';
 import { X, ChevronRight, ChevronDown, Search, Zap, Filter, Copy, Check, Clock, Trash2 } from 'lucide-react';
 import { FieldReference, FieldType, isFieldCompatible, getFieldTypeName } from './types';
 import { getRecentFieldsForNodes, saveRecentField, clearRecentFields, formatTimeAgo, RecentField } from '@/lib/recentFields';
+import { nodeRunnerService, NodeMetadata, OutputSchemaProperty } from '@/services/nodeRunnerService';
 
 interface FieldPickerModalProps {
   currentNodeId: string;
@@ -28,9 +29,10 @@ export function FieldPickerModal({
 }: FieldPickerModalProps) {
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
-  const [showAllFields, setShowAllFields] = useState(false); // Toggle for showing incompatible fields
-  const [copiedPath, setCopiedPath] = useState<string | null>(null); // Track copied path for visual feedback
-  const [recentFields, setRecentFields] = useState<RecentField[]>([]); // Recently used fields
+  const [showAllFields, setShowAllFields] = useState(false);
+  const [copiedPath, setCopiedPath] = useState<string | null>(null);
+  const [recentFields, setRecentFields] = useState<RecentField[]>([]);
+  const [nodeMetadataCache, setNodeMetadataCache] = useState<Map<string, NodeMetadata>>(new Map());
 
   // Format preview based on value type
   const formatPreview = (value: any, typeName: string): string => {
@@ -117,6 +119,25 @@ export function FieldPickerModal({
     setRecentFields(recent);
   }, [previousNodes]);
 
+  // Fetch metadata for all previous nodes
+  useEffect(() => {
+    const fetchMetadata = async () => {
+      for (const node of previousNodes) {
+        const nodeType = node.data?.nodeType || node.data?.type || node.type;
+        if (nodeType && !nodeMetadataCache.has(nodeType)) {
+          try {
+            const metadata = await nodeRunnerService.getNodeMetadata(nodeType);
+            setNodeMetadataCache(prev => new Map(prev).set(nodeType, metadata));
+          } catch (error) {
+            console.warn(`Failed to fetch metadata for ${nodeType}:`, error);
+          }
+        }
+      }
+    };
+    
+    fetchMetadata();
+  }, [previousNodes]);
+
   // Enhanced onSelect that saves to recent history
   const handleFieldSelect = (ref: FieldReference) => {
     // Save to recent history
@@ -141,55 +162,209 @@ export function FieldPickerModal({
     setRecentFields([]);
   };
 
-  // Mock field data - In production, this would come from actual execution results
+  // Get placeholder fields from backend outputSchema (fetched metadata)
   const getNodeFields = (node: Node): NodeFieldData => {
-    const nodeType = node.data.type || node.type;
+    const nodeType = node.data.nodeType || node.data.type || node.type;
     
-    // Mock data based on node type
-    const mockDataByType: Record<string, NodeFieldData> = {
-      'trigger': {
-        timestamp: new Date().toISOString(),
-        userId: 'user-123',
-        eventType: 'manual',
-        metadata: {
-          source: 'web',
-          ipAddress: '192.168.1.1'
+    console.log(`[FieldPicker] Getting fields for node: ${nodeType}`);
+    
+    // Priority 1: Use outputSchema from fetched metadata
+    const candidates = [
+      node.data?.nodeType,
+      node.data?.type,
+      node.type,
+    ].filter(Boolean) as string[];
+    
+    for (const candidate of candidates) {
+      const metadata = nodeMetadataCache.get(candidate);
+      if (metadata?.outputSchema) {
+        console.log(`[FieldPicker] Using outputSchema for ${candidate}:`, metadata.outputSchema);
+        return buildFieldsFromSchema(metadata.outputSchema);
+      }
+    }
+    
+    // Priority 2: Fallback to hardcoded structures
+    console.log(`[FieldPicker] No outputSchema found, using fallback for ${nodeType}`);
+    return getActualNodeStructure(nodeType);
+  };
+
+  // Build field structure from backend outputSchema
+  const buildFieldsFromSchema = (schema: any): NodeFieldData => {
+    const fields: NodeFieldData = {};
+    
+    Object.entries(schema).forEach(([key, prop]: [string, any]) => {
+      fields[key] = buildValueFromProperty(prop);
+    });
+    
+    return fields;
+  };
+
+  // Recursively build value from schema property
+  const buildValueFromProperty = (prop: any): any => {
+    if (!prop || !prop.type) return prop.example || 'placeholder';
+    
+    switch (prop.type) {
+      case 'object':
+        if (prop.properties) {
+          const obj: any = {};
+          Object.entries(prop.properties).forEach(([key, subProp]: [string, any]) => {
+            obj[key] = buildValueFromProperty(subProp);
+          });
+          return obj;
+        }
+        return prop.example || {};
+      
+      case 'array':
+        if (prop.items) {
+          const item = buildValueFromProperty(prop.items);
+          return [item, item]; // Show 2 example items
+        }
+        return prop.example || [];
+      
+      case 'string':
+        return prop.example || 'placeholder text';
+      
+      case 'number':
+        return prop.example || 0;
+      
+      case 'boolean':
+        return prop.example !== undefined ? prop.example : true;
+      
+      default:
+        return prop.example || 'placeholder';
+    }
+  };
+
+  // FALLBACK: Hardcoded structures (used when outputSchema not available)
+  const getActualNodeStructure = (nodeType: string): NodeFieldData => {
+    const structures: Record<string, NodeFieldData> = {
+      // From GenerateQRCodeNode.execute() - lines 76-84
+      'generateQRCode': {
+        result: {
+          qrCode: 'data:image/png;base64,iVBORw0KGgo...',
+          dataURL: 'data:image/png;base64,iVBORw0KGgo...',
+          text: 'QR Code content text',
+          size: 300
         }
       },
-      'getStudents': {
-        email: 'john@example.com',
-        name: 'John Doe',
-        score: 95,
-        students: [
-          { email: 'john@example.com', name: 'John', score: 95 },
-          { email: 'jane@example.com', name: 'Jane', score: 88 }
-        ],
-        metadata: {
-          total: 2,
-          source: 'database'
+      'qrCode': { // alias
+        result: {
+          qrCode: 'data:image/png;base64,iVBORw0KGgo...',
+          dataURL: 'data:image/png;base64,iVBORw0KGgo...',
+          text: 'QR Code content text',
+          size: 300
         }
       },
-      'httpRequest': {
-        status: 200,
-        statusText: 'OK',
-        data: { 
-          success: true,
-          message: 'Request completed',
-          results: ['item1', 'item2']
-        },
-        headers: {
-          'content-type': 'application/json'
-        }
-      },
+      
+      // From SendEmailNode.execute() - lines 111-119
       'sendEmail': {
-        success: true,
-        messageId: 'msg-123',
-        recipient: 'john@example.com'
+        result: {
+          messageId: 'msg-1234567890',
+          to: 'user@example.com',
+          subject: 'Email Subject',
+          sentAt: new Date().toISOString()
+        }
+      },
+      
+      // From SendBulkEmailNode.execute() (similar to SendEmail)
+      'sendBulkEmail': {
+        result: {
+          successCount: 10,
+          failureCount: 0,
+          results: [
+            { to: 'user1@example.com', success: true, messageId: 'msg-1' },
+            { to: 'user2@example.com', success: true, messageId: 'msg-2' }
+          ],
+          sentAt: new Date().toISOString()
+        }
+      },
+      
+      // From SaveToDBNode.execute() - lines 72-77
+      'saveToDB': {
+        result: {
+          documentId: '507f1f77bcf86cd799439011',
+          document: {
+            _id: '507f1f77bcf86cd799439011',
+            createdAt: new Date().toISOString(),
+            data: {}
+          }
+        }
+      },
+      
+      // From GetStudentListNode.execute() (assumed structure)
+      'getStudentList': {
+        result: {
+          students: [
+            { 
+              id: 1,
+              email: 'john@example.com', 
+              name: 'John Doe', 
+              score: 95,
+              grade: 'A',
+              groupCode: 'GRP-001'
+            },
+            { 
+              id: 2,
+              email: 'jane@example.com', 
+              name: 'Jane Smith', 
+              score: 88,
+              grade: 'B+',
+              groupCode: 'GRP-002'
+            }
+          ],
+          total: 2,
+          page: 1
+        }
+      },
+      
+      // From CronTriggerNode.execute()
+      'cronTrigger': {
+        result: {
+          timestamp: new Date().toISOString(),
+          cronExpression: '0 9 * * 1-5',
+          triggerTime: new Date().toISOString()
+        }
+      },
+      
+      // Logic nodes - Map, Filter, If, IfElse
+      'map': {
+        result: {
+          items: [],
+          count: 0,
+          transformed: true
+        }
+      },
+      'filter': {
+        result: {
+          items: [],
+          count: 0,
+          filtered: true
+        }
+      },
+      'if': {
+        result: {
+          condition: true,
+          branch: 'true'
+        }
+      },
+      'ifElse': {
+        result: {
+          condition: true,
+          branch: 'true'
+        }
+      },
+      
+      // Default for unknown nodes
+      'default': {
+        result: {
+          data: 'placeholder',
+          success: true,
+          timestamp: new Date().toISOString()
+        }
       }
     };
 
-    // Return mock data or node config
-    return mockDataByType[nodeType] || node.data.config || {};
+    return structures[nodeType] || structures['default'];
   };
 
   const toggleNode = (nodeId: string) => {
