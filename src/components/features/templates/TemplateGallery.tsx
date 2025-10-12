@@ -21,7 +21,7 @@ const categoryLabels: Record<CategoryType, { label: string; icon: React.ReactNod
 };
 
 const difficultyLabels: Record<DifficultyType, { label: string; color: string }> = {
-  all: { label: 'Tất cả', color: 'text-stone-400' },
+  all: { label: 'Tất cả', color: 'text-black' },
   beginner: { label: 'Beginner', color: 'text-green-500' },
   intermediate: { label: 'Intermediate', color: 'text-yellow-500' },
   advanced: { label: 'Advanced', color: 'text-red-500' },
@@ -53,20 +53,20 @@ export default function TemplateGallery({ onSelectTemplate }: TemplateGalleryPro
       <div className="mb-6 space-y-4">
         {/* Search Bar */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black" />
           <input
             type="text"
             placeholder="Tìm template theo tên, mô tả, hoặc tag..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-3 bg-stone-800 border border-stone-700 rounded-lg
-              text-white placeholder:text-stone-500 focus:outline-none focus:ring-2 
+              text-white placeholder:text-black focus:outline-none focus:ring-2 
               focus:ring-orange-500 focus:border-transparent transition-all"
           />
           {searchTerm && (
             <button
               onClick={() => setSearchTerm('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-black
                 hover:text-white transition-colors"
             >
               <X className="w-4 h-4" />
@@ -89,7 +89,7 @@ export default function TemplateGallery({ onSelectTemplate }: TemplateGalleryPro
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     selectedCategory === category
                       ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30'
-                      : 'bg-stone-800 text-stone-400 hover:bg-stone-700 hover:text-white border border-stone-700'
+                      : 'bg-stone-800 text-black400 hover:bg-stone-700 hover:text-white border border-stone-700'
                   }`}
                 >
                   {categoryLabels[category].icon}

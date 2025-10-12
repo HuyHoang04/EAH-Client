@@ -122,12 +122,12 @@ export default function NodeConfigPanel({
               Đã kết nối
             </span>
           </div>
-          <div className="text-sm text-stone-700 bg-white rounded p-2 border border-green-200">
+          <div className="text-sm text-black bg-white rounded p-2 border border-green-200">
             <div className="flex items-center gap-2">
               <Link className="w-5 h-5 text-green-600" />
               <div>
                 <div className="font-medium">{connectedSource.nodeName}</div>
-                <div className="text-xs text-stone-500">
+                <div className="text-xs text-black">
                   Output: {connectedSource.outputName}
                 </div>
               </div>
@@ -168,7 +168,7 @@ export default function NodeConfigPanel({
       return (
         <div className="space-y-3 bg-purple-50 p-3 rounded-lg border border-purple-200">
           <div>
-            <label className="flex items-center gap-1 text-xs font-medium text-stone-700 mb-2">
+            <label className="flex items-center gap-1 text-xs font-medium text-black mb-2">
               <Zap className="w-3 h-3" /> Mẫu nhanh
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -182,7 +182,7 @@ export default function NodeConfigPanel({
                   className={`flex items-center gap-2 px-3 py-2 text-xs rounded-md transition-colors text-left ${
                     value === preset.value
                       ? "bg-purple-500 text-white"
-                      : "bg-white text-stone-700 border border-stone-300 hover:bg-purple-100"
+                      : "bg-white text-black border border-stone-300 hover:bg-purple-100"
                   }`}
                 >
                   {preset.icon}
@@ -193,7 +193,7 @@ export default function NodeConfigPanel({
           </div>
 
           <div>
-            <label className="flex items-center gap-1 text-xs font-medium text-stone-700 mb-1">
+            <label className="flex items-center gap-1 text-xs font-medium text-black mb-1">
               <Zap className="w-3 h-3" /> Hoặc nhập thủ công
             </label>
             <input
@@ -203,7 +203,7 @@ export default function NodeConfigPanel({
                 handleParameterChange(input.name, e.target.value)
               }
               placeholder="Ví dụ: 0 9 * * 1-5"
-              className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-stone-900 font-mono text-sm"
+              className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-black font-mono text-sm"
             />
           </div>
 
@@ -233,7 +233,7 @@ export default function NodeConfigPanel({
             />
             <label
               htmlFor={`param-${input.name}`}
-              className="text-sm text-stone-700 cursor-pointer"
+              className="text-sm text-black cursor-pointer"
             >
               {input.description || input.name}
             </label>
@@ -247,7 +247,7 @@ export default function NodeConfigPanel({
             value={value}
             onChange={(e) => handleParameterChange(input.name, e.target.value)}
             placeholder={`Nhập số...`}
-            className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-stone-900"
+            className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
           />
         );
 
@@ -268,7 +268,7 @@ export default function NodeConfigPanel({
             }}
             placeholder={`Nhập JSON... ví dụ: {"key": "value"}`}
             rows={4}
-            className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm text-stone-900"
+            className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm text-black"
           />
         );
 
@@ -336,15 +336,15 @@ export default function NodeConfigPanel({
             value={value}
             onChange={(e) => handleParameterChange(input.name, e.target.value)}
             placeholder={`Nhập ${input.name}...`}
-            className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-stone-900"
-          />
+            className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
+          />;
         );
     }
   };
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-3 text-stone-900">
+      <h3 className="text-lg font-semibold mb-3 text-black">
         Cài Đặt Node
       </h3>
 
@@ -357,31 +357,31 @@ export default function NodeConfigPanel({
           ) : (
             <Wrench className="w-6 h-6 text-indigo-600" />
           )}
-          <span className="font-bold text-stone-900">
+          <span className="font-bold text-black">
             {nodeData?.nodeType || "Node"}
           </span>
         </div>
-        <p className="text-sm text-stone-600">
+        <p className="text-sm text-black">
           {nodeData?.description || "Không có mô tả"}
         </p>
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-stone-700 mb-2">
+        <label className="block text-sm font-medium text-black mb-2">
           Tên hiển thị
         </label>
         <input
           type="text"
           value={selectedNode.data.label || ""}
           onChange={(e) => handleLabelChange(e.target.value)}
-          className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-stone-900"
+          className="w-full px-3 py-2 border border-stone-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
           placeholder="Nhập tên node..."
         />
       </div>
 
       {nodeData?.inputs && nodeData.inputs.length > 0 && (
         <div className="mb-4">
-          <h4 className="text-sm font-medium text-stone-700 mb-3 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-black mb-3 flex items-center gap-2">
             <Settings className="w-4 h-4" />
             Thông số
           </h4>
@@ -393,7 +393,7 @@ export default function NodeConfigPanel({
               )
               .map((input: any, index: number) => (
                 <div key={index} className="space-y-1">
-                  <label className="block text-sm font-medium text-stone-700">
+                  <label className="block text-sm font-medium text-black">
                     {input.name}
                     {input.required && (
                       <span className="text-red-500 ml-1">*</span>
@@ -405,7 +405,7 @@ export default function NodeConfigPanel({
                     </p>
                   )}
                   {renderInputField(input)}
-                  <div className="text-xs text-stone-400">
+                  <div className="text-xs text-black">
                     Loại:{" "}
                     <span className="font-mono bg-stone-100 px-1 rounded">
                       {input.type}
@@ -419,7 +419,7 @@ export default function NodeConfigPanel({
 
       {nodeData?.outputs && nodeData.outputs.length > 0 && (
         <div className="mb-4">
-          <h4 className="text-sm font-medium text-stone-700 mb-2">
+          <h4 className="text-sm font-medium text-black mb-2">
             Dữ liệu đầu ra
           </h4>
           <div className="bg-green-50 border border-green-200 rounded-md p-3">

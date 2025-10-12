@@ -600,7 +600,7 @@ function FlowEditorContent() {
                 <h3 className="font-semibold text-black mb-2">
                   Getting Started
                 </h3>
-                <ul className="text-sm text-stone-600 space-y-1">
+                <ul className="text-sm text-black space-y-1">
                   <li>Drag to pan the canvas</li>
                   <li>Scroll to zoom in/out</li>
                   <li>Click and drag from node edges to connect</li>

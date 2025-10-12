@@ -94,8 +94,8 @@ export default function ExecutionLogs({ logs, onClear }: ExecutionLogsProps) {
             <Info className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-semibold text-stone-900">Execution Logs</h3>
-            <p className="text-xs text-stone-500">{logs.length} messages</p>
+            <h3 className="font-semibold text-black">Execution Logs</h3>
+            <p className="text-xs text-black">{logs.length} messages</p>
           </div>
         </div>
 
@@ -103,7 +103,7 @@ export default function ExecutionLogs({ logs, onClear }: ExecutionLogsProps) {
           <button
             onClick={handleExport}
             disabled={logs.length === 0}
-            className="p-2 text-stone-600 hover:bg-stone-100 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 text-black hover:bg-stone-100 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title="Export logs"
           >
             <Download className="w-4 h-4" />
@@ -112,7 +112,7 @@ export default function ExecutionLogs({ logs, onClear }: ExecutionLogsProps) {
             <button
               onClick={onClear}
               disabled={logs.length === 0}
-              className="p-2 text-stone-600 hover:bg-stone-100 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 text-black hover:bg-stone-100 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               title="Clear logs"
             >
               <XCircle className="w-4 h-4" />
@@ -125,7 +125,7 @@ export default function ExecutionLogs({ logs, onClear }: ExecutionLogsProps) {
       <div className="flex flex-col gap-3 p-4 border-b border-stone-200 bg-stone-50">
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-stone-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-black" />
           <input
             type="text"
             placeholder="Search logs..."
@@ -137,7 +137,7 @@ export default function ExecutionLogs({ logs, onClear }: ExecutionLogsProps) {
 
         {/* Level Filter */}
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-stone-500" />
+          <Filter className="w-4 h-4 text-black" />
           <div className="flex gap-2">
             {['all', 'info', 'warn', 'error'].map((level) => (
               <button
@@ -146,7 +146,7 @@ export default function ExecutionLogs({ logs, onClear }: ExecutionLogsProps) {
                 className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
                   filterLevel === level
                     ? 'bg-blue-500 text-white'
-                    : 'bg-white text-stone-600 hover:bg-stone-100 border border-stone-300'
+                    : 'bg-white text-black hover:bg-stone-100 border border-stone-300'
                 }`}
               >
                 {level.charAt(0).toUpperCase() + level.slice(1)}
@@ -159,7 +159,7 @@ export default function ExecutionLogs({ logs, onClear }: ExecutionLogsProps) {
       {/* Logs List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-2 font-mono text-sm">
         {filteredLogs.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-stone-400">
+          <div className="flex flex-col items-center justify-center h-full text-black">
             <Info className="w-12 h-12 mb-2 opacity-50" />
             <p className="text-sm">
               {logs.length === 0 ? 'No logs yet' : 'No matching logs found'}
@@ -181,16 +181,16 @@ export default function ExecutionLogs({ logs, onClear }: ExecutionLogsProps) {
                     <span className={`text-xs font-semibold ${style.color}`}>
                       {log.level.toUpperCase()}
                     </span>
-                    <span className="text-xs text-stone-500">
+                    <span className="text-xs text-black">
                       {new Date(log.timestamp).toLocaleTimeString()}
                     </span>
                     {log.nodeId && (
-                      <span className="text-xs px-2 py-0.5 bg-stone-200 text-stone-700 rounded">
+                      <span className="text-xs px-2 py-0.5 bg-stone-200 text-black rounded">
                         {log.nodeId}
                       </span>
                     )}
                   </div>
-                  <p className="text-stone-700 break-words">{log.message}</p>
+                  <p className="text-black break-words">{log.message}</p>
                 </div>
               </div>
             );
@@ -201,7 +201,7 @@ export default function ExecutionLogs({ logs, onClear }: ExecutionLogsProps) {
 
       {/* Footer Stats */}
       <div className="flex items-center justify-between p-3 border-t border-stone-200 bg-stone-50 text-xs text-stone-600">
-        <div className="flex gap-4 text-sm text-stone-400">
+        <div className="flex gap-4 text-sm text-black">
           <span className="flex items-center gap-1.5">
             <Info className="w-4 h-4" /> Info: <strong>{logs.filter(l => l.level === 'info').length}</strong>
           </span>

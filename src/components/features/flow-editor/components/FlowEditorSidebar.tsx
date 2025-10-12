@@ -94,7 +94,7 @@ export default function FlowEditorSidebar({
             className={`flex-1 px-3 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
               activeTab === "nodes"
                 ? "text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50"
-                : "text-stone-600 hover:text-black hover:bg-stone-50"
+                : "text-black hover:text-black hover:bg-stone-50"
             }`}
           >
             <Layers className="w-4 h-4" />
@@ -107,8 +107,8 @@ export default function FlowEditorSidebar({
               activeTab === "config"
                 ? "text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50"
                 : selectedNodeId
-                ? "text-stone-600 hover:text-black hover:bg-stone-50"
-                : "text-stone-400 cursor-not-allowed"
+                ? "text-black hover:text-black hover:bg-stone-50"
+                : "text-black cursor-not-allowed"
             }`}
           >
             <SettingsIcon className="w-4 h-4" />
@@ -119,7 +119,7 @@ export default function FlowEditorSidebar({
             className={`flex-1 px-2 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
               activeTab === "execute"
                 ? "text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50"
-                : "text-stone-600 hover:text-black hover:bg-stone-50"
+                : "text-black hover:text-black hover:bg-stone-50"
             }`}
           >
             <Play className="w-4 h-4" />
@@ -130,7 +130,7 @@ export default function FlowEditorSidebar({
             className={`flex-1 px-2 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
               activeTab === "schedule"
                 ? "text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50"
-                : "text-stone-600 hover:text-black hover:bg-stone-50"
+                : "text-black hover:text-black hover:bg-stone-50"
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -141,7 +141,7 @@ export default function FlowEditorSidebar({
             className={`flex-1 px-2 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
               activeTab === "history"
                 ? "text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50"
-                : "text-stone-600 hover:text-black hover:bg-stone-50"
+                : "text-black hover:text-black hover:bg-stone-50"
             }`}
           >
             <History className="w-4 h-4" />
@@ -152,7 +152,7 @@ export default function FlowEditorSidebar({
             className={`flex-1 px-2 py-3 text-sm font-medium transition-colors flex items-center justify-center gap-2 relative ${
               activeTab === "logs"
                 ? "text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50"
-                : "text-stone-600 hover:text-black hover:bg-stone-50"
+                : "text-black hover:text-black hover:bg-stone-50"
             }`}
           >
             <svg
@@ -183,7 +183,7 @@ export default function FlowEditorSidebar({
             <h3 className="text-lg font-semibold mb-3 text-black">
               Available Nodes
             </h3>
-            <p className="text-sm text-stone-600 mb-4">
+            <p className="text-sm text-black mb-4">
               Drag nodes to the canvas to build your workflow
             </p>
             <NodePalette />
@@ -201,11 +201,11 @@ export default function FlowEditorSidebar({
               />
             ) : (
               <div className="text-center py-8">
-                <SettingsIcon className="w-12 h-12 text-stone-400 mx-auto mb-3" />
-                <h3 className="text-lg font-semibold text-stone-700 mb-2">
+                <SettingsIcon className="w-12 h-12 text-black mx-auto mb-3" />
+                <h3 className="text-lg font-semibold text-black mb-2">
                   No Node Selected
                 </h3>
-                <p className="text-sm text-stone-600">
+                <p className="text-sm text-black">
                   Click on a node in the canvas to configure its settings
                 </p>
               </div>
@@ -217,7 +217,7 @@ export default function FlowEditorSidebar({
           <div className="space-y-4">
             <div>
               <h3 className="text-lg font-semibold mb-3">Execute Workflow</h3>
-              <p className="text-sm text-stone-600 mb-4">
+              <p className="text-sm text-black mb-4">
                 Run this workflow immediately and see results
               </p>
             </div>
@@ -243,7 +243,7 @@ export default function FlowEditorSidebar({
         {activeTab === "schedule" && (
           <div>
             <h3 className="text-lg font-semibold mb-3">Schedule Workflow</h3>
-            <p className="text-sm text-stone-600 mb-4">
+            <p className="text-sm text-black mb-4">
               Create automated schedules with cron expressions
             </p>
             <CronJobManager flowId={flowId} />
@@ -253,7 +253,7 @@ export default function FlowEditorSidebar({
         {activeTab === "history" && (
           <div>
             <h3 className="text-lg font-semibold mb-3">Execution History</h3>
-            <p className="text-sm text-stone-600 mb-4">
+            <p className="text-sm text-black mb-4">
               View past executions and their results
             </p>
             <ExecutionHistory flowId={flowId} limit={20} />
@@ -270,7 +270,7 @@ export default function FlowEditorSidebar({
                     isConnected ? "bg-green-500 animate-pulse" : "bg-gray-400"
                   }`}
                 ></div>
-                <span className="text-stone-600">
+                <span className="text-black">
                   {isConnected ? "Connected" : "Disconnected"}
                 </span>
                 {isExecuting && (
@@ -286,7 +286,7 @@ export default function FlowEditorSidebar({
                 <ExecutionLogs logs={logs} onClear={onClearLogs} />
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center h-full text-stone-400">
+              <div className="flex flex-col items-center justify-center h-full text-black">
                 <svg
                   className="w-16 h-16 mb-4 opacity-50"
                   fill="none"

@@ -45,13 +45,13 @@ export default function ExecutionProgress({
           ) : (
             <XCircle className="w-5 h-5 text-red-600" />
           )}
-          <h3 className="font-semibold text-stone-900">
+          <h3 className="font-semibold text-black">
             {isRunning ? 'Executing...' : progress.percentage === 100 ? 'Completed' : 'Failed'}
           </h3>
         </div>
 
         {currentExecution && (
-          <div className="flex items-center gap-2 text-sm text-stone-600">
+          <div className="flex items-center gap-2 text-sm text-black">
             <Clock className="w-4 h-4" />
             <span>{getElapsedTime()}</span>
           </div>
@@ -60,14 +60,14 @@ export default function ExecutionProgress({
 
       {/* Workflow Name */}
       {currentExecution && (
-        <p className="text-sm text-stone-600 mb-3">
+        <p className="text-sm text-black mb-3">
           {currentExecution.flowName}
         </p>
       )}
 
       {/* Progress Bar */}
       <div className="mb-3">
-        <div className="flex items-center justify-between text-xs text-stone-600 mb-2">
+        <div className="flex items-center justify-between text-xs text-black mb-2">
           <span>Progress</span>
           <span className="font-mono font-semibold">
             {progress.completed} / {progress.total} nodes
@@ -86,7 +86,7 @@ export default function ExecutionProgress({
           />
         </div>
         <div className="text-center mt-1">
-          <span className="text-lg font-bold text-stone-900">
+          <span className="text-lg font-bold text-black">
             {progress.percentage}%
           </span>
         </div>
@@ -98,19 +98,19 @@ export default function ExecutionProgress({
           <div className="text-2xl font-bold text-blue-600">
             {progress.total}
           </div>
-          <div className="text-xs text-stone-600">Total</div>
+          <div className="text-xs text-black">Total</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-green-600">
             {progress.completed}
           </div>
-          <div className="text-xs text-stone-600">Completed</div>
+          <div className="text-xs text-black">Completed</div>
         </div>
         <div className="text-center">
-          <div className="text-2xl font-bold text-stone-400">
+          <div className="text-2xl font-bold text-black">
             {progress.total - progress.completed}
           </div>
-          <div className="text-xs text-stone-600">Remaining</div>
+          <div className="text-xs text-black">Remaining</div>
         </div>
       </div>
     </div>

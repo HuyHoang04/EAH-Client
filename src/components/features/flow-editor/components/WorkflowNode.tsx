@@ -210,7 +210,7 @@ function WorkflowNode({ data, selected, id }: NodeProps<WorkflowNodeData>) {
                   <span className="font-semibold">{input.name}</span>
                   {input.required && <span className="text-red-400 text-sm">*</span>}
                 </div>
-                <div className="text-[10px] text-stone-300 mt-0.5" style={{ color: handleColor }}>
+                <div className="text-[10px] text-black mt-0.5" style={{ color: handleColor }}>
                   Loại: {input.type}
                 </div>
               </div>
@@ -342,7 +342,7 @@ function WorkflowNode({ data, selected, id }: NodeProps<WorkflowNodeData>) {
                   <span className="text-orange-400 font-bold text-[9px]">GỬI</span>
                   <span className="font-semibold">{output.name}</span>
                 </div>
-                <div className="text-[10px] text-stone-300 mt-0.5" style={{ color: handleColor }}>
+                <div className="text-[10px] text-black mt-0.5" style={{ color: handleColor }}>
                   Loại: {output.type}
                 </div>
               </div>

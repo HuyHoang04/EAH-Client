@@ -79,7 +79,7 @@ export default function FlowEditorHeader({
       <div className="flex items-center gap-4">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-stone-600 hover:text-black transition-colors"
+          className="flex items-center gap-2 text-black hover:text-black transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           <span className="font-medium">Back</span>
@@ -87,7 +87,7 @@ export default function FlowEditorHeader({
         <div className="border-l border-stone-300 h-6"></div>
         <div>
           <h1 className="text-xl font-bold text-black">{flowData?.name || 'Untitled Flow'}</h1>
-          <p className="text-sm text-stone-600">{flowData?.description || 'No description'}</p>
+          <p className="text-sm text-black">{flowData?.description || 'No description'}</p>
         </div>
       </div>
       
@@ -117,7 +117,7 @@ export default function FlowEditorHeader({
         <button
           onClick={saveFlow}
           disabled={isSaving || isLoading}
-          className={`relative flex items-center justify-center px-2 py-2 rounded-md border border-stone-300 bg-white text-stone-700 hover:bg-stone-50 transition-colors ${isSaving ? 'opacity-60 cursor-not-allowed' : ''}`}
+          className={`relative flex items-center justify-center px-2 py-2 rounded-md border border-stone-300 bg-white text-black hover:bg-stone-50 transition-colors ${isSaving ? 'opacity-60 cursor-not-allowed' : ''}`}
         >
           <span className="flex items-center gap-2">
             {isSaving ? (
@@ -137,7 +137,7 @@ export default function FlowEditorHeader({
           className={`flex items-center gap-2 px-4 py-2 border rounded-md transition-colors ${
             showSidebar 
               ? 'bg-indigo-50 border-indigo-300 text-indigo-700' 
-              : 'bg-white border-stone-300 text-stone-700 hover:bg-stone-50'
+              : 'bg-white border-stone-300 text-black hover:bg-stone-50'
           }`}
         >
           <Layers className="w-4 h-4" />
@@ -153,7 +153,7 @@ export default function FlowEditorHeader({
           <span className="font-semibold">Templates</span>
         </button>
         <button
-          className="flex items-center gap-2 px-4 py-2 bg-white border border-stone-300 text-stone-700 rounded-md hover:bg-stone-50 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-white border border-stone-300 text-black rounded-md hover:bg-stone-50 transition-colors"
         >
           <Settings className="w-4 h-4" />
           Settings
