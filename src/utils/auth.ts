@@ -1,7 +1,7 @@
 import { UserData } from '@/types/auth';
 
 
-let currentUser: UserData | null = null;
+const currentUser: UserData | null = null;
 
 export function hasToken(): boolean {
   if (typeof window === 'undefined') {
