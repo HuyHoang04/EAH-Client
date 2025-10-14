@@ -13,7 +13,7 @@ interface FieldChipProps {
 // Format preview value for better readability
 const formatChipPreview = (preview: string): { text: string; title: string } => {
   // Remove quotes if already formatted
-  let cleaned = preview.replace(/^"|"$/g, '');
+  const cleaned = preview.replace(/^"|"$/g, '');
   
   // Check for special formatting
   if (preview.startsWith('[') && preview.includes('item')) {
