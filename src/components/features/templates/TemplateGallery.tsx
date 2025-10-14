@@ -146,7 +146,7 @@ export default function TemplateGallery({ onSelectTemplate }: TemplateGalleryPro
       ) : (
         <div className="text-center py-16">
           <div className="text-6xl mb-4">🔍</div>
-          <h3 className="text-xl font-semibold text-white mb-2">
+          <h3 className="text-xl  font-semibold text-white mb-2">
             Không tìm thấy template
           </h3>
           <p className="text-black-500 mb-6">

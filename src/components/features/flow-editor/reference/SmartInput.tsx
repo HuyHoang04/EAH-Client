@@ -158,7 +158,7 @@ export function SmartInput({
                 onKeyDown={handleKeyDown}
                 onBlur={handleAddText}
                 placeholder={isEmpty ? placeholder : 'Type here...'}
-                className="flex-1 min-w-[150px] outline-none bg-transparent"
+                className="flex-1 min-w-[150px] outline-none text-black bg-transparent"
               />
             )
           )}

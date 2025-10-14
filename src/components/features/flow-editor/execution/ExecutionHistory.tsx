@@ -62,7 +62,7 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
         <h3 className="text-black font-semibold">Execution History</h3>
         <button
           onClick={loadExecutions}
-          className="px-3 py-1 text-sm border rounded hover:bg-gray-50 flex items-center gap-1"
+          className="px-3 py-1 text-sm text-black border rounded hover:bg-gray-50 flex items-center gap-1"
           title="Refresh"
         >
           <RefreshCw className="w-4 h-4" /> Refresh
@@ -103,14 +103,14 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
 
                     <div className="mt-3 grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-gray-500">Duration:</span>
-                        <span className="ml-2 font-medium">
+                        <span className="text-gray-700">Duration:</span>
+                        <span className="ml-2 text-black font-medium">
                           {formatDuration(execution.startedAt, execution.endedAt)}
                         </span>
                       </div>
                       <div>
                         <span className="text-gray-500">Execution ID:</span>
-                        <span className="ml-2 font-mono text-xs">
+                        <span className="ml-2 text-black font-mono text-xs">
                           {execution._id.slice(0, 8)}...
                         </span>
                       </div>
@@ -138,7 +138,7 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
                       e.stopPropagation();
                       setSelectedExecution(execution);
                     }}
-                    className="px-3 py-1 text-sm border rounded hover:bg-gray-50"
+                    className="px-3 py-1 text-sm text-black border rounded hover:bg-gray-50"
                   >
                     View Details →
                   </button>
@@ -161,7 +161,7 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
           >
             <div className="p-6 border-b">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-semibold">Execution Details</h3>
+                <h3 className="text-xl text-black font-semibold">Execution Details</h3>
                 <button
                   onClick={() => setSelectedExecution(null)}
                   className="text-black hover:text-gray-600"
@@ -188,7 +188,7 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
               {/* Metadata */}
               <div>
                 <h4 className="font-medium text-gray-700 mb-2">Metadata</h4>
-                <div className="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
+                <div className="bg-gray-50 text-black rounded-lg p-4 space-y-2 text-sm">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <span className="text-gray-500">Execution ID:</span>
@@ -237,7 +237,7 @@ export default function ExecutionHistory({ flowId, limit = 20 }: ExecutionHistor
               {/* Result */}
               {selectedExecution.result && (
                 <div>
-                  <h4 className="font-medium text-gray-700 mb-2">Result</h4>
+                  <h4 className="font-medium text-gray- mb-2">Result</h4>
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <pre className="text-sm text-green-800 whitespace-pre-wrap overflow-x-auto">
                       {JSON.stringify(selectedExecution.result, null, 2)}

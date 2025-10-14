@@ -29,7 +29,7 @@ export function FieldPickerModal({
 }: FieldPickerModalProps) {
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
-  const [showAllFields, setShowAllFields] = useState(false);
+  const [showAllFields, setShowAllFields] = useState(true);
   const [copiedPath, setCopiedPath] = useState<string | null>(null);
   const [recentFields, setRecentFields] = useState<RecentField[]>([]);
   const [nodeMetadataCache, setNodeMetadataCache] = useState<Map<string, NodeMetadata>>(new Map());
@@ -467,13 +467,13 @@ export function FieldPickerModal({
           )}
           
           <div className={`flex items-center gap-2 py-1.5 hover:bg-blue-50 rounded px-2 group transition-colors ${
-            !isCompatible ? 'opacity-50' : ''
+            !isCompatible ? 'opacity-80' : ''
           }`}>
             {/* Expand/Collapse for objects/arrays */}
             {isExpandable ? (
               <button
                 onClick={() => toggleNode(`${node.id}.${fieldPath}`)}
-                className="w-4 h-4 flex items-center justify-center text-gray-500 hover:text-gray-700"
+                className="w-4 h-4 flex items-center justify-center text-gray-900 hover:text-gray-700"
               >
                 {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
               </button>
@@ -487,7 +487,7 @@ export function FieldPickerModal({
             </span>
 
             {/* Field name */}
-            <span className="text-sm font-medium text-gray-700 flex-1">
+            <span className="text-sm font-medium text-black flex-1">
               {key}
             </span>
 
@@ -705,7 +705,7 @@ export function FieldPickerModal({
               </div>
               <button
                 onClick={() => setShowAllFields(!showAllFields)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-lg border-2 transition-colors ${
+                className={`hidden px-3 py-1.5 text-xs font-medium rounded-lg border-2 transition-colors ${
                   showAllFields
                     ? 'bg-blue-50 border-blue-300 text-blue-700'
                     : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'

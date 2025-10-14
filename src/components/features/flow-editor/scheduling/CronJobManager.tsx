@@ -238,7 +238,7 @@ export default function CronJobManager({ flowId }: CronJobManagerProps) {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleToggle(job)}
-                    className="px-3 py-1 text-sm border rounded hover:bg-gray-50 flex items-center gap-1"
+                    className="px-3 py-1 text-sm text-black border rounded hover:bg-gray-50 flex items-center gap-1"
                     title={job.isActive ? 'Pause' : 'Resume'}
                   >
                     {job.isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
@@ -261,7 +261,7 @@ export default function CronJobManager({ flowId }: CronJobManagerProps) {
       {showCreateDialog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-lg w-full p-6">
-            <h3 className="text-xl font-semibold mb-4">Lên Lịch Chạy</h3>
+            <h3 className="text-xl text-black font-semibold mb-4">Lên Lịch Chạy</h3>
 
             <form onSubmit={handleCreate} className="space-y-4">
               {formError && (
