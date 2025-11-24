@@ -1,6 +1,6 @@
-import { postRequest, getRequest, putRequest } from '@/utils/api';
+import { postRequest, getRequest, putRequest, api } from '@/utils/api';
 import { decodeToken, getToken } from '@/utils/auth';
-import { FLOW_URL } from '@/constants/api';
+import { NODE_RUNNER_URL } from '@/constants/api';
 
 export interface FlowDto {
   id?: string;
@@ -51,7 +51,7 @@ export class FlowService {
       };
 
       const response = await postRequest<FlowResponse>(
-        `${FLOW_URL}/api/flows`,
+        `${NODE_RUNNER_URL}/flows`,
         requestData,
         true // Cần auth header
       );
@@ -65,14 +65,14 @@ export class FlowService {
 
   static async getFlows(): Promise<FlowResponse[]> {
     try {
-      const userId = this.getUserIdFromToken();
+      // Temporarily use demo user for testing
+      const userId = this.getUserIdFromToken() || 'demo-user-001';
 
-      if (!userId) {
-        throw new Error('User not authenticated');
-      }
+      console.log('[FlowService] Getting flows for user:', userId);
+      console.log('[FlowService] Using NODE_RUNNER_URL:', process.env.NEXT_PUBLIC_NODE_RUNNER_URL);
 
       const response = await getRequest<FlowResponse[]>(
-        `${FLOW_URL}/api/flows/user/${userId}`,
+        `${NODE_RUNNER_URL}/flows/user/${userId}`,
         true // Cần auth header
       );
 
@@ -86,7 +86,7 @@ export class FlowService {
   static async getFlowById(flowId: string): Promise<FlowResponse> {
     try {
       const response = await getRequest<FlowResponse>(
-        `${FLOW_URL}/api/flows/${flowId}`,
+        `${NODE_RUNNER_URL}/flows/${flowId}`,
         true // Cần auth header
       );
 
@@ -103,7 +103,7 @@ export class FlowService {
   ): Promise<FlowResponse> {
     try {
       const response = await putRequest<FlowResponse>(
-        `${FLOW_URL}/api/flows/${flowId}`,
+        `${NODE_RUNNER_URL}/flows/${flowId}`,
         flowData,
         true // Cần auth header
       );
@@ -117,11 +117,7 @@ export class FlowService {
 
   static async deleteFlow(flowId: string): Promise<void> {
     try {
-      await postRequest(
-        `${FLOW_URL}/api/flows/${flowId}/delete`,
-        {},
-        true // Cần auth header
-      );
+      await api.delete(`/flows/${flowId}`, { useAuth: true });
     } catch (error) {
       console.error('Failed to delete flow:', error);
       throw error;
