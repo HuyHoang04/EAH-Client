@@ -31,14 +31,8 @@ export default function AuthGuard({
         const hasLocalToken = hasToken();
         console.log(`Local token exists: ${hasLocalToken}`);
         
-        // Xử lý các tình huống chuyển hướng
-        if (!hasLocalToken && requireAuth) {
-          // Chuyển hướng khi không có token nhưng trang cần xác thực
-          console.log('No token and auth required, redirecting to', redirectTo);
-          router.push(redirectTo);
-          setChecking(false);
-          return;
-        } else if (hasLocalToken && !requireAuth && redirectTo === '/dashboard') {
+        // Chỉ xử lý redirect khi thực sự có token
+        if (hasLocalToken && !requireAuth && redirectTo === '/dashboard') {
           // Chuyển hướng khi đã đăng nhập nhưng đang ở trang login/register
           console.log('Token exists and on auth page, redirecting to dashboard');
           router.push('/dashboard');
@@ -51,14 +45,15 @@ export default function AuthGuard({
           return;
         }
         
-        // Xác thực chỉ dựa trên token, bỏ qua kiểm tra API
+        // Xác thực chỉ dựa trên token
         if (hasLocalToken) {
           console.log('Token exists, allowing access');
           setIsAuthenticated(true);
           setChecking(false);
           return;
-        } else {
-          console.log('No token found, redirecting to', redirectTo);
+        } else if (requireAuth) {
+          // Chỉ redirect khi trang yêu cầu auth và không có token
+          console.log('No token found and auth required, redirecting to', redirectTo);
           router.push(redirectTo);
           return;
         }

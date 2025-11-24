@@ -65,11 +65,13 @@ export class FlowService {
 
   static async getFlows(): Promise<FlowResponse[]> {
     try {
-      // Temporarily use demo user for testing
-      const userId = this.getUserIdFromToken() || 'demo-user-001';
+      const userId = this.getUserIdFromToken();
+
+      if (!userId) {
+        throw new Error('User not authenticated');
+      }
 
       console.log('[FlowService] Getting flows for user:', userId);
-      console.log('[FlowService] Using NODE_RUNNER_URL:', process.env.NEXT_PUBLIC_NODE_RUNNER_URL);
 
       const response = await getRequest<FlowResponse[]>(
         `${NODE_RUNNER_URL}/flows/user/${userId}`,

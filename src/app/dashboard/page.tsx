@@ -10,6 +10,7 @@ import { TemplateModal } from '@/components/features/templates';
 import { FlowTemplate } from '@/constants/flowTemplates';
 import { Search, Plus, Palette } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { getToken } from '@/utils/auth';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -18,6 +19,16 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
+
+  // Check authentication on mount
+  useEffect(() => {
+    const token = getToken();
+    if (!token) {
+      console.log('[Dashboard] No token found, redirecting to login');
+      router.push('/login');
+      return;
+    }
+  }, [router]);
 
   // Load flows from API
   useEffect(() => {
